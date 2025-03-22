@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { SideMenuOptionsComponent } from './side-menu-options/side-menu-options.component';
 
 @Component({
-  selector: 'app-side-menu',
-  imports: [],
+  selector: 'side-menu',
+  imports: [SideMenuOptionsComponent],
   templateUrl: './side-menu.component.html',
   styleUrl: './side-menu.component.css'
 })

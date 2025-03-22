@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 interface MenuOptions {
   label: string;
@@ -7,8 +8,8 @@ interface MenuOptions {
 
 
 @Component({
-  selector: 'app-side-menu-options',
-  imports: [],
+  selector: 'side-menu-options',
+  imports: [RouterLink,RouterLinkActive],
   templateUrl: './side-menu-options.component.html',
   styleUrl: './side-menu-options.component.css'
 })
@@ -16,31 +17,31 @@ export class SideMenuOptionsComponent {
   menuOptions: MenuOptions[]=[
     {
       label: 'Home',
-      route: '/home'
+      route: '/nav/home'
     },
     {
       label: 'About-us',
-      route: '/about-us'
+      route: '/nav/about-us'
     },
     {
       label: 'Contact-us',
-      route: '/contact-us'
+      route: '/nav/contact-us'
     },
     {
       label: 'Facilities',
-      route: '/facilities'
+      route: '/nav/facilities'
     },
     {
       label: 'Location',
-      route: '/location'
+      route: '/nav/location'
     },
     {
       label: 'Room Rate',
-      route: '/fees'
+      route: '/nav/room-rate'
     },
     {
       label:'Reservation',
-      route: '/reservation'
+      route: '/nav/reservation'
     }
   ]
 }
