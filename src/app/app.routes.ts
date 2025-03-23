@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
+import NavPageComponent from './shared/components/main-layout/main-layout.component';
 
 export const routes: Routes = [
   {
-    path: 'nav',
-    loadComponent: () => import('./pages/nav-page/nav-page.component'),
+    path: '',
+    component: NavPageComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'home', // Redirige a 'home' si la URL está vacía
+        pathMatch: 'full'
+      },
       {
         path: 'home',
         loadComponent: () => import('./pages/home-page/home-page.component')
@@ -37,7 +43,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'nav/home'
+    redirectTo: 'home' // Cualquier ruta no encontrada redirige a 'home'
   }
-
 ];

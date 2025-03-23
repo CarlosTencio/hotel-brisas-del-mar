@@ -9,39 +9,39 @@ interface MenuOptions {
 
 @Component({
   selector: 'side-menu-options',
-  imports: [RouterLink,RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './side-menu-options.component.html',
   styleUrl: './side-menu-options.component.css'
 })
 export class SideMenuOptionsComponent {
-  menuOptions: MenuOptions[]=[
+  menuOptions: MenuOptions[] = [
     {
       label: 'Home',
-      route: '/nav/home'
+      route: '/home'
     },
     {
-      label: 'About-us',
-      route: '/nav/about-us'
+      label: 'Sobre nosotros',
+      route: '/about-us'
+    },
+    {
+      label: 'Facilidades',
+      route: '/facilities'
+    },
+    {
+      label: 'Cómo llegar?',
+      route: '/location'
+    },
+    {
+      label: 'Tarifas',
+      route: '/room-rate'
+    },
+    {
+      label: 'Reservar en linea',
+      route: '/reservation'
     },
     {
       label: 'Contact-us',
-      route: '/nav/contact-us'
-    },
-    {
-      label: 'Facilities',
-      route: '/nav/facilities'
-    },
-    {
-      label: 'Location',
-      route: '/nav/location'
-    },
-    {
-      label: 'Room Rate',
-      route: '/nav/room-rate'
-    },
-    {
-      label:'Reservation',
-      route: '/nav/reservation'
+      route: '/contact-us'
     }
   ]
 }
