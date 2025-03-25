@@ -40,7 +40,7 @@ export class SideMenuOptionsComponent {
       route: '/reservation'
     },
     {
-      label: 'Contact-us',
+      label: 'Contáctenos',
       route: '/contact-us'
     }
   ]
