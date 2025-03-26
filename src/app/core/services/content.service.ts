@@ -18,10 +18,9 @@ contentPages=signal<Page[]>([]);
   loadContent(): Observable<Page[]> {
     return this.http.get<Page[]>(this.pageURL);
   }
-  // loadContent(): void {
-  //   this.http.get<Page[]>(this.pageURL)
-  //     .subscribe((resp) => {
-  //       this.contentPages.set(resp);
-  //     })
-  //}
+
+  private pageFacilitiesURL = 'https://localhost:7075/api/Page/getPageForTittle?facilities=Facilidades';
+  loadFacilities(): Observable<Page[]> {
+    return this.http.get<Page[]>(this.pageFacilitiesURL);
+  }
 }
