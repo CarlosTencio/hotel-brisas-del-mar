@@ -1,0 +1,9 @@
+<div *ngIf="adDisplay" class="w-full max-h-[90px] mt-3 object-cover rounded-lg shadow-md">
+  <a [href]="adDisplay.imgUrl" target="_blank" class="block">
+    <img
+      [src]="adDisplay.img"
+      [alt]="adDisplay.name || 'Advertisement'"
+      class="w-full max-h-[300px] object-cover rounded-lg shadow-md"
+    />
+  </a>
+</div>

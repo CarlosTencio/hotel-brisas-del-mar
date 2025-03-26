@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AdsComponent } from "../../ads/ads.component";
 
 interface MenuOptions {
   label: string;
@@ -9,7 +10,7 @@ interface MenuOptions {
 
 @Component({
   selector: 'side-menu-options',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, AdsComponent],
   templateUrl: './side-menu-options.component.html',
   styleUrl: './side-menu-options.component.css'
 })
