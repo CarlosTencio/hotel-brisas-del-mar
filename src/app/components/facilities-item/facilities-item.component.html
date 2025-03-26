@@ -1,0 +1,9 @@
+<div class="m-10">
+  @for (item of dataPage(); track $index) {
+    @if (item.pageTitle === 'Facilidades') {
+      <app-facilities [dataPage]="item"/>
+    }
+  }
+
+</div>
+

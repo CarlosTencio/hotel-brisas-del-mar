@@ -1,11 +1,29 @@
-import { Component } from '@angular/core';
-
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { ContentService } from '../../core/services/content.service';
+import { Page } from '../../models/page.interface';
+import { FacilitiesItemComponent } from '../../components/facilities-item/facilities-item.component';
 @Component({
   selector: 'app-facilities-page',
-  imports: [],
+  imports: [FacilitiesItemComponent],
   templateUrl: './facilities-page.component.html',
   styleUrl: './facilities-page.component.css'
 })
-export default class FacilitiesPageComponent {
+export default class FacilitiesPageComponent implements OnInit {
 
+  facilities= inject(ContentService);
+  dataPage = signal<Page[]>([]);
+
+  ngOnInit() {
+    this.facilities.loadFacilities().subscribe({
+      next: (respPages) => {
+        // Set the retrieved pages to the signal
+        this.dataPage.set(respPages);
+        console.log(respPages);
+      },
+      error: (err) => {
+        // Optional: handle error
+        console.error('Error loading pages', err);
+      }
+    });
+}
 }
