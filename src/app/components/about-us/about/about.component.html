@@ -1,2 +1,10 @@
 <h1 class="text-5xl font-bold mb-2 text-center ">{{title()}}</h1>
 <p class=" text-1xl text-center font-medium">{{content()}}</p>
+
+
+<!-- Galería de Imágenes -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+    @for (img of images(); track $index) {
+      <img [src]="img" alt="Imagen de la página" class="w-full h-auto rounded-lg shadow-md"/>
+    }
+  </div>

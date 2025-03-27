@@ -13,4 +13,5 @@ export class AboutComponent{
 
   title = computed(() => this.dataPage().pageTitle);
   content = computed(() => this.dataPage().pageContent);
+  images = computed(() => this.dataPage().images);
 }

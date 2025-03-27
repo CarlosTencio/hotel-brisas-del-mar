@@ -2,10 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ContentService } from '../../core/services/content.service';
 import { Page } from '../../models/page.interface';
 import { AboutUsComponent } from '../../components/about-us/about-us.component';
+import { GalleryComponent } from '../../components/about-us/gallery/gallery.component';
 
 @Component({
   selector: 'app-about-us-page',
-  imports: [AboutUsComponent],
+  imports: [AboutUsComponent, GalleryComponent],
   templateUrl: './about-us-page.component.html',
   styleUrl: './about-us-page.component.css'
 })

@@ -12,3 +12,16 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 export class AppComponent {
   title = 'hotel-brisas-del-mar';
 }
+
+/* @NgModule({
+  declarations: [
+    // otros componentes
+  ],
+  imports: [
+    // otros módulos
+    GalleriaModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { } */
