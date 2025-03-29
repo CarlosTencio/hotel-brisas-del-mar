@@ -3,6 +3,7 @@
   @for (item of dataPage(); track $index) {
     @if (item.pageTitle === 'Sobre nosotros') {
       <app-about [dataPage]="item"/>
+      <app-gallery [dataPage]="item"/>
     }
   }
 </div>
