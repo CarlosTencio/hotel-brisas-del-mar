@@ -1,0 +1,23 @@
+<!-- Galería de imágenes -->
+<div class="mt-8">
+  <h3 class="text-lg font-semibold mb-4">Galería</h3>
+
+  <div class="flex gap-6">
+    <!-- Imagen principal -->
+    <div class="w-2/5">
+      <img [src]="selectedImage()" alt="Imagen seleccionada" class="w-full rounded-lg shadow-lg">
+    </div>
+
+    <!-- Miniaturas (limite de 12 imágenes) -->
+    <div class="grid grid-cols-4 gap-1 w-3/5">
+      <ng-container *ngFor="let img of limitedImages(); let i = index">
+        <img 
+          [src]="img" 
+          alt="Miniatura" 
+          class="w-full h-20 object-cover rounded-lg shadow-md cursor-pointer border-2 transition-all p-0 m-0"
+          [ngClass]="img === selectedImage() ? 'border-blue-500 scale-105' : 'border-gray-300 hover:border-blue-400'"
+          (click)="setSelectedImage(img)">
+      </ng-container>
+    </div>
+  </div>
+</div>
