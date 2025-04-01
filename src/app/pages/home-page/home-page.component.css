@@ -1,0 +1,17 @@
+/* Styles will be handled by Tailwind CSS */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: calc(100vh - 64px); /* Adjust based on your header height */
+  background-color: #ffffff;
+}
+
+.prose {
+  max-width: none;
+}
+
+img {
+  min-height: 400px;
+  max-height: 600px;
+}
