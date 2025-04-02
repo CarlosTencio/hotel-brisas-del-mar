@@ -1,17 +1,19 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Inject, Injectable, signal } from '@angular/core';
-
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { Page } from '../../models/page.interface';
-import { Observable } from 'rxjs';
-
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContentService {
+
   private pageURL = 'https://localhost:7075/api/Page';
   private http = inject(HttpClient);
 
+
+  private pageURL= 'https://localhost:7075/api/Page';
+  private readonly http = inject(HttpClient);
 
   contentPages = signal<Page[]>([]);
 

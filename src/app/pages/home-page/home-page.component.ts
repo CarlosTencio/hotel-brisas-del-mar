@@ -1,11 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Page } from '../../models/page.interface';
+import { ContentService } from '../../core/services/content.service';
+import { HomeItemComponent } from '../../components/home-item/home-item.component';
 
 @Component({
   selector: 'app-home-page',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, HomeItemComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export default class HomePageComponent {
+export default class HomePageComponent implements OnInit {
+  private contentService = inject(ContentService);
+  pageData = signal<Page | null>(null);
 
+  ngOnInit() {
+    this.loadPageContent();
+  }
+
+  private loadPageContent() {
+    this.contentService.loadContent().subscribe({
+      next: (pages) => {
+        const homePage = pages.find(page => page.pageTitle === 'Inicio');
+        if (homePage) {
+          console.log('Home page data:', homePage);
+          this.pageData.set(homePage);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading home page content:', error);
+      }
+    });
+  }
+
+  get validPageData(): Page | null {
+    return this.pageData() ? this.pageData() : null;
+  }
 }
