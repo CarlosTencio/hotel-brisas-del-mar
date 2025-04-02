@@ -1,9 +1,9 @@
 <div class="">
   @for (item of dataPage(); track $index) {
-    @if (item.pageTitle === 'Facilidades') {
-      <app-facilities [dataPage]="item"/>
-    }
+  @if (item.pageTitle === 'Facilidades') {
+  <app-facilities [dataPage]="item" />
+  <hr class="mb-2.5">
+  }
   }
 
 </div>
-
