@@ -37,7 +37,7 @@ export const routes: Routes = [
       },
       {
         path: 'reservation',
-        loadComponent: () => import('./pages/reservation-page/reservation-page.component')
+        loadComponent: () => import('./pages/booking-page/booking-page.component')
       }
     ]
   },

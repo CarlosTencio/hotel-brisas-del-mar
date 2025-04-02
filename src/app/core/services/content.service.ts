@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ContentService {
-private pageURL= 'https://localhost:7075/api/Page';
+  private pageURL = 'https://localhost:7075/api/Page';
   private http = inject(HttpClient);
 
 
-contentPages=signal<Page[]>([]);
+  contentPages = signal<Page[]>([]);
 
   loadContent(): Observable<Page[]> {
     return this.http.get<Page[]>(this.pageURL);
