@@ -11,7 +11,7 @@ import { HomeItemComponent } from '../../components/home-item/home-item.componen
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent implements OnInit {
+export default class HomePageComponent implements OnInit {
   private contentService = inject(ContentService);
   pageData = signal<Page | null>(null);
 

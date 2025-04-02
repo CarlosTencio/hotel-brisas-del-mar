@@ -11,7 +11,7 @@ import { Page } from '../../../models/page.interface';
 })
 export class HomeComponent {
   dataPage = input.required<Page>();
-  image = computed(() => this.dataPage().images[0]);
+  image = computed(() => this.dataPage().images[2]);
   content = computed(() => this.dataPage().pageContent);
   title = computed(() => this.dataPage().pageTitle);
 } 
