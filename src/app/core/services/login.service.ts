@@ -9,16 +9,14 @@ import { catchError } from 'rxjs/operators';
 })
 export class LoginService {
   constructor(private http: HttpClient) { }
-  private loginURL = 'https://localhost:7075/api/Login';
-  login(): Observable<Page[]> {
-      return this.http.get<Page[]>(this.loginURL).pipe(
-  
-        catchError((error)=>{
-  
-          throw error;
-  
-        })
-  
-      );
-    }
+  private loginURL = 'https://hotelauth-hrbdbne0c3b3gagy.canadacentral-01.azurewebsites.net/api/Admin/AuthWithCredentials';
+  login(userNameDTO: string, passwordDTO: string): Observable<Page[]> {
+    const body = { userNameDTO, passwordDTO }; 
+
+    return this.http.post<Page[]>(this.loginURL, body).pipe(
+      catchError((error) => {
+        throw error;
+      })
+    );
+  }
 }

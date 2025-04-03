@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from "./shared/components/header/header.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,9 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 })
 export class AppComponent {
   title = 'hotel-brisas-del-mar';
+
+  constructor(private router: Router) {}
+  isLoginPage(): boolean {
+    return this.router.url === '/login';
+  }
 }
