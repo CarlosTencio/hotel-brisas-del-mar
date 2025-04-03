@@ -8,5 +8,9 @@ import { SideMenuOptionsComponent } from './side-menu-options/side-menu-options.
   styleUrl: './side-menu.component.css'
 })
 export class SideMenuComponent {
+  isMenuOpen = false;
 
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

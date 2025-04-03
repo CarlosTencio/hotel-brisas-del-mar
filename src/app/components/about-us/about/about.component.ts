@@ -10,7 +10,7 @@ import { Page } from '../../../models/page.interface';
 export class AboutComponent{
 
   dataPage = input.required<Page>();
-
+  // errorMessage=input.required<string>();
   title = computed(() => this.dataPage().pageTitle);
   content = computed(() => this.dataPage().pageContent);
 }

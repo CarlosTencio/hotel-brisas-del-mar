@@ -11,4 +11,5 @@ import { GalleryComponent } from "./gallery/gallery.component";
 })
 export class AboutUsComponent {
 dataPage=input.required<Page[]>();
+
 }

@@ -3,11 +3,10 @@ import { BookingRoomComponent } from './booking-room/booking-room.component';
 
 
 @Component({
-  selector: 'reservation-component',
+  selector: 'booking-component',
   imports: [BookingRoomComponent],
-  templateUrl: './reservation.component.html',
-  styleUrl: './reservation.component.css'
+  templateUrl: './booking.component.html',
 })
-export class ReservationComponent {
+export class BookingComponent {
 
 }
