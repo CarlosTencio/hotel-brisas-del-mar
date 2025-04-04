@@ -11,7 +11,7 @@ import { LoginItemComponent } from "./login-item/login-item.component";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  // Añadir esta línea para reenviar el evento
+
   @Output() loginEvent = new EventEmitter<{ username: string; password: string }>();
 
   handleLogin(credentials: { username: string; password: string }) {

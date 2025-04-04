@@ -1,8 +1,16 @@
 <div class="flex flex-col h-screen overflow-hidden">
 
-  @if(!isLoginPage()){
-    <app-header></app-header>
+  @if(isLoginPage()){
+    <app-header-auth></app-header-auth>
+  } @else{
+   
+    @if(isPageAuth()){
+      
+    } @else {
+      <app-header></app-header>
+    }
   }
+ 
   <div class="flex-1 overflow-auto">
 
     <router-outlet></router-outlet>
