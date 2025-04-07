@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
+import { MenuService } from '../../../../services/menu.service';
+import { Router } from '@angular/router';
 
 interface MenuOptions {
   label: string;
@@ -15,6 +16,10 @@ interface MenuOptions {
   styleUrl: './side-menu-options-auth.component.css'
 })
 export  class SideMenuOptionsAuthComponent {
+  constructor( private router: Router,private menuService: MenuService) {
+ 
+    
+  }
   menuOptions: MenuOptions[] = [
     {
       label: 'Home',
@@ -49,4 +54,8 @@ export  class SideMenuOptionsAuthComponent {
       route: '/publicidad'
     }
   ]
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+    this.menuService.setMenuOpen(false); // Cerramos menú
+  }
 }
