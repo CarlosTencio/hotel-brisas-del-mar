@@ -14,10 +14,10 @@ interface TokenResponse {
 export class LoginService {
   constructor(private http: HttpClient) { }
   private loginURL = 'https://hotelauth-hrbdbne0c3b3gagy.canadacentral-01.azurewebsites.net/api/Admin/AuthWithCredentials';
-  login(userNameDTO: string, passwordDTO: string): Observable<TokenResponse[]> {
-    const body = { userNameDTO, passwordDTO }; 
-
-    return this.http.post<TokenResponse[]>(this.loginURL, body).pipe(
+  login(userNameDTO: string, passwordDTO: string): Observable<TokenResponse> {
+    const body = { userNameDTO, passwordDTO };
+    
+    return this.http.post<TokenResponse>(this.loginURL, body).pipe(
       catchError((error) => {
         throw error;
       })

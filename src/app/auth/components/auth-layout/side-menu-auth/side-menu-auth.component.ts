@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MenuService } from '../../../services/menu.service';
 
 
 import {SideMenuOptionsAuthComponent}  from './side-menu-options-auth/side-menu-options-auth.component';
@@ -14,7 +15,12 @@ import {SideMenuOptionsAuthComponent}  from './side-menu-options-auth/side-menu-
 export class SideMenuAuthComponent {
   menuOpen = false;
 
+  constructor(private menuService: MenuService) {
+    this.menuService.menuOpen$.subscribe(open => {
+      this.menuOpen = open;
+    });
+  }
   toggleMenu() {
-    this.menuOpen = !this.menuOpen;
+    this.menuService.toggleMenu();
   }
 }

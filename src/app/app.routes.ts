@@ -50,15 +50,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login-page/login-page.component') 
   },
   {
-    path: 'auth-home',
-    component: AdminNavComponent, 
+    path: 'home-auth',
+    component: AdminNavComponent,
     children: [
       {
-        path: 'home',
+        path: '',
         loadComponent: () => import('./auth/pages/home-auth/home-auth.component')
       }
     ]
   },
+  
   {
     path: '**',
     redirectTo: 'home' 
