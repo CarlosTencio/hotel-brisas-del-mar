@@ -13,7 +13,7 @@ interface TokenResponse {
   styleUrl: './home-auth.component.css'
 })
 export default class HomeAuthComponent implements OnInit {
-
+  isLoading = signal(true);
   constructor(private router: Router) {
     console.log('HomeAuthComponent initialized');
    }
@@ -26,8 +26,10 @@ export default class HomeAuthComponent implements OnInit {
     if (token) {
       this.login.verifyToken(token).subscribe({
         next: (tokenResponse) => {
-          console.log(tokenResponse);
+         
+          this.isLoading.set(false);
           if(!tokenResponse) {
+           
            
             this.router.navigate(['/login']);
           
