@@ -1,8 +1,7 @@
-
-<div class="">
+<div class="m-3">
   @for (item of dataPage(); track $index) {
     @if (item.pageTitle === 'Sobre nosotros') {
-      <app-about [dataPage]="item"/>
+      <app-about [dataPage]="item" error />
       <app-gallery [dataPage]="item"/>
     }
   }

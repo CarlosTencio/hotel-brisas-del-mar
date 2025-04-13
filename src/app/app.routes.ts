@@ -1,11 +1,14 @@
 import { Routes } from '@angular/router';
 import NavPageComponent from './shared/components/main-layout/main-layout.component';
+//import AdminNavComponent from './shared/components/admin-layout/admin-layout.component';
+import LoginPageComponent from './pages/login-page/login-page.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: NavPageComponent,
+    component: NavPageComponent, // Aquí estás usando el layout
     children: [
+
       {
         path: '',
         redirectTo: 'home', // Redirige a 'home' si la URL está vacía
@@ -37,12 +40,17 @@ export const routes: Routes = [
       },
       {
         path: 'reservation',
-        loadComponent: () => import('./pages/reservation-page/reservation-page.component')
+        loadComponent: () => import('./pages/booking-page/booking-page.component')
       }
+
     ]
   },
   {
+    path: 'login', 
+    loadComponent: () => import('./pages/login-page/login-page.component') // Solo carga el componente login
+  },
+  {
     path: '**',
-    redirectTo: 'home' // Cualquier ruta no encontrada redirige a 'home'
+    redirectTo: 'home' // Redirige a home si la ruta no existe
   }
 ];

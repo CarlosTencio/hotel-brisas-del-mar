@@ -17,12 +17,10 @@ export class PromotionMainComponent implements OnInit {
   private promotionItem: number = 0;
   private promotionInterval: number = 7000;
 
-  constructor(private promotionService: PromotionService) {}
+  constructor(private promotionService: PromotionService) { }
 
-  ngOnInit(){
-    
+  ngOnInit() {
     this.getPromotions();
-    
   }
 
   async getPromotions() {
@@ -33,16 +31,16 @@ export class PromotionMainComponent implements OnInit {
 
         this.promotions = response;
 
-        this.transitionAd();  
+        this.transitionAd();
 
       },
 
       error: (error) => {
-        
+
         console.log("Error en la consulta de anuncios", error);
 
       }
-      
+
 
     });
 
@@ -52,7 +50,7 @@ export class PromotionMainComponent implements OnInit {
 
     this.promotionItem++;
 
-    if(this.promotionItem >= this.promotions.length){
+    if (this.promotionItem >= this.promotions.length) {
 
       this.promotionItem = 0;
 
@@ -65,14 +63,14 @@ export class PromotionMainComponent implements OnInit {
   transitionAd() {
 
     //not need to execute the transition if there are no ads
-    if(this.promotions.length <= 0){
+    if (this.promotions.length <= 0) {
 
       return;
 
-    } 
+    }
 
     //if there is only one ad, display it
-    if(this.promotions.length === 1){
+    if (this.promotions.length === 1) {
 
       this.promotionDisplay = this.promotions[0];
 
@@ -83,7 +81,7 @@ export class PromotionMainComponent implements OnInit {
     this.promotionDisplay = this.promotions[this.promotionItem];
 
     //set a time to change the ad every 5 seconds
-    setInterval(()=>{
+    setInterval(() => {
 
       this.changeAd();
 
