@@ -9,5 +9,4 @@ export const appConfig: ApplicationConfig = {
   provideRouter(routes),
   provideHttpClient(withFetch()),//nuevo estandar
   ]
-
 };
