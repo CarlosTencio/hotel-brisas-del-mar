@@ -1,4 +1,3 @@
-<!-- Galería de imágenes -->
 <div class="mt-8">
   <h3 class="text-lg font-semibold mb-4">Galería</h3>
 
@@ -9,7 +8,8 @@
       <img [src]="selectedImage()" alt="Imagen seleccionada" class="w-full rounded-lg shadow-lg">
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1 w-full lg:w-3/5">
+<!-- Miniaturas (limite de 12 imágenes declarado en ts) -->
+    <div class="grid grid-cols-4 gap-1 w-3/5">
       <ng-container *ngFor="let img of limitedImages(); let i = index">
         <img
           [src]="img"
