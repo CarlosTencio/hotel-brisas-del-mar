@@ -1,21 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Page } from '../../models/page.interface';
-import { Observable, catchError, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { RoomType } from '../../models/room-type.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ContentService {
+@Injectable({ providedIn: 'root' })
+export class RoomTypeService {
+  constructor() { }
 
-
-  private pageURL = 'https://localhost:7075/api/Page';
-  private pageFacilitiesURL = 'https://localhost:7075/api/Page/getPageForTittle?facilities=Facilidades';
+  private URL = 'https://localhost:7075/api/RoomType';
   private readonly http = inject(HttpClient);
 
-
-  loadContent(): Observable<Page[]> {
-    return this.http.get<Page[]>(this.pageURL).pipe(
+  loadSelectRoomType(): Observable<RoomType[]> {
+    return this.http.get<RoomType[]>(this.URL).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMsg: string;
 
@@ -30,10 +26,5 @@ export class ContentService {
         return throwError(() => new Error(errorMsg));
       })
     );
-  }
-
-
-  loadFacilities(): Observable<Page[]> {
-    return this.http.get<Page[]>(this.pageFacilitiesURL);
   }
 }

@@ -44,24 +44,6 @@ export const routes: Routes = [
       }
 
     ]
-  },
-  {
-    path: 'login', 
-    loadComponent: () => import('./pages/login-page/login-page.component') 
-  },
-  {
-    path: 'home-auth',
-    component: AdminNavComponent,
-    children: [
-      {
-        path: '',
-        loadComponent: () => import('./auth/pages/home-auth/home-auth.component')
-      }
-    ]
-  },
-  
-  {
-    path: '**',
-    redirectTo: 'home' 
   }
+  
 ];

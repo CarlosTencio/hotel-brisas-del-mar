@@ -1,22 +1,32 @@
-<section class="flex flex-col md:flex-row justify-center items-center gap-6 p-6">
-  <div class="flex flex-col">
-    <label class="text-gray-700 font-semibold">Fecha de llegada</label>
-    <input type="date" name="arrivalDate" required class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <section class="flex flex-col md:flex-row justify-center items-center gap-6 p-6">
+    <div class="flex flex-col">
+      <label class="text-gray-700 font-semibold">Fecha de llegada</label>
+      <input type="date" formControlName="arrivalDate" required
+        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <div class="flex flex-col">
+      <label class="text-gray-700 font-semibold">Fecha de salida</label>
+      <input type="date" formControlName="departureDate" required
+        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+  </section>
+  <div class="flex flex-col items-center w-full">
+    <label for="roomType" class="text-center mb-2">Seleccione tipo de habitación</label>
+    <div class="flex flex-col md:flex-row justify-center items-center gap-4 p-6">
+      <select id="roomType" formControlName="roomType"
+        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="">--Habitaciones--</option>
+        @for (item of dataSelectRoomType(); track item.roomTypeID) {
+          <option [value]="item.roomTypeID">{{ item.roomTypeName }}</option>
+        }
+      </select>
+
+      <button type="submit" (click)="onSubmit()"
+        class="bg-gray-900 text-white px-6 py-2 rounded-2xl shadow-md hover:bg-gray-700 transition-all duration-300">
+        Aceptar
+      </button>
+    </div>
   </div>
-
-  <div class="flex flex-col">
-    <label class="text-gray-700 font-semibold">Fecha de salida</label>
-    <input type="date" name="departureDate" required class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-  </div>
-</section>
-
-<div class="flex flex-col md:flex-row justify-center items-center gap-4 p-6">
-  <select class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <option value="1">Premium</option>
-    <option value="2">Normal</option>
-  </select>
-
-  <button class="bg-gray-900 text-white px-6 py-2 rounded-2xl shadow-md hover:bg-gray-700 transition-all duration-300">
-    Aceptar
-  </button>
-</div>
+</form>
