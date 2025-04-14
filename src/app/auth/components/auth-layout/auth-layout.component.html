@@ -1,8 +1,8 @@
-<div class="flex h-screen overflow-hidden ">
+<div class="flex h-screen overflow-hidden">
   <!-- Menú lateral - siempre presente en desktop, overlay en móvil -->
   <div class="fixed md:static md:block">
     <div [class]="menuOpen ? 'block' : 'hidden md:block'" class="bg-white w-64 h-full shadow-lg z-20">
-      <side-menu />
+      <app-side-menu-auth />
     </div>
   </div>
   

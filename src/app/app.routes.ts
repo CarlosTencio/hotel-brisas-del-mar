@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import NavPageComponent from './shared/components/main-layout/main-layout.component';
-//import AdminNavComponent from './shared/components/admin-layout/admin-layout.component';
+import AdminNavComponent from './auth/components/auth-layout/auth-layout.component';
 import LoginPageComponent from './pages/login-page/login-page.component';
 
 export const routes: Routes = [

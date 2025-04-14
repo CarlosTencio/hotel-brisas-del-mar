@@ -1,0 +1,7 @@
+<div class="">
+    @for (item of dataPage(); track $index) {
+      @if (item.pageTitle === 'Contáctenos') {
+        <app-contact [dataPage]="item"/>
+      }
+    }
+  </div>

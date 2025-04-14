@@ -1,0 +1,21 @@
+<h1 class="text-5xl font-bold mb-6 text-center">{{ title() }}</h1>
+
+<div class="flex justify-center">
+  <div class="w-full max-w-2xl text-left pl-40">
+    <div *ngFor="let section of content()" class="mb-4">
+      <h2 class="text-xl font-semibold text-emerald-700">
+        {{ section.split(':')[0].trim() }}
+      </h2>
+      <p class="text-gray-700">
+        {{ section.split(':').slice(1).join(':').trim() }}
+      </p>
+    </div>
+  </div>
+  <div class="flex items-center justify-center w-full">
+    <img 
+      [src]="dataPage().images[1]" 
+      alt="Imagen de contacto" 
+      class="w-100 h-100 rounded-2xl object-cover shadow-xl animate-fade-in"
+    />
+  </div>
+</div>
