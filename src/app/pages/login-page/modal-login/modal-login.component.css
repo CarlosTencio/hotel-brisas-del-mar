@@ -1,0 +1,27 @@
+.modal-enter {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  .modal-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  .modal-exit {
+    opacity: 1;
+  }
+  
+  .modal-exit-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 300ms, transform 300ms;
+  }
+  
+  /* Sombra para el modal */
+  .modal-shadow {
+    box-shadow:
+      0 10px 25px -5px rgba(248, 242, 242, 0.05), /* More transparent first shadow */
+      0 10px 10px -5px rgba(251, 242, 242, 0.02); /* More transparent second shadow */
+  }

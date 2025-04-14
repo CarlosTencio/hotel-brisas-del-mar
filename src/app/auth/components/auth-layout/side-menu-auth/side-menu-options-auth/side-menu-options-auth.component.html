@@ -1,0 +1,14 @@
+
+<section class="w-full py-4 overflow-y-auto ">
+  @for (option of menuOptions; track option.route) {
+    <a 
+    (click)="navigateTo(option.route)" 
+      [routerLink]="option.route" 
+      routerLinkActive="" 
+      class="block px-4 py-3 text-gray-700 transition-all duration-200 border-l-4 border-transparent"
+      
+    >
+      <span class="text-base">{{option.label}}</span>
+    </a>
+  }
+</section>

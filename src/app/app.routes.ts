@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import NavPageComponent from './shared/components/main-layout/main-layout.component';
-//import AdminNavComponent from './shared/components/admin-layout/admin-layout.component';
+import AdminNavComponent from './auth/components/auth-layout/auth-layout.component';
 import LoginPageComponent from './pages/login-page/login-page.component';
 
 export const routes: Routes = [
@@ -47,10 +47,21 @@ export const routes: Routes = [
   },
   {
     path: 'login', 
-    loadComponent: () => import('./pages/login-page/login-page.component') // Solo carga el componente login
+    loadComponent: () => import('./pages/login-page/login-page.component') 
   },
   {
+    path: 'home-auth',
+    component: AdminNavComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./auth/pages/home-auth/home-auth.component')
+      }
+    ]
+  },
+  
+  {
     path: '**',
-    redirectTo: 'home' // Redirige a home si la ruta no existe
+    redirectTo: 'home' 
   }
 ];

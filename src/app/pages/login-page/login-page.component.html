@@ -1,28 +1,16 @@
 <div class="min-h-screen flex flex-col bg-gray-100">
-  <nav class="bg-white shadow-lg">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex justify-between h-16">
-           <!-- Admin Module Title -->
-  <div class="container mx-auto px-4 py-6">
-    <h2 class="text-gray-700 text-center sm:text-left">Módulo Administrador</h2>
-  </div>
-
-        <div class="flex items-center">
-        <span class="text-xl text-gray-700">Módulo Administrador</span> 
-        </div>
-      </div>
-    </div>
-  </nav>
- 
-  <!-- Divider -->
   <div class="flex-grow flex items-start justify-center pt-20 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-6">
       <div>
-       
         <app-login (loginEvent)="handleLogin($event)"></app-login>
+      </div>
     </div>
   </div>
-  
+
+  @if(showErrorModal()){
     
-  </div>
-  
+      <app-modal-login [errorMessage]="errorMessage()" (closeModal)="closeErrorModal()"></app-modal-login>
+    
+    
+  }
+</div>
