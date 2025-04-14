@@ -1,0 +1,45 @@
+<div class="p-8 bg-white rounded-lg shadow-md max-w-2xl mx-auto">
+  <h2 class="text-2xl font-bold text-amber-800 mb-6">Reserva en línea</h2>
+
+  <div class="flex flex-col md:flex-row items-start gap-6 mb-8 border-b border-gray-200 pb-6">
+    <img src="" alt="Foto de habitación" class="bg-amber-200 rounded-lg shadow-sm object-cover w-full md:w-64 h-48">
+    <div>
+      <h3 class="text-xl font-semibold mb-2">Habitación</h3>
+      <p class="text-gray-600">Disfrute de nuestra confortable habitación equipada con todas las comodidades para hacer de su estancia una experiencia inolvidable.</p>
+    </div>
+  </div>
+
+  <div class="bg-amber-50 p-4 rounded-md mb-6">
+    <p class="font-medium text-amber-900">Monto de su reservación: <span class="font-bold">$120.00 USD</span></p>
+  </div>
+
+  <form class="space-y-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
+        <input type="text" id="nombre" placeholder="Nombre" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+      </div>
+
+      <div>
+        <label for="apellidos" class="block text-sm font-medium text-gray-700 mb-1">Apellidos:</label>
+        <input type="text" id="apellidos" placeholder="Apellidos" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email:</label>
+        <input type="email" id="email" placeholder="Email" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+      </div>
+
+      <div>
+        <label for="tarjeta" class="block text-sm font-medium text-gray-700 mb-1">Tarjeta:</label>
+        <input type="text" id="tarjeta" placeholder="XXXX XXXX XXXX XXXX" class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500" />
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <button type="submit" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-md shadow-md transition duration-300 transform hover:scale-105">
+        Confirmar Reserva
+      </button>
+    </div>
+  </form>
+</div>

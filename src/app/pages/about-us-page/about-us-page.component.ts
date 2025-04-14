@@ -12,27 +12,18 @@ import { AboutUsComponent } from '../../components/about-us/about-us.component';
 export default class AboutUsPageComponent implements OnInit {
   aboutUsContent = inject(ContentService);
   dataPage = signal<Page[]>([]);
-  errorMessage:string=' ';
+  errorMessage = signal<string>('');
 
   ngOnInit() {
-
     this.aboutUsContent.loadContent().subscribe({
       next: (respPages) => {
         this.dataPage.set(respPages);
+        this.errorMessage.set(''); // Limpiar cualquier error previo
       },
       error: (err) => {
         console.error('Error loading pages:', err);
-        if (err.status) {
-          if (err.status === 404) {
-            this.errorMessage = 'No se encontraron las páginas.';
-          } else if (err.status === 500) {
-            this.errorMessage = 'Error en el servidor. Inténtalo más tarde.';
-          }
-        } else {
-          this.errorMessage = 'Error al cargar las páginas. Inténtalo más tarde.';
-        }
+        this.errorMessage.set(err.message); // Utilizamos directamente el mensaje procesado por el servicio
       }
     });
   }
-
 }

@@ -44,13 +44,6 @@ export const routes: Routes = [
       }
 
     ]
-  },
-  {
-    path: 'login', 
-    loadComponent: () => import('./pages/login-page/login-page.component') // Solo carga el componente login
-  },
-  {
-    path: '**',
-    redirectTo: 'home' // Redirige a home si la ruta no existe
   }
+  
 ];

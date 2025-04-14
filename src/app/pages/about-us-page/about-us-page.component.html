@@ -1,7 +1,7 @@
 <div class="">
-  @if (errorMessage ) {
-<h1 class="">{{errorMessage}}</h1>
+  @if (errorMessage()) {
+    <h1 class="">{{errorMessage()}}</h1>
   }
-  <app-about-us class="about-section"  [dataPage]="dataPage()"></app-about-us>
-
+  <app-about-us class="about-section" [dataPage]="dataPage()"></app-about-us>
+  
 </div>
