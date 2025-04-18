@@ -1,0 +1,6 @@
+<div class="">
+    @for (item of dataRoomRate(); track item.roomTypeID) {
+        <app-room-rate-item [dataRoomRate]="item" />
+        <hr class="mb-2.5">
+    }
+</div>
