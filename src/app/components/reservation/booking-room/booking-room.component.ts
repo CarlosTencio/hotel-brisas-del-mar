@@ -4,16 +4,20 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RoomService } from '../../../core/services/room.service';
 import { RoomAvailable } from '../../../models/room-available.interface';
+import { BookingService } from '../../../core/services/booking.service';
+import { RecommendationModalComponent } from '../recommendation-modal/recommendation-modal.component';
 
 @Component({
   selector: 'booking-room',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RecommendationModalComponent],
   templateUrl: './booking-room.component.html',
 })
 export class BookingRoomComponent {
+  bookingService = inject(BookingService);
+  message: string = '';
   @Output() isAvailable = new EventEmitter<boolean>();
   errorMessage = signal<string>('');
-  Room = inject(RoomService);
+  room = inject(RoomService);
   dataSelectRoomType = input.required<RoomType[]>();
 
   //data from form
@@ -25,7 +29,6 @@ export class BookingRoomComponent {
 
   onSubmit() {
     // console.log(this.profileForm.value);
-
     // Obtener los valores del formulario
     const arrivalDate = this.profileForm.get('arrivalDate')?.value;
     const departureDate = this.profileForm.get('departureDate')?.value;
@@ -33,34 +36,52 @@ export class BookingRoomComponent {
 
     // Verificar que los valores existan antes de hacer la llamada
     if (arrivalDate && departureDate && roomTypeId) {
-      this.Room.checkAvailability(arrivalDate, departureDate, roomTypeId)
+      this.room.checkAvailability(arrivalDate, departureDate, roomTypeId)
         .subscribe({
           next: (room: RoomAvailable) => {
-            // Si retona un objeto, significa que hay habitaciones disponibles
-
-            this.isAvailable.emit(true); // Emitir el evento de disponibilidad
-            console.log('Habitación disponible:', this.isAvailable);
-
-            if (room == null) {
-              //levantar modal
-              console.log('No hay habitaciones disponibles');
+            console.log(room);
+            if (room.resultType === 'Available') {
+              // Guardar los datos de la habitación en el servicio de reserva
+              this.bookingService.saveData(room);
+              this.isAvailable.emit(true); // Emitir el evento de disponibilidad
             }
-            // Aquí puedes manejar la lógica para mostrar la disponibilidad
+            //Room not available, but there is another type of room available
+            if (room.resultType === 'Recommendation') {
+              //levantar modal
+              this.message = 'No hay disponibilidad para las fechas seleccionadas, pero tenemos una recomendación para usted: Hay espacio en el tipo de habitación'
+                + room.roomTypeName;
+              this.openModal();
+            }
+            if (room.resultType === 'AlternativeDates') {
+               this.message ='No hay habitaciones disponibles para las fechas seleccionadas, pero puedes intentar entre estas fechas: ' + room.checkIn + ' - ' + room.checkOut;
+              this.openModal();
+            }
+            if (room.resultType === 'NoAvailability') {
+             this.message ='Lo sentimos, no hay disponibilidad en las próximas fechas.';
+              this.openModal();
+            }
           },
           error: (error) => {
-            console.error('Error al verificar disponibilidad:', error);
-
             if (error.status === 404) {
               this.errorMessage.set('No hay habitaciones disponibles para las fechas seleccionadas');
             } else {
               this.errorMessage.set('Ocurrió un error al consultar la disponibilidad');
             }
-
-            // this.mostrarAlertaError = true;
           },
         });
     }
   }
+  //modal
 
+  isModalOpen = signal<boolean>(false);
 
+  openModal(): void {
+    this.isModalOpen.set(true);
+  }
+
+  closeModal(): void {
+    console.log('Modal closed');
+    this.isModalOpen.set(false);
+    this.isAvailable.emit(false);//emite el evento para volver al componente hermano
+  }
 }
