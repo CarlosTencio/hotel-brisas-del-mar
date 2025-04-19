@@ -1,17 +1,17 @@
-<div class="flex h-screen overflow-hidden ">
+<div class="flex h-screen overflow-hidden">
   <!-- Menú lateral - siempre presente en desktop, overlay en móvil -->
   <div class="fixed md:static md:block">
     <div [class]="menuOpen ? 'block' : 'hidden md:block'" class="bg-white w-64 h-full shadow-lg z-20">
       <side-menu />
     </div>
   </div>
-  
+
 
   @if(menuOpen) {
     <div class="" (click)="menuService.setMenuOpen(false)"></div>
   }
 
-  
+
   <!-- Contenido principal - siempre ocupa todo el espacio disponible -->
   <div class="flex flex-col flex-1 h-full overflow-auto text-slate-800">
     <router-outlet />

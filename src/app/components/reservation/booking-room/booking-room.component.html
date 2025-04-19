@@ -19,7 +19,7 @@
         class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         <option value="">--Habitaciones--</option>
         @for (item of dataSelectRoomType(); track item.roomTypeID) {
-          <option [value]="item.roomTypeID">{{ item.roomTypeName }}</option>
+        <option [value]="item.roomTypeID">{{ item.roomTypeName }}</option>
         }
       </select>
 
@@ -30,3 +30,9 @@
     </div>
   </div>
 </form>
+<app-recommendation-modal [isOpen]="isModalOpen()" title="Reserva Confirmada" [showConfirmButton]="true"
+  [showCancelButton]="false" confirmButtonText="Aceptar" (closeModal)="closeModal()">
+  <p class="text-gray-700 dark:text-gray-300">
+    {{ message }}
+  </p>
+</app-recommendation-modal>

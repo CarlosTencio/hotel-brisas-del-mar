@@ -8,15 +8,14 @@ export class RoomService {
   constructor() { }
   private pageURL = 'https://localhost:7075/api/Room/check-availability';
   private readonly http = inject(HttpClient);
-
+//Check availability and if there is any, return the room.
   checkAvailability(entryDate: string, departureDate: string, roomTypeId: number): Observable<RoomAvailable> {
-    // Crear el objeto para enviarlo en el cuerpo de la solicitud
+// Create the request object to send to the backend
     const requestBody = {
       entryDate: entryDate,
       departureDate: departureDate,
       roomTypeId: roomTypeId
     };
-
     // Enviar la solicitud POST con el cuerpo
     return this.http.post<RoomAvailable>(this.pageURL, requestBody);
   }

@@ -19,7 +19,6 @@ export class BookingComponent implements OnInit {
 
   updateProporty(newValue: boolean) {
     this.isAvailable = newValue;
-    console.log("isAvailable", this.isAvailable);
   }
 
 
@@ -31,10 +30,8 @@ export class BookingComponent implements OnInit {
       next: (respRoomTypes) => {
         this.dataRoomType = respRoomTypes; // Guardamos el array completo
         this.errorMessage.set(''); // Limpiar cualquier error previo
-        // console.log("Padre", this.dataRoomType); // Esto mostrará el primer objeto completo
       },
       error: (err) => {
-        // console.error('Error loading room types:', err);
         this.errorMessage.set(err.message || 'Error al cargar los tipos de habitación');
       }
     });

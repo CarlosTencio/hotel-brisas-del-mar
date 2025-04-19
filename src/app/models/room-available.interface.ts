@@ -1,6 +1,12 @@
 export interface RoomAvailable {
-    RoomNumber: number;
-    RoomTypeId: string;
-    RoomTypeName: string;
-    Description: string;
+  roomNumber: number;
+  roomId: number;
+  roomTypeId: string;
+  roomTypeName: string;
+  description: string;
+  price: number;
+  imgUrl: string;
+  checkIn: string;
+  checkOut: string;
+  resultType: string;
 }

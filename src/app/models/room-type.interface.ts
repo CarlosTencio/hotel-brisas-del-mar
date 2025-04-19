@@ -4,4 +4,5 @@ export interface RoomType {
   price: number;
   chracteristics: string;
   description: string;
+  img: string;
 }
