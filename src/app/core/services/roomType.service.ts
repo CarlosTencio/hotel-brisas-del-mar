@@ -2,12 +2,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { RoomType } from '../../models/room-type.interface';
+import { getBaseUrl } from '../constants/api.constants';
 
 @Injectable({ providedIn: 'root' })
 export class RoomTypeService {
   constructor() { }
 
-  private URL = 'https://localhost:7075/api/RoomType';
+  private readonly baseUrl = getBaseUrl();
+  private URL = `${this.baseUrl}/RoomType`;
   private readonly http = inject(HttpClient);
 
   loadSelectRoomType(): Observable<RoomType[]> {

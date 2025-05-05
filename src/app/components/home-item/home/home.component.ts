@@ -11,7 +11,14 @@ import { Page } from '../../../models/page.interface';
 })
 export class HomeComponent {
   dataPage = input.required<Page>();
-  image = computed(() => this.dataPage().images[2]);
+  image = computed(() => {
+    const images = this.dataPage().images;
+    if (!images || images.length === 0) {
+      console.warn('No images available for the home page');
+      return '';
+    }
+    return images[0];
+  });
   content = computed(() => this.dataPage().pageContent);
   title = computed(() => this.dataPage().pageTitle);
 } 

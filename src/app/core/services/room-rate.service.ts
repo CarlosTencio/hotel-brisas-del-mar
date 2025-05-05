@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { RoomRate } from '../../models/room-rate.interface';
+import { getBaseUrl } from '../constants/api.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ import { RoomRate } from '../../models/room-rate.interface';
 export class RoomRateService {
   constructor() { }
 
-  private roomRateURL = 'https://localhost:7075/api/RoomType/getRoomRatePage';
+  private readonly baseUrl = getBaseUrl();
+  private roomRateURL = `${this.baseUrl}/RoomType/getRoomRatePage`
   private readonly http = inject(HttpClient);
 
   getRoomRatePage(): Observable<RoomRate[]> {
