@@ -5,13 +5,15 @@ import { HttpClient } from '@angular/common/http';
 import { Booking } from '../../models/booking.interface';
 import { BookingResponse } from '../../models/booking-response.interface';
 import { Customer } from '../../models/customer.interface';
+import { getBaseUrl } from '../constants/api.constants';
 
 @Injectable({ providedIn: 'root' })
 
 //with this service I pass the reservation information to the reservation view(between sibling components)
 //Also, I create the booking data object to be sent to the backend
 export class BookingService {
-  private bookingURLPost = 'https://localhost:7075/api/Booking/create-booking';
+  private readonly baseUrl = getBaseUrl();
+  private bookingURLPost = `${this.baseUrl}/Booking/create-booking`;
   private readonly http = inject(HttpClient);
   constructor() { }
   // Store the reservation data

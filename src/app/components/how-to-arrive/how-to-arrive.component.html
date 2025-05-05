@@ -1,0 +1,10 @@
+<div class="m-3">
+  @if (dataPage()) {
+    @for (item of dataPage(); track $index) {
+      @if (item.pageTitle === 'Como llegar?') {
+        <app-location [dataPage]="item" />
+        <app-map />
+      }
+    }
+  }
+</div> 

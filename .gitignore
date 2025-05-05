@@ -40,3 +40,11 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/app/core/services/roomType.service.ts
+src/app/core/services/roomType.service.ts
+src/app/core/services/room.service.ts
+src/app/core/services/room-rate.service.ts
+src/app/core/services/promotion.service.ts
+src/app/core/services/content.service.ts
+src/app/core/services/booking.service.ts
+src/app/core/services/ad.service.ts
