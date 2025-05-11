@@ -21,6 +21,6 @@ export class AppComponent {
     return this.router.url === '/login';
   }
   isPageAuth(): boolean {
-    return this.router.url === '/home-auth';
+    return this.router.url.startsWith('/home-auth');
   }
 }

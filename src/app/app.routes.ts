@@ -56,10 +56,35 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./auth/pages/home-auth/home-auth.component')
+      },
+      {
+        path: 'edit-page',
+        loadComponent: () => import('./auth/pages/edit-page/edit-page.component')
+      },
+      {
+        path: 'list-booking',
+        loadComponent: () => import('./auth/pages/list-booking-page/list-booking-page.component')
+      },
+      {
+        path: 'manage-room',
+        loadComponent: () => import('./auth/pages/manage-room-page/manage-room-page.component')
+      }
+      ,{
+        path: 'status-hotel',
+        loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
+      },{
+        path: 'status-hotel',
+        loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
+      }
+      ,{
+        path: 'availability-room',
+        loadComponent: () => import('./auth/pages/availability-room-page/availability-room-page.component')
+      },{
+        path: 'advertising',
+        loadComponent: () => import('./auth/pages/advertising-page/advertising-page.component')
       }
     ]
   },
-
   {
     path: '**',
     redirectTo: 'home'
