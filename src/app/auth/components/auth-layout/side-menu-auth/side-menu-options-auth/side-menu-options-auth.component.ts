@@ -23,35 +23,31 @@ export  class SideMenuOptionsAuthComponent {
   menuOptions: MenuOptions[] = [
     {
       label: 'Home',
-      route: '/auth-home'
+      route: '/home-auth'
     },
     {
-      label: 'modificar pagina',
-      route: '/about-us'
+      label: 'Modificar página',
+      route: '/home-auth/edit-page'
     },
     {
       label: 'Listado de reservaciones',
-      route: '/facilities'
+      route: '/home-auth/list-booking'
     },
     {
-      label: 'Cómo llegar?',
-      route: '/location'
+      label: 'Administrar habitaciones',
+      route: '/home-auth/manage-room'
     },
     {
-      label: 'administrar habitaciones',
-      route: '/room-rate'
+      label: 'Ver estado del hotel hoy',
+      route: '/home-auth/status-hotel'
     },
     {
-      label: 'Ver estado del hotel hoy ',
-      route: '/reservation'
+      label: 'Consultar dispobibilidad de habitaciones',
+      route: 'home-auth/availability-room'
     },
     {
-      label: 'consultar dispobibilidad de habitaciones',
-      route: '/contact-us'
-    },
-    {
-      label: 'publicidad',
-      route: '/publicidad'
+      label: 'Publicidad',
+      route: 'home-auth/advertising'
     }
   ]
   navigateTo(route: string) {
