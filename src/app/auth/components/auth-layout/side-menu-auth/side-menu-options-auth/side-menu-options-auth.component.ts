@@ -43,11 +43,11 @@ export  class SideMenuOptionsAuthComponent {
     },
     {
       label: 'Consultar dispobibilidad de habitaciones',
-      route: 'home-auth/availability-room'
+      route: '/home-auth/availability-room'
     },
     {
       label: 'Publicidad',
-      route: 'home-auth/advertising'
+      route: '/home-auth/advertising'
     }
   ]
   navigateTo(route: string) {
