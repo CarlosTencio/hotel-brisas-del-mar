@@ -48,6 +48,14 @@ export  class SideMenuOptionsAuthComponent {
     {
       label: 'Publicidad',
       route: '/home-auth/advertising'
+    },
+    {
+      label: 'Administrar temporadas',
+      route: '/home-auth/season'
+    },
+    {
+      label: 'Administrar promociones',
+      route: '/home-auth/promotion'
     }
   ]
   navigateTo(route: string) {

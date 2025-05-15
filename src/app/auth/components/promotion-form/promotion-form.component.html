@@ -1,0 +1,141 @@
+@if(isLoading()){
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+  <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
+    <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+    <p class="text-gray-700 font-medium">{{ isEditMode() ? 'Loading promotion...' : 'Preparing form...' }}</p>
+  </div>
+</div>
+} @else {
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex justify-between mb-6">
+        <h1 class="text-2xl font-bold">{{ isEditMode() ? 'Edit Promotion' : 'Create New Promotion' }}</h1>
+        <button 
+          (click)="cancel()" 
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+          Back to List
+        </button>
+      </div>
+
+      @if(errorMessage()) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form [formGroup]="promotionForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label for="promotionName" class="block text-gray-700 font-medium mb-2">Promotion Name</label>
+          <input 
+            type="text" 
+            id="promotionName" 
+            formControlName="promotionName"
+            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          @if(promotionForm.get('promotionName')?.invalid && promotionForm.get('promotionName')?.touched) {
+            <p class="text-red-600 text-sm mt-1">Promotion name is required</p>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="startDate" class="block text-gray-700 font-medium mb-2">Start Date</label>
+            <input 
+              type="date" 
+              id="startDate" 
+              formControlName="startDate"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            @if(promotionForm.get('startDate')?.invalid && promotionForm.get('startDate')?.touched) {
+              <p class="text-red-600 text-sm mt-1">Start date is required</p>
+            }
+          </div>
+
+          <div>
+            <label for="endDate" class="block text-gray-700 font-medium mb-2">End Date</label>
+            <input 
+              type="date" 
+              id="endDate" 
+              formControlName="endDate"
+              class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            @if(promotionForm.get('endDate')?.invalid && promotionForm.get('endDate')?.touched) {
+              <p class="text-red-600 text-sm mt-1">End date is required</p>
+            }
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="percent" class="block text-gray-700 font-medium mb-2">Percent</label>
+          <input 
+            type="number" 
+            id="percent" 
+            formControlName="percent"
+            min="0"
+            max="100"
+            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          @if(promotionForm.get('percent')?.invalid && promotionForm.get('percent')?.touched) {
+            <p class="text-red-600 text-sm mt-1">
+              Percent must be between 0 and 100
+            </p>
+          }
+        </div>
+
+        <div class="mb-4">
+          <label for="isActive" class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="isActive" 
+              formControlName="isActive"
+              class="w-4 h-4 text-blue-600"
+            >
+            <span class="ml-2 text-gray-700">Active</span>
+          </label>
+        </div>
+
+        <div class="mb-6">
+          <label for="img" class="block text-gray-700 font-medium mb-2">Promotion Image</label>
+          <input 
+            type="file" 
+            id="promotionImage" 
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          
+          @if(promotionForm.get('img')?.value) {
+            <div class="mt-2">
+              <p class="text-sm font-medium text-gray-500 mb-1">Preview:</p>
+              <img 
+                [src]="promotionForm.get('img')?.value" 
+                alt="Promotion preview" 
+                class="h-32 object-contain border rounded p-1"
+              />
+            </div>
+          }
+        </div>
+
+        <div class="flex justify-end space-x-4 mt-6">
+          <button 
+            type="button"
+            (click)="cancel()" 
+            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+            Cancel
+          </button>
+          <button 
+            type="submit"
+            [disabled]="promotionForm.invalid"
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300">
+            {{ isEditMode() ? 'Update' : 'Create' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+} 
