@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, input, OnInit, Output, signal } from '@angular/core';
 import { RoomType } from '../../../models/room-type.interface';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,15 @@ import { RecommendationModalComponent } from '../recommendation-modal/recommenda
   templateUrl: './booking-room.component.html',
 })
 export class BookingRoomComponent {
+
   bookingService = inject(BookingService);
   message: string = '';
   @Output() isAvailable = new EventEmitter<boolean>();
   errorMessage = signal<string>('');
   room = inject(RoomService);
   dataSelectRoomType = input.required<RoomType[]>();
+  minDate = new Date().toISOString().split('T')[0]; //fecha minima para el input de fecha de llegada
+
 
   //data from form
   profileForm = new FormGroup({
@@ -53,17 +56,21 @@ export class BookingRoomComponent {
               this.openModal();
             }
             if (room.resultType === 'AlternativeDates') {
-               this.message ='No hay habitaciones disponibles para las fechas seleccionadas, pero puedes intentar entre estas fechas: ' + room.checkIn + ' - ' + room.checkOut;
+              this.message = 'No hay habitaciones disponibles para las fechas seleccionadas, pero puedes intentar entre estas fechas: ' + room.checkIn + ' - ' + room.checkOut;
               this.openModal();
             }
             if (room.resultType === 'NoAvailability') {
-             this.message ='Lo sentimos, no hay disponibilidad en las próximas fechas.';
+              this.message = 'Lo sentimos, no hay disponibilidad en las próximas fechas.';
               this.openModal();
             }
           },
           error: (error) => {
             if (error.status === 404) {
               this.errorMessage.set('No hay habitaciones disponibles para las fechas seleccionadas');
+            } else if (error.status === 400 && error.error?.error) {
+              // Captura los BadRequest y muestra el mensaje específico del backend
+              this.message = error.error.error;
+              this.openModal();
             } else {
               this.errorMessage.set('Ocurrió un error al consultar la disponibilidad');
             }
