@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BookingComponent } from '../../components/reservation/booking.component';
+import { BookingComponent } from '../../components/booking/booking.component';
 
 
 @Component({
