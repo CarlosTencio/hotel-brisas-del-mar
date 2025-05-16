@@ -6,9 +6,13 @@ import { getBaseUrl } from '../constants/api.constants';
 
 @Injectable({ providedIn: 'root' })
 export class RoomService {
-  constructor() { }
+
   private readonly baseUrl = getBaseUrl();
-  private pageURL = `${this.baseUrl}/Room/check-availability`;
+
+  private checkAvailabilityURL = `${this.baseUrl}/Room/check-availability`;
+
+  private updateStatusURL = `${this.baseUrl}/Room/room-status`;
+
   private readonly http = inject(HttpClient);
 //Check availability and if there is any, return the room.
   checkAvailability(entryDate: string, departureDate: string, roomTypeId: number): Observable<RoomAvailable> {
@@ -19,6 +23,14 @@ export class RoomService {
       roomTypeId: roomTypeId
     };
     // Enviar la solicitud POST con el cuerpo
-    return this.http.post<RoomAvailable>(this.pageURL, requestBody);
+    return this.http.post<RoomAvailable>(this.checkAvailabilityURL, requestBody);
   }
+
+
+//actuzalizar el estado de la habitación para poder ser reservada
+updateStatus(id: number, status: number): Observable<void> {
+  const url = `${this.baseUrl}/Room/room-status/${id}`; // Interpolación directa
+  const requestBody = { status: status };
+  return this.http.put<void>(url, requestBody);
+}
 }

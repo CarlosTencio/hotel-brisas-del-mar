@@ -1,9 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { BookingRoomComponent } from './booking-room/booking-room.component';
 
 import { RoomTypeService } from '../../core/services/roomType.service';
 import { RoomType } from '../../models/room-type.interface';
 import { PersonalDataBookingComponent } from "./personal-data-booking/personal-data-booking.component";
+import { RoomService } from '../../core/services/room.service';
 
 
 @Component({
@@ -12,15 +13,15 @@ import { PersonalDataBookingComponent } from "./personal-data-booking/personal-d
   templateUrl: './booking.component.html',
 })
 export class BookingComponent implements OnInit {
+
   isAvailable:boolean= false;
   RoomType = inject(RoomTypeService);
   dataRoomType: RoomType[] = [];
   errorMessage = signal<string>('');
 
-  updateProporty(newValue: boolean) {
+  updateProperty(newValue: boolean) {
     this.isAvailable = newValue;
   }
-
 
   ngOnInit() {
     this.loadSelect();
