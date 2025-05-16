@@ -1,0 +1,95 @@
+@if(isLoading()){
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+  <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
+    <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+    <p class="text-gray-700 font-medium">Loading promotion details...</p>
+  </div>
+</div>
+} @else {
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <div class="flex justify-between mb-6">
+        <h1 class="text-2xl font-bold">Promotion Details</h1>
+        <button 
+          (click)="goToList()" 
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+          Back to List
+        </button>
+      </div>
+
+      @if(errorMessage()) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      @if(!promotion()) {
+        <div class="text-center py-8">
+          <p class="text-gray-500">Promotion not found</p>
+        </div>
+      } @else {
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="border-b p-4 bg-gray-50">
+            <h2 class="text-xl font-semibold">{{ promotion()?.promotionName }}</h2>
+            <div class="flex space-x-3 mt-2">
+              <span 
+                [class]="promotion()?.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
+                class="px-2 py-1 rounded text-xs font-medium">
+                {{ promotion()?.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Start Date</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ promotion()?.startDate | date:'mediumDate' }}</p>
+              </div>
+              
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">End Date</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ promotion()?.endDate | date:'mediumDate' }}</p>
+              </div>
+              
+              <div>
+                <h3 class="text-sm font-medium text-gray-500">Percentage</h3>
+                <p class="mt-1 text-sm text-gray-900">{{ promotion()?.percent }}%</p>
+              </div>
+
+            </div>
+            
+            @if(promotion()?.img) {
+              <div class="mt-6">
+                <h3 class="text-sm font-medium text-gray-500 mb-2">Promotion Image</h3>
+                <img 
+                  [src]="promotion()?.img" 
+                  alt="Promotion image" 
+                  class="max-h-48 object-contain border rounded"
+                />
+              </div>
+            }
+            
+            <div class="flex justify-end space-x-3 mt-8">
+              <button 
+                (click)="editPromotion()" 
+                class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors">
+                Edit
+              </button>
+              <button 
+                (click)="deletePromotion()" 
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+} 

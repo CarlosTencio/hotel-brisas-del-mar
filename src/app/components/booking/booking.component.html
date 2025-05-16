@@ -1,0 +1,6 @@
+@if(!isAvailable){
+  <booking-room [dataSelectRoomType]="dataRoomType" (isAvailable)="updateProperty($event)"/>
+}@else{
+  <personal-data-booking (isAvailable)="updateProperty($event)"/>
+}
+

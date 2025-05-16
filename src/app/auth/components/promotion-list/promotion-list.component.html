@@ -1,0 +1,93 @@
+@if(isLoading()){
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+  <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
+    <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+    <p class="text-gray-700 font-medium">Loading promotions...</p>
+  </div>
+</div>
+} @else {
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between mb-6">
+      <h1 class="text-2xl font-bold">Promotions Management</h1>
+      <button 
+        (click)="createPromotion()" 
+        class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+        Create New Promotion
+      </button>
+    </div>
+
+    @if(errorMessage()) {
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    @if(promotions().length === 0) {
+      <div class="text-center py-8">
+        <p class="text-gray-500">No promotions found</p>
+      </div>
+    } @else {
+      <div class="overflow-x-auto shadow-md rounded-lg">
+        <table class="min-w-full bg-white">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="py-3 px-4 text-left">Promotion Name</th>
+              <th class="py-3 px-4 text-left">Start Date</th>
+              <th class="py-3 px-4 text-left">End Date</th>
+              <th class="py-3 px-4 text-left">Percent</th>
+              <th class="py-3 px-4 text-left">Status</th>
+              <th class="py-3 px-4 text-left">Image</th>
+              <th class="py-3 px-4 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(promotion of promotions(); track promotion.promotionID) {
+              <tr class="border-b hover:bg-gray-50">
+                <td class="py-3 px-4">{{ promotion.promotionName }}</td>
+                <td class="py-3 px-4">{{ promotion.startDate | date:'shortDate' }}</td>
+                <td class="py-3 px-4">{{ promotion.endDate | date:'shortDate' }}</td>
+                <td class="py-3 px-4">{{ promotion.percent }}%</td>
+                <td class="py-3 px-4">
+                  <span [class]="promotion.isActive ? 'text-green-600' : 'text-red-600'">
+                    {{ promotion.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td class="py-3 px-4">
+                  <img 
+                    *ngIf="promotion.img" 
+                    [src]="promotion.img" 
+                    alt="Promotion image" 
+                    class="h-10 w-auto object-contain"
+                  />
+                  <span *ngIf="!promotion.img" class="text-gray-400">No image</span>
+                </td>
+                <td class="py-3 px-4 flex space-x-2">
+                  <button 
+                    (click)="viewPromotion(promotion.promotionID!)" 
+                    class="px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
+                    View
+                  </button>
+                  <button 
+                    (click)="editPromotion(promotion.promotionID!)" 
+                    class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors">
+                    Edit
+                  </button>
+                  <button 
+                    (click)="deletePromotion(promotion.promotionID!)" 
+                    class="px-2 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+} 

@@ -68,20 +68,50 @@ export const routes: Routes = [
       {
         path: 'manage-room',
         loadComponent: () => import('./auth/pages/manage-room-page/manage-room-page.component')
-      }
-      ,{
+      },
+      {
         path: 'status-hotel',
         loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
-      },{
-        path: 'status-hotel',
-        loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
-      }
-      ,{
+      },
+      {
         path: 'availability-room',
         loadComponent: () => import('./auth/pages/availability-room-page/availability-room-page.component')
-      },{
+      },
+      {
         path: 'advertising',
         loadComponent: () => import('./auth/pages/advertising-page/advertising-page.component')
+      },
+      {
+        path: 'season',
+        loadComponent: () => import('./auth/components/season-list/season-list.component')
+      },
+      {
+        path: 'season/create',
+        loadComponent: () => import('./auth/components/season-form/season-form.component')
+      },
+      {
+        path: 'season/edit/:id',
+        loadComponent: () => import('./auth/components/season-form/season-form.component')
+      },
+      {
+        path: 'season/view/:id',
+        loadComponent: () => import('./auth/components/season-view/season-view.component')
+      },
+      {
+        path: 'promotion',
+        loadComponent: () => import('./auth/components/promotion-list/promotion-list.component')
+      },
+      {
+        path: 'promotion/create',
+        loadComponent: () => import('./auth/components/promotion-form/promotion-form.component')
+      },
+      {
+        path: 'promotion/edit/:id',
+        loadComponent: () => import('./auth/components/promotion-form/promotion-form.component')
+      },
+      {
+        path: 'promotion/view/:id',
+        loadComponent: () => import('./auth/components/promotion-view/promotion-view.component')
       }
     ]
   },
