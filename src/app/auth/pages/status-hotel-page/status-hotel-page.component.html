@@ -1,5 +1,5 @@
 @if(isLoading()){
-<div  class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
   <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
     <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -11,8 +11,90 @@
   </div>
 </div>
 }@else{
-  <div class="container mx-auto px-4 py-8 items-center flex flex-col justify-center">
-    <h1 class="text-xl font-bold">Estado del hotel Auth</h1>
-    <p>Modulo Administrador</p>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Título centrado como en el prototipo -->
+    <h1 class="text-3xl font-bold mb-6">Estado del Hotel Hoy</h1>
+
+    <!-- Fecha con estilo similar al prototipo -->
+    <div class="mb-6">
+      <label id="fecha-actual" class="block text-lg mb-4">Fecha: {{ fechaActual() }}</label>
+    </div>
+
+    <!-- Tabla con estilo similar al prototipo -->
+    <div class="mb-8">
+      <table class="w-1/2 ml-0 border-collapse border border-gray-800">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border border-gray-800 p-3 text-left">Número de Habitación</th>
+            <th class="border border-gray-800 p-3 text-left">Tipo</th>
+            <th class="border border-gray-800 p-3 text-left">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(habitacion of paginatedHabitaciones(); track habitacion.roomNumber){
+            <tr class="bg-gray-100">
+              <td class="border border-gray-800 p-3">{{ habitacion.roomNumber }}</td>
+              <td class="border border-gray-800 p-3">{{ habitacion.roomTypeName }}</td>
+              <td class="border border-gray-800 p-3">{{ habitacion.status }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Botón centrado en la página como en el prototipo -->
+    <div class="flex justify-center mt-8">
+      <button 
+        (click)="generatePDF()" 
+        class="bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded flex items-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Paginación -->
+    <div class="flex items-center justify-between mt-8">
+      <div class="text-sm text-gray-700">
+        Mostrando <span class="font-medium">{{ ((currentPage() - 1) * pageSize()) + 1 }}</span> a 
+        <span class="font-medium">{{ mathMin(currentPage() * pageSize(), habitaciones().length) }}</span> de 
+        <span class="font-medium">{{ habitaciones().length }}</span> habitaciones
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <button 
+          (click)="prevPage()" 
+          [disabled]="currentPage() === 1"
+          class="px-3 py-1 rounded border border-gray-300 bg-white text-sm"
+          [class.opacity-50]="currentPage() === 1"
+        >
+          Anterior
+        </button>
+        
+        @for(page of pageNumbers(); track page){
+          <button 
+            (click)="goToPage(page)" 
+            class="px-3 py-1 rounded border"
+            [class.bg-blue-600]="currentPage() === page"
+            [class.text-white]="currentPage() === page"
+            [class.border-blue-600]="currentPage() === page"
+            [class.bg-white]="currentPage() !== page"
+            [class.border-gray-300]="currentPage() !== page"
+          >
+            {{ page }}
+          </button>
+        }
+        
+        <button 
+          (click)="nextPage()" 
+          [disabled]="currentPage() === totalPages()"
+          class="px-3 py-1 rounded border border-gray-300 bg-white text-sm"
+          [class.opacity-50]="currentPage() === totalPages()"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
   </div>
 }
