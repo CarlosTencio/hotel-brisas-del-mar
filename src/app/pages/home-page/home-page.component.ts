@@ -20,16 +20,30 @@ export default class HomePageComponent implements OnInit {
   }
 
   private loadPageContent() {
+    this.contentService.loadPageByTitle('Inicio').subscribe({
+      next: (page) => {
+        console.log('Home page data:', page);
+        this.pageData.set(page);
+      },
+      error: (error) => {
+        console.error('Error loading home page content:', error);
+        // Try fallback to loadContent method
+        this.loadContentFallback();
+      }
+    });
+  }
+
+  private loadContentFallback() {
     this.contentService.loadContent().subscribe({
       next: (pages) => {
         const homePage = pages.find(page => page.pageTitle === 'Inicio');
         if (homePage) {
-          console.log('Home page data:', homePage);
+          console.log('Home page data from fallback:', homePage);
           this.pageData.set(homePage);
         }
       },
       error: (error) => {
-        console.error('Error loading home page content:', error);
+        console.error('Error in fallback home page content load:', error);
       }
     });
   }
