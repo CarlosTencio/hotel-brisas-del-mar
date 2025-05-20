@@ -9,8 +9,7 @@ import { Booking } from '../../../models/booking.interface';
 import { BookingResponse } from '../../../models/booking-response.interface';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from "../confirmation-modal/confirmation-modal.component";
-
-
+import { RoomService } from '../../../core/services/room.service';
 
 @Component({
   selector: 'personal-data-booking',
@@ -22,6 +21,7 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
   errorMessage = signal<string>('');
   isLoading = signal<boolean>(false);
   bookingService = inject(BookingService);
+  roomService = inject(RoomService);
 
 
   room!: RoomAvailable;
@@ -63,6 +63,9 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
     if (this.bookingSubscription) {
       this.bookingSubscription.unsubscribe();
     }
+    this.roomService.updateStatus(this.room.roomId, 1).subscribe({
+      error: (error) => console.error('Error al actualizar estado:', error)
+    });
   }
 
   onSubmit() {
