@@ -30,6 +30,10 @@ export  class SideMenuOptionsAuthComponent {
       route: '/home-auth/edit-page'
     },
     {
+      label: 'Editar página principal',
+      route: '/home-auth/edit-home'
+    },
+    {
       label: 'Listado de reservaciones',
       route: '/home-auth/list-booking'
     },

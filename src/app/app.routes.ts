@@ -62,6 +62,10 @@ export const routes: Routes = [
         loadComponent: () => import('./auth/pages/edit-page/edit-page.component')
       },
       {
+        path: 'edit-home',
+        loadComponent: () => import('./auth/components/home-editor/home-editor.component')
+      },
+      {
         path: 'list-booking',
         loadComponent: () => import('./auth/pages/list-booking-page/list-booking-page.component')
       },
