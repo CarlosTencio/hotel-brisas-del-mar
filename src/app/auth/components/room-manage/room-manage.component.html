@@ -1,68 +1,133 @@
 <div class="container mx-auto px-4 py-8">
   <h1 class="text-3xl font-bold mb-6">Modificar Habitación</h1>
 
-  <div class="mb-6">
-    <label for="roomTypeSelect" class="block text-lg font-semibold text-gray-700 mb-2">
+  <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+    <div class="mb-6">
+      <label for="roomTypeSelect" class="block text-lg font-semibold text-gray-700 mb-2">
         Selecciona tipo de habitación:
-    </label>
-    <select
+      </label>
+      <select
+        formControlName="selectedRoomType"
         id="roomTypeSelect"
         class="w-full p-2 border rounded-lg shadow"
-        [(ngModel)]="selectedRoomType"
-        (change)="loadRoomData()"
-        name="roomTypeSelect"
-    >
+        formControlName="selectedRoomType"
+        (change)="onRoomTypeChange()"
+        [class.border-red-500]="updateForm.get('selectedRoomType')?.invalid && updateForm.get('selectedRoomType')?.touched"
+      >
         <option value="">-- Selecciona --</option>
         <option value="Normal">Normal</option>
         <option value="Premium">Premium</option>
-    </select>
-  </div>
+      </select>
+      <!-- Mostrar error de validación con @if -->
+      @if (updateForm.get('selectedRoomType')?.invalid && updateForm.get('selectedRoomType')?.touched) {
+        <div class="text-red-500 text-sm mt-1">
+          Debe seleccionar un tipo de habitación
+        </div>
+      }
+    </div>
 
+    <div>
+      <label>Tipo: </label> 
+      <span>{{ room.roomTypeName }}</span>
+      <label class="ml-8">Tarifa Diaria: </label>
+      <input 
+        formControlName="price" 
+        type="number" 
+        class="input-text"
+        [class.border-red-500]="updateForm.get('price')?.invalid && updateForm.get('price')?.touched"
+      />
+      <!-- Mostrar error de validación con @if -->
+      @if (updateForm.get('price')?.invalid && updateForm.get('price')?.touched) {
+        <div class="text-red-500 text-sm mt-1">
+          El precio es requerido
+        </div>
+      }
+    </div>
 
-  <div>
-    <label>Tipo: </label> <span>{{ room.roomTypeName }}</span>
-    <label class="ml-8">Tarifa Diaria: </label>
-    <input [(ngModel)]="room.price" type="text" class="input-text" />
-  </div>
+    <div class="mt-4">
+      <label class="block font-semibold text-gray-700 mb-1">Características:</label>
+      <textarea
+        formControlName="characteristics"
+        rows="3"
+        class="w-full p-2 border rounded-lg shadow-sm resize-none"
+        [class.border-red-500]="updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched"
+      ></textarea>
+      <!-- Mostrar error de validación con @if -->
+      @if (updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched) {
+        <div class="text-red-500 text-sm mt-1">
+          Las características son requeridas
+        </div>
+      }
+    </div>
 
-  <div class="mt-4">
-    <label class="block font-semibold text-gray-700 mb-1">Características:</label>
-    <textarea
-      [(ngModel)]="room.characteristics"
-      rows="3"
-      class="w-full p-2 border rounded-lg shadow-sm resize-none"
-    ></textarea>
-  </div>
+    <div class="mt-4">
+      <label class="block font-semibold text-gray-700 mb-1">Descripción:</label>
+      <textarea
+        formControlName="description"
+        rows="3"
+        class="w-full p-2 border rounded-lg shadow-sm resize-none"
+        [class.border-red-500]="updateForm.get('description')?.invalid && updateForm.get('description')?.touched"
+      ></textarea>
+      <!-- Mostrar error de validación con @if -->
+      @if (updateForm.get('description')?.invalid && updateForm.get('description')?.touched) {
+        <div class="text-red-500 text-sm mt-1">
+          La descripción es requerida
+        </div>
+      }
+    </div>
 
-  <div class="mt-4">
-    <label class="block font-semibold text-gray-700 mb-1">Descripción:</label>
-    <textarea
-      [(ngModel)]="room.description"
-      rows="3"
-      class="w-full p-2 border rounded-lg shadow-sm resize-none"
-    ></textarea>
-  </div>
+    <div class="mt-4">
+      <label class="block text-gray-700 font-semibold mb-1">Imagen actual</label>
+      @if (room.image) {
+        <img
+          [src]="room.image"
+          alt="Imagen actual"
+          class="image-preview"
+        />
+      } @else {
+        <div class="text-gray-500 italic">No hay imagen disponible</div>
+      }
+    </div>
 
-  <div class="mt-4">
-    <label class="block text-gray-700 font-semibold mb-1">Imagen actual</label>
-    <img
-      [src]="room.image"
-      alt="Imagen actual"
-      class="image-preview"
-    />
-  </div>
+    <div class="mt-4">
+      <label class="block text-gray-700 font-semibold mb-1">Subir nueva imagen:</label>
+      <input
+        formControlName="img"
+        type="file"
+        (change)="onFileSelected($event)"
+        class="file-input"
+      />
+    </div>
 
-  <div class="mt-4">
-    <label class="block text-gray-700 font-semibold mb-1">Subir nueva imagen:</label>
-    <input
-      type="file"
-      (change)="onFileSelected($event)"
-      class="file-input"
-    />
-  </div>
-
-  <div class="mt-6 flex gap-4">
-    <button (click)="onSubmit()" class="btn-accept">Aceptar</button>
-    <button (click)="onDelete()" class="btn-cancel">Cancelar</button>
-  </div>
+    <div class="mt-6 flex gap-4">
+      <button 
+        type="submit" 
+        class="btn-accept"
+        [disabled]="updateForm.invalid"
+        [class.opacity-50]="updateForm.invalid"
+      >
+        Aceptar
+      </button>
+      <button 
+        type="button" 
+        (click)="onDelete()" 
+        class="btn-cancel"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+ 
 </div>
+ <modal-update-room-type 
+    [isOpen]="isModalOpen()" 
+    title="Aviso" 
+    [showConfirmButton]="true" 
+    [showCancelButton]="false"
+    confirmButtonText="Aceptar" 
+    (closeModal)="closeModal()"
+  >
+    <p class="text-gray-700 dark:text-gray-300">
+      {{ message }}
+    </p>
+  </modal-update-room-type>

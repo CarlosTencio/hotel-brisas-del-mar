@@ -48,7 +48,7 @@ export default class StatusHotelPageComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
-    console.log('Token:', token);
+    // console.log('Token:', token);
     
     if (token) {
       this.login.verifyToken(token).subscribe({

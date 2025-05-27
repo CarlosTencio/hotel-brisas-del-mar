@@ -13,7 +13,7 @@ export default class HeaderAuthComponent {
   constructor(private menuService: MenuService) {}
   toggleMenu() {
     this.menuService.toggleMenu();
-    console.log('menuOpen', this.menuService.menuOpen$);
+    //console.log('menuOpen', this.menuService.menuOpen$);
   }
   logout() {
     localStorage.removeItem('user');
