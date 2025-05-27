@@ -4,6 +4,7 @@ import { LoginService } from '../../services/login.service';
 import { PromotionService } from '../../services/promotion.service';
 import { CommonModule } from '@angular/common';
 import { PromotionMainDTO } from '../../../models/promotion.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-promotion-view',
@@ -22,6 +23,8 @@ export default class PromotionViewComponent implements OnInit {
   private loginService = inject(LoginService);
   private promotionService = inject(PromotionService);
   
+
+
   ngOnInit(): void {
     this.checkAuthentication();
     

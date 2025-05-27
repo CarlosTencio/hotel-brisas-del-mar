@@ -127,7 +127,6 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
   }
 
   closeModal(): void {
-    console.log('Modal closed');
     this.isModalOpen.set(false);
     this.isAvailable.emit(false);//emite el evento para volver al componente hermano
   }

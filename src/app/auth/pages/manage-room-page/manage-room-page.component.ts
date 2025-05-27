@@ -24,7 +24,7 @@ export default class ManageRoomPageComponent implements OnInit {
 
     ngOnInit(): void {
     const token = localStorage.getItem('token');
-    console.log('Token:', token);
+    // console.log('Token:', token);
     
     if (token) {
       this.login.verifyToken(token).subscribe({

@@ -3,6 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RoomType } from '../models/room-type';
 import { getBaseUrl } from '../../core/constants/api.constants';
+import { UpdateResponse } from '../models/update-response';
+import { RoomTypedto } from '../models/room-typedto';
 
 @Injectable({ providedIn: 'root'})
 export class RoomTypeService {
@@ -24,8 +26,18 @@ export class RoomTypeService {
   getRoomByTypeId(roomTypeId: number): Observable<RoomType> {
     return this.http.get<RoomType>(`${this.baseUrl}/RoomType/id/${roomTypeId}`);
   }
-
-  updateRoomType(roomTypeName: string, data: FormData): Observable<RoomType> {
-  return this.http.put<RoomType>(`${this.baseUrl}/RoomType/${roomTypeName}`, data);
+  updateRoomTypeData(roomType: RoomTypedto): Observable<string> {
+    const url = `${this.baseUrl}/RoomType/UpdateRoomTypeData`;
+    const requestBody = {
+      roomTypeId: roomType.roomTypeId,
+      roomTypeName: roomType.roomTypeName,
+      price: roomType.price,
+      characteristics: roomType.characteristics,
+      description: roomType.description,
+      image: roomType.image
+    };
+    
+    // ✅ CLAVE: Especificar responseType: 'text'
+    return this.http.put(url, requestBody, { responseType: 'text' });
   }
 }
