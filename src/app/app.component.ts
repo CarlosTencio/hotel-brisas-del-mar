@@ -6,10 +6,11 @@ import HeaderComponentAuth from "./auth/components/header-auth/header-auth.compo
 import { Router } from '@angular/router';
 import AuthLayoutComponent from "./auth/components/auth-layout/auth-layout.component";
 import { HeaderLoginComponent } from "./auth/components/header-login/header-login.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FooterComponent, HeaderComponent, HeaderComponentAuth, HeaderLoginComponent],
+  imports: [RouterOutlet, FooterComponent, HeaderComponent, HeaderComponentAuth, HeaderLoginComponent, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

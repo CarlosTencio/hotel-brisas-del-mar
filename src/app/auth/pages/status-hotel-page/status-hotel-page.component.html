@@ -12,15 +12,12 @@
 </div>
 }@else{
   <div class="container mx-auto px-4 py-8">
-    <!-- Título centrado como en el prototipo -->
     <h1 class="text-3xl font-bold mb-6">Estado del Hotel Hoy</h1>
 
-    <!-- Fecha con estilo similar al prototipo -->
     <div class="mb-6">
       <label id="fecha-actual" class="block text-lg mb-4">Fecha: {{ fechaActual() }}</label>
     </div>
 
-    <!-- Tabla con estilo similar al prototipo -->
     <div class="mb-8">
       <table class="w-1/2 ml-0 border-collapse border border-gray-800">
         <thead>
@@ -42,7 +39,6 @@
       </table>
     </div>
 
-    <!-- Botón centrado en la página como en el prototipo -->
     <div class="flex justify-center mt-8">
       <button 
         (click)="generatePDF()" 
@@ -54,7 +50,6 @@
       </button>
     </div>
     
-    <!-- Paginación -->
     <div class="flex items-center justify-between mt-8">
       <div class="text-sm text-gray-700">
         Mostrando <span class="font-medium">{{ ((currentPage() - 1) * pageSize()) + 1 }}</span> a 
