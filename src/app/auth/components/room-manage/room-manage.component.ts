@@ -2,7 +2,6 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RoomTypeService } from '../../services/roomType.service';
 import { RoomType } from '../../models/room-type';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EditorModule } from '@tinymce/tinymce-angular';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -13,7 +12,7 @@ import { CloudinaryService } from '../../services/cloudinary.service';
 @Component({
   selector: 'app-room-manage',
   standalone: true,
-  imports: [CommonModule, EditorModule, modalUpdateRoomTypeComponent, ReactiveFormsModule],
+  imports: [CommonModule, modalUpdateRoomTypeComponent, ReactiveFormsModule],
   templateUrl: './room-manage.component.html',
   styleUrls: ['./room-manage.component.css']
 })
