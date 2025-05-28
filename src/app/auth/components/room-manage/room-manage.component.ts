@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RoomTypeService } from '../../services/roomType.service';
 import { RoomType } from '../../models/room-type';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 
 import { RoomTypedto } from '../../models/room-typedto';
 import { modalUpdateRoomTypeComponent } from '../confirmation-modal-updateRoomType/confirmation-modal-updateRoomType.component';
-import { UpdateResponse } from '../../models/update-response';
+import { CloudinaryService } from '../../services/cloudinary.service';
 
 @Component({
   selector: 'app-room-manage',
@@ -18,7 +18,7 @@ import { UpdateResponse } from '../../models/update-response';
   styleUrls: ['./room-manage.component.css']
 })
 export class RoomManageComponent {
-
+  cloudinary=inject(CloudinaryService);
   roomTypes: RoomType[] = [];
   selectedRoomTypeId: number | null = null;
   selectedFile: File | null = null;
@@ -95,35 +95,67 @@ export class RoomManageComponent {
 onSubmit(): void {
   if (this.updateForm.valid) {
     const formValues = this.updateForm.value;
-    
-    // Obtener el roomTypeId basado en el nombre seleccionado
+
+    // Validar el tipo de habitación
     let roomTypeId: number;
     if (formValues.selectedRoomType === 'Normal') {
-      roomTypeId = 1; // ID para Normal
+      roomTypeId = 1;
     } else if (formValues.selectedRoomType === 'Premium') {
-      roomTypeId = 2; // ID para Premium
+      roomTypeId = 2;
     } else {
       console.error('Tipo de habitación no válido');
       return;
     }
-    
-    const updatedRoom: RoomTypedto = {
-      roomTypeId: roomTypeId, 
-      roomTypeName: formValues.selectedRoomType,
-      price: formValues.price ? parseInt(formValues.price) : 0,
-      description: formValues.description || '',
-      characteristics: formValues.characteristics || '',
-      image: this.selectedFile ? (this.selectedFile as File).name : this.room.image,
+
+    const proceedWithUpdate = (imageUrl: string) => {
+      const updatedRoom: RoomTypedto = {
+        roomTypeId: roomTypeId,
+        roomTypeName: formValues.selectedRoomType || '', // <-- Agrega valor por defecto
+        price: formValues.price ? parseInt(formValues.price) : 0,
+        description: formValues.description || '',
+        characteristics: formValues.characteristics || '',
+        image: imageUrl
+      };
+
+      updatedRoom.characteristics = this.characteristicsFormatted(updatedRoom.characteristics);
+
+      console.log('Actualizando habitación con datos:', updatedRoom);
+
+      this.roomTypeService.updateRoomTypeData(updatedRoom).subscribe({
+        next: (response: string) => {
+          this.message = response;
+          this.openModal();
+        },
+        error: (err) => {
+          console.error('Error al actualizar habitación en backend:', err);
+          this.message = 'Error al actualizar la habitación. Por favor, verifique los datos ingresados.';
+          this.openModal();
+        }
+      });
     };
 
-    // console.log('updatedRoom final:', updatedRoom);
-
-    this.updateRoomType(updatedRoom);
-  }else {
-    this.markFormGroupTouched(); // Marcar todos los campos como touched para mostrar errores
-    
+    if (formValues.img) {
+      this.cloudinary.processImage(this.selectedFile).subscribe({
+        next: (uploadResponse) => {
+          const imageUrl = uploadResponse;
+          console.log('Imagen subida a Cloudinary:', imageUrl);
+          proceedWithUpdate(imageUrl);
+          },
+        error: (uploadErr) => {
+          console.error('Error al subir imagen:', uploadErr);
+          this.message = 'Error al subir la imagen.';
+          this.openModal();
+        }
+      });
+    } else {
+      proceedWithUpdate(this.room.image); // usa la imagen existente
+    }
+  } else {
+    this.markFormGroupTouched();
   }
 }
+
+
   characteristicsFormatted(characteristics: string): string {
     return characteristics ? characteristics.split('\n').join('~') : '';
   }
