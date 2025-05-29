@@ -3,6 +3,7 @@ import { LoginService } from '../../services/login.service';
 import { BokingService } from '../../services/boking.service';
 import { Router } from '@angular/router';
 import { ModalListBookingComponent } from "./modal-list-booking/modal-list-booking.component";
+import { ModalBookingDetailsComponent } from "./modal-booking-details/modal-booking-details.component";
 
 
 interface TokenResponse {
@@ -37,7 +38,7 @@ interface Booking {
 }
 @Component({
   selector: 'app-list-booking-page',
-  imports: [ModalListBookingComponent],
+  imports: [ModalListBookingComponent, ModalBookingDetailsComponent],
   templateUrl: './list-booking-page.component.html',
   styleUrl: './list-booking-page.component.css'
 })
@@ -48,12 +49,20 @@ export default class ListBookingPageComponent {
     
   }
   login= inject(LoginService);
-   bookings: Booking[] = [];
+  bookings: Booking[] = [];
   currentPage: number = 1;
   bookingService = inject(BokingService);
   
-    ngOnInit(): void {
-      this.loadBookings(this.currentPage);
+  // Modal states
+  showModal = false;
+  bookingToDelete: number | null = null;
+  
+  // Details modal properties
+  showDetailsModal = false;
+  selectedBooking: Booking | null = null;
+  
+  ngOnInit(): void {
+    this.loadBookings(this.currentPage);
     const token = localStorage.getItem('token');
     // console.log('Token:', token);
     
@@ -80,7 +89,8 @@ export default class ListBookingPageComponent {
       this.router.navigate(['/login']);
     }
   }
-loadBookings(page: number): void {
+
+  loadBookings(page: number): void {
     this.bookingService.getAllBookings(page).subscribe({
       next: (data) => {
         this.bookings = data;
@@ -101,6 +111,7 @@ loadBookings(page: number): void {
       this.loadBookings(this.currentPage - 1);
     }
   }
+
   delteBooking(bookingId: number): void {
     this.bookingService.deleteBooking(bookingId).subscribe({
       next: () => {
@@ -113,13 +124,19 @@ loadBookings(page: number): void {
       }
     });
   }
-  viewBooking(bookingId: number): void {
 
+  // Updated viewBooking method
+  viewBooking(bookingId: number): void {
+    const booking = this.bookings.find(b => b.bookingid === bookingId);
+    if (booking) {
+      this.selectedBooking = booking;
+      this.showDetailsModal = true;
+    } else {
+      console.error('Booking not found');
+    }
   }
 
-   showModal = false;
-  bookingToDelete: number | null = null;
-
+  // Delete modal methods
   openDeleteModal(bookingId: number): void {
     this.bookingToDelete = bookingId;
     this.showModal = true;
@@ -142,5 +159,18 @@ loadBookings(page: number): void {
         console.error('Error deleting booking', err);
       }
     });
+  }
+
+  // Details modal methods
+  closeDetailsModal(): void {
+    this.showDetailsModal = false;
+    this.selectedBooking = null;
+  }
+
+  deleteBookingFromDetails(bookingId: number): void {
+    this.showDetailsModal = false;
+    this.selectedBooking = null;
+    // Show confirmation modal
+    this.openDeleteModal(bookingId);
   }
 }
