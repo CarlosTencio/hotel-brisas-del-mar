@@ -99,13 +99,21 @@
     </button>
   </div>
 
+  <!-- Modal for Delete Confirmation -->
   <app-modal-list-booking
     [showModal]="showModal"
     [bookingId]="bookingToDelete"
     (cancel)="cancelDelete()"
     (confirm)="confirmDelete($event)">
   </app-modal-list-booking>
-</div>
 
+  <!-- Modal for Booking Details -->
+  <app-modal-booking-details
+    [showModal]="showDetailsModal"
+    [booking]="selectedBooking"
+    (close)="closeDetailsModal()"
+    (deleteBooking)="deleteBookingFromDetails($event)">
+  </app-modal-booking-details>
+</div>
 
 }
