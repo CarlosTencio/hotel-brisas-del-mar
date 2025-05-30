@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RoomManageComponent } from '../../components/room-manage/room-manage.component';
+import { RoomManageComponent } from '../../components/change-status-room/room-manage/room-manage.component';
 
 interface TokenResponse {
   tokenDTOString: string;

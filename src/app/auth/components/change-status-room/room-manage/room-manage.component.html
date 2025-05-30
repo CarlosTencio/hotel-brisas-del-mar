@@ -2,30 +2,7 @@
   <h1 class="text-3xl font-bold mb-6">Modificar Habitación</h1>
 
   <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
-    <div class="mb-6">
-      <label for="roomTypeSelect" class="block text-lg font-semibold text-gray-700 mb-2">
-        Selecciona tipo de habitación:
-      </label>
-      <select
-        formControlName="selectedRoomType"
-        id="roomTypeSelect"
-        class="w-full p-2 border rounded-lg shadow"
-        formControlName="selectedRoomType"
-        (change)="onRoomTypeChange()"
-        [class.border-red-500]="updateForm.get('selectedRoomType')?.invalid && updateForm.get('selectedRoomType')?.touched"
-      >
-        <option value="">-- Selecciona --</option>
-        <option value="Normal">Normal</option>
-        <option value="Premium">Premium</option>
-      </select>
-      <!-- Mostrar error de validación con @if -->
-      @if (updateForm.get('selectedRoomType')?.invalid && updateForm.get('selectedRoomType')?.touched) {
-        <div class="text-red-500 text-sm mt-1">
-          Debe seleccionar un tipo de habitación
-        </div>
-      }
-    </div>
-
+    
     <div>
       <label>Tipo: </label> 
       <span>{{ room.roomTypeName }}</span>
