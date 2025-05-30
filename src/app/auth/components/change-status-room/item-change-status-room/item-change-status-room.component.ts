@@ -11,7 +11,7 @@ import { RoomService } from '../../../services/room.service';
 })
 export class ItemChangeStatusRoomComponent {
 
-  @Output() openChildMessage = new EventEmitter<Number>();
+  @Output() openChildMessage = new EventEmitter<number>();
 
 
   RoomService = inject(RoomService);
@@ -20,7 +20,7 @@ export class ItemChangeStatusRoomComponent {
   roomTypeName = computed(() => this.dataRoomActive().roomTypeName);
   roomActiveDTOs = computed(() => this.dataRoomActive().roomActiveDTOs);
 
-  sendToParent(roomTypeId: Number) {
+  sendToParent(roomTypeId: number) {
     this.openChildMessage.emit(roomTypeId);
   }
 
