@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-4 px-5 max-w-2xl mx-auto overflow-x-hidden mb-6">
+  <!-- Título + botón en línea -->
+  <div class="flex items-center gap-3">
+    <h2 class="text-2xl font-bold">{{ roomTypeName() }}</h2>
+    <button 
+    (click)="sendToParent(roomTypeId())"
+      class="bg-blue-500 text-white text-sm px-2.5 py-1 rounded hover:bg-blue-600 transition duration-200">
+      Cambiar Descripción
+    </button>
+  </div>
+
+  <!-- Tabla compacta -->
+  <div class="overflow-x-auto max-w-full">
+    <table class="border border-gray-300 text-base table-auto">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="border border-gray-300 px-3 py-1.5 text-left">Habitación</th>
+          <th class="border border-gray-300 px-3 py-1.5 text-left">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (room of roomActiveDTOs(); track $index) {
+        <tr>
+          <td class="border border-gray-300 px-3 py-1.5">{{ room.roomNumber }}</td>
+          <td class="border border-gray-300 px-3 py-1.5">
+            <label class="inline-flex items-center gap-2 cursor-pointer">
+              <input 
+                type="checkbox" 
+                class="form-checkbox h-5 w-5 text-green-600"
+                [checked]="room.isActice"
+                (change)="toggleRoomStatus(room)" />
+              <span class="text-base">{{ room.isActice ? 'Activo' : 'Inactivo' }}</span>
+            </label>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="">
+
+  @if(!openChild){
+
+    @for (item of dataRoomActive(); track item.roomTypeId) {
+
+    <app-item-change-status-room (openChildMessage)="updateProperty($event)" [dataRoomActive]="item" />
+      
+    
+    }
+
+  }@else {
+
+    <app-room-manage [roomTypeId]="roomTypeId" />
+    
+  }
+
+</div>

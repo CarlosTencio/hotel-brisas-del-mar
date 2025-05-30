@@ -1,13 +1,13 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { RoomTypeService } from '../../services/roomType.service';
-import { RoomType } from '../../models/room-type';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { RoomTypeService } from '../../../services/roomType.service';
+import { RoomType } from '../../../models/room-type';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-import { RoomTypedto } from '../../models/room-typedto';
-import { modalUpdateRoomTypeComponent } from '../confirmation-modal-updateRoomType/confirmation-modal-updateRoomType.component';
-import { CloudinaryService } from '../../services/cloudinary.service';
+import { RoomTypedto } from '../../../models/room-typedto';
+import { modalUpdateRoomTypeComponent } from '../../confirmation-modal-updateRoomType/confirmation-modal-updateRoomType.component';
+import { CloudinaryService } from '../../../services/cloudinary.service';
 
 @Component({
   selector: 'app-room-manage',
@@ -16,7 +16,17 @@ import { CloudinaryService } from '../../services/cloudinary.service';
   templateUrl: './room-manage.component.html',
   styleUrls: ['./room-manage.component.css']
 })
-export class RoomManageComponent {
+export class RoomManageComponent implements OnInit {
+
+  ngOnInit(): void {
+    console.log("RoomTypeId  HIJO ROOM-MANAGE-COMPONENT:", this.roomTypeId());
+    this.loadRoomData();
+  }
+
+  roomTypeId = input.required<number>();
+
+  roomTypeName: string = '';
+
   cloudinary=inject(CloudinaryService);
   roomTypes: RoomType[] = [];
   selectedRoomTypeId: number | null = null;
@@ -34,7 +44,6 @@ export class RoomManageComponent {
 
   // FormGroup con todos los campos incluyendo el selector
   updateForm = new FormGroup({
-    selectedRoomType: new FormControl('', [Validators.required]),
     price: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     characteristics: new FormControl('', [Validators.required]),
@@ -45,13 +54,24 @@ export class RoomManageComponent {
     private roomTypeService: RoomTypeService,
     private route: ActivatedRoute,
     private router: Router
+    
+
   ) {}
 
   loadRoomData(roomType?: string): void {
     const selectedType = roomType || this.updateForm.get('selectedRoomType')?.value;
     
-    if (selectedType) {
-      this.roomTypeService.getRoomByName(selectedType).subscribe({
+
+    if (this.roomTypeId() === 1) {
+      this.roomTypeName = 'Normal';
+    } else if (this.roomTypeId() === 2) {
+      this.roomTypeName = 'Premium';
+    } else {
+      console.error('Tipo de habitación no válido');
+      return;
+    }
+    if (this.roomTypeId()){
+      this.roomTypeService.getRoomByName(this.roomTypeName).subscribe({
         next: (roomData) => {
           this.room = roomData;
           this.room.characteristics = this.room.characteristics ? 
@@ -95,21 +115,10 @@ onSubmit(): void {
   if (this.updateForm.valid) {
     const formValues = this.updateForm.value;
 
-    // Validar el tipo de habitación
-    let roomTypeId: number;
-    if (formValues.selectedRoomType === 'Normal') {
-      roomTypeId = 1;
-    } else if (formValues.selectedRoomType === 'Premium') {
-      roomTypeId = 2;
-    } else {
-      console.error('Tipo de habitación no válido');
-      return;
-    }
-
     const proceedWithUpdate = (imageUrl: string) => {
       const updatedRoom: RoomTypedto = {
-        roomTypeId: roomTypeId,
-        roomTypeName: formValues.selectedRoomType || '', // <-- Agrega valor por defecto
+        roomTypeId: this.roomTypeId(),
+        roomTypeName: this.roomTypeName,
         price: formValues.price ? parseInt(formValues.price) : 0,
         description: formValues.description || '',
         characteristics: formValues.characteristics || '',

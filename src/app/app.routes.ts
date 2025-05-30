@@ -71,11 +71,11 @@ export const routes: Routes = [
       },
       {
         path: 'manage-room',
-        loadComponent: () => import('./auth/pages/manage-room-page/manage-room-page.component')
+        loadComponent: () => import('./auth/pages/manage-status-room-page/manage-status-room-page.component')
       },
       {
         path: 'status-hotel',
-        loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
+        loadComponent: () => import('./auth/pages/manage-status-room-page/manage-status-room-page.component')
       },
       {
         path: 'availability-room',
