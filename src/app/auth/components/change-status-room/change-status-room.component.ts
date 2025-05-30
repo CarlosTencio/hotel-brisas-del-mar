@@ -18,9 +18,9 @@ export class ChangeStatusRoomComponent {
   dataRoomActive=input.required<ManageRoomActive[]>();
 
   openChild: Boolean = false;
-  roomTypeId: Number = 0;
+  roomTypeId: number = 0;
 
-  updateProperty(roomTypeId: Number) {
+  updateProperty(roomTypeId: number) {
 
     console.log('updateProperty called with roomTypeId:', roomTypeId);
     
