@@ -75,7 +75,7 @@ export const routes: Routes = [
       },
       {
         path: 'status-hotel',
-        loadComponent: () => import('./auth/pages/manage-status-room-page/manage-status-room-page.component')
+        loadComponent: () => import('./auth/pages/status-hotel-page/status-hotel-page.component')
       },
       {
         path: 'availability-room',
