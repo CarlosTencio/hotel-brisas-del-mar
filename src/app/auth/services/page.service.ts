@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { Page } from '../../models/page.interface';
@@ -9,11 +9,8 @@ import { getBaseUrl } from '../../core/constants/api.constants';
   providedIn: 'root'
 })
 export class PageService {
-  private baseUrl = `${getBaseUrl()}/Page`;
-
-  constructor(private http: HttpClient) {
-    console.log('PageService initialized with baseUrl:', this.baseUrl);
-  }
+   private readonly http = inject(HttpClient);
+  private readonly baseUrl = getBaseUrl();
 
   getPageByTitle(title: string): Observable<Page> {
     const url = `${this.baseUrl}/getPageForTittle?facilities=${title}`;
@@ -35,6 +32,13 @@ export class PageService {
       })
     );
   }
+  loadFacilities(): Observable<Page[]> {
+    return this.http.get<Page[]>(`${this.baseUrl}/Page/getPageForTittle?facilities=Facilidades`);
+  }
+  deleteFacility(facilityID: number): Observable<{ message: string }> {
+  return this.http.delete<{ message: string }>(`${this.baseUrl}/Page/facility/${facilityID}`);
+}
+
 
   updatePage(page: Page): Observable<any> {
     const url = `${this.baseUrl}/update`;

@@ -16,9 +16,7 @@ export default class FacilitiesPageComponent implements OnInit {
   ngOnInit() {
     this.facilities.loadFacilities().subscribe({
       next: (respPages) => {
-        // Set the retrieved pages to the signal
         this.dataPage.set(respPages);
-        console.log(respPages);
       },
       error: (err) => {
         // Optional: handle error

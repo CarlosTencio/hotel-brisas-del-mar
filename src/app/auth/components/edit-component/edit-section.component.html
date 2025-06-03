@@ -1,0 +1,42 @@
+<h1>Sección para editar</h1>
+
+<select name="" id="" (change)="onSelectChange($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  <option value="Home">Opción 1</option>
+  <option value="Facilities">Facilities</option>
+  <option value="3">Opción 3</option>
+  <option value="4">Opción 4</option>
+  <option value="5">Opción 5</option>
+</select>
+
+@if (typeMessage === 'success') {
+  <modal-confimation  
+    [isOpen]="isModalOpen()" 
+    title="Aviso" 
+    [showConfirmButton]="true" 
+    [showCancelButton]="false"
+    confirmButtonText="Aceptar" 
+    (closeModal)="closeModal()"
+  >
+    <p class="text-gray-700 dark:text-gray-300">
+      {{ message }}
+    </p>
+  </modal-confimation>
+} @else if (typeMessage === 'error') {
+  <modal-confimation  
+    [isOpen]="isModalOpen()" 
+    title="Aviso" 
+    [showConfirmButton]="true" 
+    [showCancelButton]="false"
+    confirmButtonText="Aceptar" 
+    (closeModal)="closeModal()"
+    (confirm)="onModalConfirm()"
+  >
+    <p class="text-gray-700 dark:text-gray-300">
+      {{ message }}
+    </p>
+  </modal-confimation>
+}@else{
+  @if(selectedOption() === 'Facilities') {
+      <facilities-edit [dataPage]="dataPage()" (modalRequest)="onModalRequestFromChild($event)"></facilities-edit>
+  } 
+}

@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { EditSectionComponent } from '../../components/edit-component/edit-section.component';
 interface TokenResponse {
   tokenDTOString: string;
 }
@@ -9,9 +10,8 @@ interface TokenResponse {
 @Component({
   selector: 'app-edit-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,EditSectionComponent],
   templateUrl: './edit-page.component.html',
-  styleUrl: './edit-page.component.css'
 })
 export default class EditPageComponent {
 

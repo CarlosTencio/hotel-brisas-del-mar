@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RoomType } from '../models/room-type';
 import { getBaseUrl } from '../../core/constants/api.constants';
-import { UpdateResponse } from '../models/update-response';
+import { UpdateResponse } from '../models/response';
 import { RoomTypedto } from '../models/room-typedto';
 
 @Injectable({ providedIn: 'root'})
