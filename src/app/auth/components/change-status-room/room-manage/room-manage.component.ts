@@ -19,7 +19,6 @@ import { CloudinaryService } from '../../../services/cloudinary.service';
 export class RoomManageComponent implements OnInit {
 
   ngOnInit(): void {
-    console.log("RoomTypeId  HIJO ROOM-MANAGE-COMPONENT:", this.roomTypeId());
     this.loadRoomData();
   }
 
