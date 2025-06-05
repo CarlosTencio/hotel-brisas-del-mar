@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { Page } from '../../models/page.interface';
 import { catchError, tap } from 'rxjs/operators';
@@ -37,9 +37,21 @@ export class PageService {
   }
   deleteFacility(facilityID: number): Observable<{ message: string }> {
   return this.http.delete<{ message: string }>(`${this.baseUrl}/Page/facility/${facilityID}`);
+  }
+  updateFacility(id: number, content: string, imgPath: string): Observable<any> {
+    const params = new HttpParams()
+      .set('pageID', id.toString())
+      .set('pageContent', content)
+      .set('imagePath', imgPath);
+    return this.http.put<any>(`${this.baseUrl}/Page/updateFacility`, null, { params });
+  }
+  addFacility(content: string, imgPath: string): Observable<any> {
+  const params = new HttpParams()
+    .set('contentFacility', content)  // Cambiar de 'pageContent' a 'contentFacility'
+    .set('imagePath', imgPath);
+  console.log('Adding facility with params:', params.toString());
+  return this.http.post<any>(`${this.baseUrl}/Page/createFacility`, null, { params });
 }
-
-
   updatePage(page: Page): Observable<any> {
     const url = `${this.baseUrl}/update`;
     

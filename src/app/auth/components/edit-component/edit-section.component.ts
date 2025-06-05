@@ -3,7 +3,7 @@ import { FacilitiesEditComponent } from './facilities-edit/facilities-edit.compo
 import { PageService } from '../../services/page.service';
 import { Page } from '../../../models/page.interface';
 import { confirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-component',
@@ -17,16 +17,14 @@ export class EditSectionComponent implements OnInit {
   message: string = '';
   selectedOption = signal('');
 
-  onSelectChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    this.selectedOption.set(target.value);
-   
-  }
+
+
+
 
   loadFacilities() {
     this.pageService.loadFacilities().subscribe({
       next: (respPage) => {
-      // console.log('Pages loaded successfully:', respPage);
+     console.log('Pages loaded successfully:', respPage);
         this.dataPage.set(respPage);
       },
       error: (err) => {
@@ -34,9 +32,16 @@ export class EditSectionComponent implements OnInit {
       },
     });
   }
+  onSelectChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.selectedOption.set(target.value);
+   if (this.selectedOption() === 'Facilities') {
+      this.loadFacilities();
+    }
 
+  }
   ngOnInit() {
-    this.loadFacilities();
+   // this.loadFacilities();
   }
 
   onModalRequestFromChild(event: {
