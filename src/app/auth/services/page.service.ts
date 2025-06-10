@@ -2,8 +2,11 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { Page } from '../../models/page.interface';
+import { Page as PageaAboutUs} from '../../auth/models/page-model';
+import { ImagePageAbotUs} from '../../auth/models/image-model'
 import { catchError, tap } from 'rxjs/operators';
 import { getBaseUrl } from '../../core/constants/api.constants';
+import {ContentAboutUS} from '../models/image-model';
 
 @Injectable({
   providedIn: 'root'
@@ -95,6 +98,133 @@ export class PageService {
       console.log('Sending data:', JSON.stringify(requestBody));
       
       // Send the request
+      xhr.send(JSON.stringify(requestBody));
+    });
+  }
+  loadAboutUs(): Observable<PageaAboutUs[]> {
+    return this.http.get<PageaAboutUs[]>(`${this.baseUrl}/Page/GetPageWithImagesAboutUs?PageTitle=Sobre%20nosotros`).pipe(
+      tap(response => console.log('About Us loaded successfully:', response)),
+      catchError(err => {
+        console.error('Error loading About Us:', err);
+        return of([]); // Return an empty array on error
+      })
+    );
+  }
+  UpdateAboutUs(ContentAboutUS: ContentAboutUS): Observable<any> {
+    const url = `${this.baseUrl}/Page/UpdateTextAboutUs`;
+    
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Accept', '*/*');
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Update successful', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Update failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+      
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+      
+      const requestBody = {
+        pageID: ContentAboutUS.pageID,
+        pageContent: ContentAboutUS.pageContent
+      };
+      
+      console.log('Sending data:', JSON.stringify(requestBody));
+      
+      xhr.send(JSON.stringify(requestBody));
+    });
+  }
+  DeleteImageAboutUs(imageID: number): Observable<any> {
+    const url = `${this.baseUrl}/Page/DeleteImagePageAboutUs?imageID=${imageID}`;
+    
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('DELETE', url, true);
+      xhr.setRequestHeader('Accept', '*/*');
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Image deleted successfully', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Delete failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+      
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+      
+      console.log('Sending delete request for image ID:', imageID);
+      
+      xhr.send();
+    });
+  }
+  InsertImageAboutUs(ImagePageAbotUs: ImagePageAbotUs): Observable<any> {
+    const url = `${this.baseUrl}/Page/InsertImagePageAboutUs?ImagePath=${ImagePageAbotUs.ImagePath}&PageID=${ImagePageAbotUs.PageID}`;
+
+    
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Accept', '*/*');
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Image inserted successfully', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Insert failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+      
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+      
+      const requestBody = {
+        PageID: ImagePageAbotUs.PageID,
+        ImagePath: ImagePageAbotUs.ImagePath
+      };
+      
+      console.log('Sending data:', JSON.stringify(requestBody));
+      
       xhr.send(JSON.stringify(requestBody));
     });
   }

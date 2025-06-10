@@ -2,17 +2,19 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FacilitiesEditComponent } from './facilities-edit/facilities-edit.component';
 import { PageService } from '../../services/page.service';
 import { Page } from '../../../models/page.interface';
+import {Page as PageAboutUs} from '../../models/page-model'
 import { confirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AboutusEditComponent } from './aboutus-edit/aboutus-edit.component';
 
 @Component({
   selector: 'app-edit-component',
-  imports: [FacilitiesEditComponent, confirmationModalComponent],
+  imports: [FacilitiesEditComponent, confirmationModalComponent, AboutusEditComponent],
   templateUrl: './edit-section.component.html',
 })
 export class EditSectionComponent implements OnInit {
   pageService = inject(PageService);
   dataPage = signal<Page[]>([]);
+  dataPageAbout = signal<PageAboutUs[]>([]);
   typeMessage: string = '';
   message: string = '';
   selectedOption = signal('');
@@ -32,11 +34,25 @@ export class EditSectionComponent implements OnInit {
       },
     });
   }
+  loadAboutUs() {
+    this.pageService.loadAboutUs().subscribe({
+      next: (respPageAbout) => {
+        console.log('About Us loaded successfully:', respPageAbout);
+        this.dataPageAbout.set(respPageAbout);
+      },
+      error: (err) => {
+        console.error('Error loading About Us:', err.error.message);
+      },
+    });
+  }
   onSelectChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedOption.set(target.value);
    if (this.selectedOption() === 'Facilities') {
       this.loadFacilities();
+    }
+    if (this.selectedOption() === 'AboutUs') {
+      this.loadAboutUs();
     }
 
   }
@@ -52,6 +68,7 @@ export class EditSectionComponent implements OnInit {
     this.typeMessage = event.type;
     this.openModal();
     this.loadFacilities();
+    this.loadAboutUs();
   }
 
   // Modal
