@@ -25,28 +25,29 @@ export default class EditPageComponent {
     const token = localStorage.getItem('token');
     // console.log('Token:', token);
     
-    if (token) {
-      this.login.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
+    // if (token) {
+    //   this.login.verifyToken(token).subscribe({
+    //     next: (tokenResponse) => {
          
-          this.isLoading.set(false);
-          if(!tokenResponse) {
+    //       this.isLoading.set(false);
+    //       if(!tokenResponse) {
            
            
-            this.router.navigate(['/login']);
+    //         this.router.navigate(['/login']);
           
-          }
+    //       }
       
-        },
-        error: (err) => {
-          console.error('Error loading pages', err);
-        }
-      });
-    } else {
-      console.error('No token found');
-      // Redirect to login page
-      this.router.navigate(['/login']);
-    }
+    //     },
+    //     error: (err) => {
+    //       console.error('Error loading pages', err);
+    //     }
+    //   });
+    // } else {
+    //   console.error('No token found');
+    //   // Redirect to login page
+    //   this.router.navigate(['/login']);
+    // }
+    this.isLoading = signal(false);
   }
 
 }
