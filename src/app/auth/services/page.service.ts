@@ -9,11 +9,24 @@ import { getBaseUrl } from '../../core/constants/api.constants';
   providedIn: 'root'
 })
 export class PageService {
-   private readonly http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly baseUrl = getBaseUrl();
 
+  getPageByTitleArray(title: string): Observable<Page[]> {
+    const url = `${this.baseUrl}/Page/getPageForTittle?facilities=${title}`;
+    console.log('Fetching pages with URL:', url);
+    
+    return this.http.get<Page[]>(url).pipe(
+      tap(response => console.log('Received page data:', response)),
+      catchError((error) => {
+        console.error('Error fetching pages by title:', error);
+        return of([]); // Return an empty array on error
+      })
+    );
+  }
+
   getPageByTitle(title: string): Observable<Page> {
-    const url = `${this.baseUrl}/getPageForTittle?facilities=${title}`;
+    const url = `${this.baseUrl}/Page/getPageForTittle?facilities=${title}`;
     console.log('Fetching page with URL:', url);
     
     return this.http.get<Page[]>(url).pipe(
@@ -53,49 +66,6 @@ export class PageService {
   return this.http.post<any>(`${this.baseUrl}/Page/createFacility`, null, { params });
 }
   updatePage(page: Page): Observable<any> {
-    const url = `${this.baseUrl}/update`;
-    
-    return new Observable(observer => {
-      // Use the XMLHttpRequest API directly for maximum control
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.setRequestHeader('Accept', '*/*');
-      
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          console.log('Update successful', xhr.responseText);
-          observer.next(xhr.responseText || 'Success');
-          observer.complete();
-        } else {
-          console.error('Update failed', xhr.status, xhr.statusText, xhr.responseText);
-          observer.error({
-            status: xhr.status,
-            statusText: xhr.statusText,
-            error: xhr.responseText
-          });
-        }
-      };
-      
-      xhr.onerror = () => {
-        console.error('Network error occurred');
-        observer.error({
-          error: 'Network error occurred'
-        });
-      };
-      
-      // Format request body
-      const requestBody = {
-        pageID: page.pageID,
-        pageTitle: page.pageTitle,
-        pageContent: page.pageContent,
-        images: page.images || []
-      };
-      
-      console.log('Sending data:', JSON.stringify(requestBody));
-      
-      // Send the request
-      xhr.send(JSON.stringify(requestBody));
-    });
+    return this.updateFacility(page.pageID, page.pageContent, page.images[0] || '');
   }
 } 

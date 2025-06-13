@@ -4,22 +4,36 @@ import { PageService } from '../../services/page.service';
 import { Page } from '../../../models/page.interface';
 import { confirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import HomeEditorComponent from './home-editor/home-editor.component';
 
 @Component({
   selector: 'app-edit-component',
-  imports: [FacilitiesEditComponent, confirmationModalComponent],
+  imports: [FacilitiesEditComponent, confirmationModalComponent, HomeEditorComponent],
   templateUrl: './edit-section.component.html',
 })
 export class EditSectionComponent implements OnInit {
   pageService = inject(PageService);
   dataPage = signal<Page[]>([]);
+  dataHomePage = signal<Page>({} as Page);
   typeMessage: string = '';
   message: string = '';
   selectedOption = signal('');
+  readonly titleHomePage = "Inicio";
 
+  loadHome(){
+    
+    this.pageService.getPageByTitle(this.titleHomePage).subscribe({
+    next: (respPage) => {
+    console.log('Pages loaded successfully:', respPage);
+      this.dataHomePage.set(respPage);
+      console.log('DataPage updated at index 0:', this.dataPage()[0]);
+    },
+    error: (err) => {
+      console.error('Error loading pages:', err.error.message);
+    },
+  });
 
-
-
+  }
 
   loadFacilities() {
     this.pageService.loadFacilities().subscribe({
@@ -35,13 +49,20 @@ export class EditSectionComponent implements OnInit {
   onSelectChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedOption.set(target.value);
+    this.dataPage.set([]); // Clear the dataPage when changing selection
+    console.log('Selected option:', this.selectedOption());
    if (this.selectedOption() === 'Facilities') {
       this.loadFacilities();
+    }
+    else if (this.selectedOption() === 'Home') {
+      this.loadHome();
     }
 
   }
   ngOnInit() {
    // this.loadFacilities();
+   this.dataPage.set([]);
+   this.loadHome();
   }
 
   onModalRequestFromChild(event: {
@@ -52,6 +73,11 @@ export class EditSectionComponent implements OnInit {
     this.typeMessage = event.type;
     this.openModal();
     this.loadFacilities();
+
+    if(this.selectedOption() === 'Home' && this.typeMessage === 'success') {
+      this.loadHome();
+    }
+    
   }
 
   // Modal
@@ -62,7 +88,8 @@ export class EditSectionComponent implements OnInit {
     console.log('Datos actualizados después de confirmar modal');
     // Recargar los datos después de confirmar la acción
     this.loadFacilities();
-    this.selectedOption.set('Facilities'); // Reset the selected option
+    // this.loadHome();
+    // this.selectedOption.set('Facilities'); // Reset the selected option
    this.closeModal();
   }
 
