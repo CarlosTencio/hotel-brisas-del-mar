@@ -40,7 +40,7 @@
   } 
   @if(selectedOption() === "Home") {
       <app-home-editor [dataPage]="dataHomePage()" (modalRequest)="onModalRequestFromChild($event)"></app-home-editor>
-
+  }
   @if(selectedOption()=== 'AboutUs'){
     <app-aboutus-edit [dataPageAbout]="dataPageAbout()" (modalRequest)="onModalRequestFromChild($event)"></app-aboutus-edit>
   }
