@@ -1,0 +1,10 @@
+
+<div class="m-3">
+  <h1 class="text-center">Editar Sobre Nosotros</h1>
+  @for (item of dataPageAbout(); track $index) {
+    @if(item.pageTitle === 'Sobre nosotros') {
+      <app-aboutus-item [dataPage]="item" (update)="handleUpdateContent($event)"></app-aboutus-item>
+      <app-aboutus-gallery [dataPage]="item" (deleteImage)="deleteImageAboutUs($event)" (insertImage)="insertImageAboutUs($event)"></app-aboutus-gallery>
+    }
+  }
+</div>
