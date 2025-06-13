@@ -15,38 +15,41 @@ interface TokenResponse {
 })
 export default class EditPageComponent {
 
-  isLoading = signal(true);
+  isLoading = signal(false);
   constructor(private router: Router) {
     
   }
   login= inject(LoginService);
 
     ngOnInit(): void {
+
     const token = localStorage.getItem('token');
     console.log('Token:', token);
+
     
-    if (token) {
-      this.login.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
+  if (token) {
+    this.login.verifyToken(token).subscribe({
+      next: (tokenResponse) => {
+       
+        this.isLoading.set(false);
+        if(!tokenResponse) {
          
-          this.isLoading.set(false);
-          if(!tokenResponse) {
-           
-           
-            this.router.navigate(['/login']);
-          
-          }
-      
-        },
-        error: (err) => {
-          console.error('Error loading pages', err);
+         
+          this.router.navigate(['/login']);
+        
         }
-      });
-    } else {
-      console.error('No token found');
-      // Redirect to login page
-      this.router.navigate(['/login']);
-    }
+    
+      },
+      error: (err) => {
+        console.error('Error loading pages', err);
+      }
+    });
+  } else {
+    console.error('No token found');
+    // Redirect to login page
+    this.router.navigate(['/login']);
+  }
+
   }
 
 }

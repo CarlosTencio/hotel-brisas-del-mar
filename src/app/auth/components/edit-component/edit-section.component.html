@@ -1,10 +1,9 @@
 <h1 class=>Sección para editar</h1>
 
 <select name="" id="" (change)="onSelectChange($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-  <option value="Home">Opción 1</option>
+  <option value="default">---Elige una opción---</option>
+  <option value="Home">Home</option>
   <option value="Facilities">Facilities</option>
-  <option value="3">Opción 3</option>
-  <option value="4">Opción 4</option>
   <option value="AboutUs">sobre nosotros</option>
 </select>
 
@@ -39,6 +38,9 @@
   @if(selectedOption() === 'Facilities') {
       <facilities-edit [dataPage]="dataPage()" (modalRequest)="onModalRequestFromChild($event)"></facilities-edit>
   } 
+  @if(selectedOption() === "Home") {
+      <app-home-editor [dataPage]="dataHomePage()" (modalRequest)="onModalRequestFromChild($event)"></app-home-editor>
+
   @if(selectedOption()=== 'AboutUs'){
     <app-aboutus-edit [dataPageAbout]="dataPageAbout()" (modalRequest)="onModalRequestFromChild($event)"></app-aboutus-edit>
   }
