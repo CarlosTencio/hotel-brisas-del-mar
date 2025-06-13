@@ -4,9 +4,7 @@
   <option value="default">---Elige una opción---</option>
   <option value="Home">Home</option>
   <option value="Facilities">Facilities</option>
-  <option value="3">Opción 3</option>
-  <option value="4">Opción 4</option>
-  <option value="5">Opción 5</option>
+  <option value="AboutUs">sobre nosotros</option>
 </select>
 
 @if (typeMessage === 'success') {
@@ -40,7 +38,10 @@
   @if(selectedOption() === 'Facilities') {
       <facilities-edit [dataPage]="dataPage()" (modalRequest)="onModalRequestFromChild($event)"></facilities-edit>
   } 
-  @else if(selectedOption() === "Home") {
+  @if(selectedOption() === "Home") {
       <app-home-editor [dataPage]="dataHomePage()" (modalRequest)="onModalRequestFromChild($event)"></app-home-editor>
+
+  @if(selectedOption()=== 'AboutUs'){
+    <app-aboutus-edit [dataPageAbout]="dataPageAbout()" (modalRequest)="onModalRequestFromChild($event)"></app-aboutus-edit>
   }
 }
