@@ -1,24 +1,111 @@
-<div class="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg space-y-4">
-  <h2 class="text-xl font-semibold text-gray-700">Disponibilidad de habitaciones</h2>
+<div class="max-w-4xl mx-auto p-4 space-y-6">
+  <!-- Formulario de búsqueda -->
+  <div class="bg-white shadow-md rounded-lg p-4 space-y-4">
+    <h2 class="text-xl font-semibold text-gray-700">Disponibilidad de habitaciones</h2>
 
-  <div class="flex flex-col">
-    <label class="mb-1 text-sm font-medium text-gray-600">Fecha de entrada</label>
-    <input type="date" class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300" />
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-medium text-gray-600">Fecha de entrada</label>
+        <input 
+          type="date" 
+          [(ngModel)]="checkInDate"
+          [min]="minDate"
+          (change)="onCheckInDateChange()"
+          class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300" 
+        />
+      </div>
+
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-medium text-gray-600">Fecha de salida</label>
+        <input 
+          type="date" 
+          [(ngModel)]="checkOutDate"
+          [min]="minDateDeparture"
+          class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300" 
+        />
+      </div>
+
+      <div class="flex flex-col">
+        <label class="mb-1 text-sm font-medium text-gray-600">Tipo de habitación</label>
+        <select 
+          [(ngModel)]="roomType"
+          class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300"
+        >
+          <option [value]="0">Todas</option>
+          <option [value]="1">Normal</option>
+          <option [value]="2">Premium</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="text-red-600 text-sm bg-red-50 p-2 rounded">
+      {{ error }}
+    </div>
+
+    <button 
+      (click)="onSearch()" 
+      [disabled]="loading"
+      class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2 px-6 rounded-md transition"
+    >
+      <span *ngIf="loading">Buscando...</span>
+      <span *ngIf="!loading">Buscar</span>
+    </button>
   </div>
 
-  <div class="flex flex-col">
-    <label class="mb-1 text-sm font-medium text-gray-600">Fecha de salida</label>
-    <input type="date" class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300" />
+  <!-- Tabla de resultados -->
+  <div *ngIf="rooms.length > 0" class="bg-white shadow-md rounded-lg overflow-hidden">
+    <div class="px-4 py-3 bg-gray-50 border-b">
+      <h3 class="text-lg font-medium text-gray-700">
+        Habitaciones Disponibles ({{ rooms.length }} encontradas)
+      </h3>
+    </div>
+    
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Número de Habitación
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Tipo
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Precio por Noche
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let room of rooms" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              {{ room.roomNumber }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
+                    [class]="room.roomType === 'Premium' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'">
+                {{ room.roomType }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+              {{ '$'+room.price }}
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="flex flex-col">
-    <label class="mb-1 text-sm font-medium text-gray-600">Tipo de habitación</label>
-    <select class="border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring focus:border-blue-300">
-      <option value="">Cualquiera</option>
-      <option value="1">Normal</option>
-      <option value="2">Premium</option>
-    </select>
+  <!-- Mensaje cuando no hay resultados -->
+  <div *ngIf="rooms.length === 0 && !loading && hasSearched" 
+       class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
+    <p class="text-yellow-700">No se encontraron habitaciones disponibles para las fechas seleccionadas.</p>
   </div>
 
-  <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition">Buscar</button>
+  <!-- Indicador de carga -->
+  <div *ngIf="loading" class="bg-white shadow-md rounded-lg p-8 text-center">
+    <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    <p class="mt-2 text-gray-600">Buscando habitaciones disponibles...</p>
+  </div>
 </div>

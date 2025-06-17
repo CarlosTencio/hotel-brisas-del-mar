@@ -5,6 +5,7 @@ import { RoomStatus } from '../models/room-status';
 import { ManageRoomActive } from '../models/manage-room-active';
 import { getBaseUrl } from '../../core/constants/api.constants';
 import { RoomActive } from '../models/room-active';
+import { Room } from '../models/roomAvailable';
 
 @Injectable({ providedIn: 'root' })
 export class RoomService {
@@ -32,4 +33,15 @@ export class RoomService {
     return this.http.put<boolean>(url, room);
   }
 
+listAvailableRooms(entryDate: string, departureDate: string, roomType: number): Observable<Room[]> {
+  const url = `${this.baseUrl}/Room/list-roomAvailable`;
+  
+  const body = {
+    entryDate: entryDate,
+    departureDate: departureDate,
+    roomTypeId: roomType
+  };
+
+  return this.http.post<Room[]>(url, body);
+}
 }
