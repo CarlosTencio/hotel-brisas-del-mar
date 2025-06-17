@@ -20,8 +20,8 @@ export class BookingRoomComponent {
   errorMessage = signal<string>('');
   room = inject(RoomService);
   dataSelectRoomType = input.required<RoomType[]>();
-  minDate = new Date().toISOString().split('T')[0]; //fecha minima para el input de fecha de llegada
-
+  minDate = new Date().toISOString().split('T')[0]; // fecha mínima para el input de fecha de llegada
+  minDateDeparture = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]; // un día después de hoy por defecto
 
   //data from form
   profileForm = new FormGroup({
@@ -29,6 +29,25 @@ export class BookingRoomComponent {
     departureDate: new FormControl(''),
     roomType: new FormControl(''),
   });
+
+  // Método para actualizar la fecha mínima de salida cuando cambie la fecha de llegada
+  onArrivalDateChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const arrivalDate = target.value;
+    
+    if (arrivalDate) {
+      // Crear fecha de salida mínima (un día después de la llegada)
+      const departure = new Date(arrivalDate);
+      departure.setDate(departure.getDate() + 1);
+      this.minDateDeparture = departure.toISOString().split('T')[0];
+      
+      // Limpiar la fecha de salida si es anterior a la nueva fecha mínima
+      const currentDepartureDate = this.profileForm.get('departureDate')?.value;
+      if (currentDepartureDate && currentDepartureDate <= arrivalDate) {
+        this.profileForm.get('departureDate')?.setValue('');
+      }
+    }
+  }
 
   onSubmit() {
     // console.log(this.profileForm.value);
