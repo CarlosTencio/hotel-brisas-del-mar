@@ -10,6 +10,7 @@ import { BookingResponse } from '../../../models/booking-response.interface';
 import { Subscription } from 'rxjs';
 import { ModalComponent } from "../confirmation-modal/confirmation-modal.component";
 import { RoomService } from '../../../core/services/room.service';
+import { EmailJSService } from '../../../core/services/email.service';
 
 @Component({
   selector: 'personal-data-booking',
@@ -22,7 +23,7 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
   isLoading = signal<boolean>(false);
   bookingService = inject(BookingService);
   roomService = inject(RoomService);
-
+  emailJSService = inject(EmailJSService); // Asegúrate de que EmailJSService esté proporcionado en tu módulo
 
   room!: RoomAvailable;
   private bookingSubscription?: Subscription;
@@ -41,7 +42,6 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Suscripción al observable de datos de reserva
     this.bookingSubscription = this.bookingService.bookingData$.subscribe((data) => {
-      // Access the booking data here
       if (data !== null) {
         this.room = data.roomAvailable;
         this.room.roomNumber = data.roomAvailable.roomNumber;
@@ -67,6 +67,28 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
       error: (error) => console.error('Error al actualizar estado:', error)
     });
   }
+
+  private async sendConfirmationEmailJS(customer: Customer): Promise<void> {
+  const emailData = {
+    customerEmail: customer.email,
+    customerName: `${customer.name} ${customer.lastName}`,
+    roomNumber: this.room.roomNumber,
+    roomType: this.room.roomTypeName,
+    description: this.room.description,
+    checkIn: this.room.checkIn,
+    checkOut: this.room.checkOut,
+    price: this.room.price
+  };
+
+  try {
+    await this.emailJSService.sendBookingConfirmation(emailData);
+    console.log('Correo enviado exitosamente');
+  } catch (error) {
+    console.error('Error al enviar correo:', error);
+  }
+}
+
+// Llama este método en el success de createBooking:
 
   onSubmit() {
     if (this.profileForm.invalid) {
@@ -98,6 +120,7 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
 
         this.isLoading.set(false);
         if (response.status === "Success") {
+          this.sendConfirmationEmailJS(customer);
           this.openModal();
 
           this.bookingService.cleanData(); // Limpiar los datos de reserva después de la creación

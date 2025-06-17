@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ListAvailableRoomsComponent } from "../../components/list-available-rooms/list-available-rooms.component";
 interface TokenResponse {
   tokenDTOString: string;
 }
@@ -9,7 +10,7 @@ interface TokenResponse {
 
 @Component({
   selector: 'app-availability-room-page',
-  imports: [],
+  imports: [ListAvailableRoomsComponent],
   templateUrl: './availability-room-page.component.html',
   styleUrl: './availability-room-page.component.css'
 })
