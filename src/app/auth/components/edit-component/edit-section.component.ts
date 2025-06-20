@@ -8,10 +8,12 @@ import { confirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import HomeEditorComponent from './home-editor/home-editor.component';
 import { AboutusEditComponent } from './aboutus-edit/aboutus-edit.component';
+import { LocationEditComponent } from './location-edit/location-edit.component';
+
 
 @Component({
   selector: 'app-edit-component',
-  imports: [FacilitiesEditComponent, confirmationModalComponent, AboutusEditComponent, HomeEditorComponent],
+  imports: [FacilitiesEditComponent, confirmationModalComponent, AboutusEditComponent, HomeEditorComponent, LocationEditComponent],
 
   templateUrl: './edit-section.component.html',
 })
@@ -21,12 +23,13 @@ export class EditSectionComponent implements OnInit {
   
   dataHomePage = signal<Page>({} as Page);
   dataPageAbout = signal<PageAboutUs[]>([]);
-
+  dataLocationPage = signal<Page>({} as Page);
   typeMessage: string = '';
   message: string = '';
   selectedOption = signal('');
   readonly titleHomePage = "Inicio";
-
+  readonly titleContactUs = "Contáctanos";
+  readonly titleLocation = "Ubicacion";
   loadHome(){
     
     this.pageService.getPageByTitle(this.titleHomePage).subscribe({
@@ -64,6 +67,19 @@ export class EditSectionComponent implements OnInit {
       },
     });
   }
+  loadLocation() {
+    this.pageService.loadLocation(this.titleLocation).subscribe({
+      next: (respPage) => {
+        console.log('Location loaded successfully:', respPage);
+        console.log('Location data:', respPage);
+        this.dataLocationPage.set(respPage);
+      },
+      error: (err) => {
+        console.error('Error loading location:', err.error.message);
+      },
+    });
+  }
+
   onSelectChange(event: Event) {
     const target = event.target as HTMLSelectElement;
     this.selectedOption.set(target.value);
@@ -78,12 +94,17 @@ export class EditSectionComponent implements OnInit {
     if (this.selectedOption() === 'AboutUs') {
       this.loadAboutUs();
     }
+    if (this.selectedOption() === 'Location') {
+      this.loadLocation();
+    }
 
   }
+
   ngOnInit() {
    // this.loadFacilities();
    this.dataPage.set([]);
    this.loadHome();
+   this.loadLocation();
   }
 
   onModalRequestFromChild(event: {

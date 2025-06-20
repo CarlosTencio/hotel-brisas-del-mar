@@ -80,6 +80,22 @@ export class PageService {
       })
     );
   }
+  loadLocation(title: string): Observable<Page> {
+    return this.http.get<Page[]>(`${this.baseUrl}/Page/GetPageWithImagesAboutUs?PageTitle=${title}`).pipe(
+      map(response => {
+        if (Array.isArray(response) && response.length > 0) {
+          console.log('Location loaded successfully:', response[0]);
+          return response[0];
+        } else {
+          throw new Error('No location page found with the specified title');
+        }
+      }),
+      catchError(err => {
+        console.error('Error loading About Us:', err);
+        throw err;
+      })
+    );
+  }
   UpdateAboutUs(ContentAboutUS: ContentAboutUS): Observable<any> {
     const url = `${this.baseUrl}/Page/UpdateTextAboutUs`;
     

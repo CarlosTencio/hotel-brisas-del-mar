@@ -5,6 +5,7 @@
   <option value="Home">Home</option>
   <option value="Facilities">Facilities</option>
   <option value="AboutUs">sobre nosotros</option>
+  <option value="Location">Ubicación</option>
 </select>
 
 @if (typeMessage === 'success') {
@@ -43,5 +44,8 @@
   }
   @if(selectedOption()=== 'AboutUs'){
     <app-aboutus-edit [dataPageAbout]="dataPageAbout()" (modalRequest)="onModalRequestFromChild($event)"></app-aboutus-edit>
+  }
+  @if(selectedOption()=== 'Location'){
+    <app-location-edit [dataLocationPage]="dataLocationPage()" (modalRequest)="onModalRequestFromChild($event)"></app-location-edit>
   }
 }
