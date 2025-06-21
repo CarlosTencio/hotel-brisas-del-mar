@@ -47,7 +47,7 @@ export  class SideMenuOptionsAuthComponent {
     },
     {
       label: 'Publicidad',
-      route: '/home-auth/advertising'
+      route: '/home-auth/ad'
     },
     {
       label: 'Administrar temporadas',

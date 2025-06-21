@@ -78,8 +78,20 @@ export const routes: Routes = [
         loadComponent: () => import('./auth/pages/availability-room-page/availability-room-page.component')
       },
       {
-        path: 'advertising',
-        loadComponent: () => import('./auth/pages/advertising-page/advertising-page.component')
+        path: 'ad',
+        loadComponent: () => import('./auth/components/ad-list/ad-list.component')
+      },
+      {
+        path: 'ad/view/:id',
+        loadComponent: () => import('./auth/components/ad-view/ad-view.component')
+      },
+      {
+        path: 'ad/edit/:id',
+        loadComponent: () => import('./auth/components/ad-form/ad-form.component')
+      },
+      {
+        path: 'ad/create',
+        loadComponent: () => import('./auth/components/ad-form/ad-form.component')
       },
       {
         path: 'season',
