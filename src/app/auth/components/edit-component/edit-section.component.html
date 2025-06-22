@@ -5,7 +5,8 @@
   <option value="Home">Home</option>
   <option value="Facilities">Facilidades</option>
   <option value="AboutUs">Sobre Nosotros</option>
-  <option value="ContactUs">Contáctenos</option>
+  <option value="Location">Ubicación</option>
+  <option value="ContactUs">Contáctenos</option>  
 </select>
 
 @if (typeMessage === 'success') {
@@ -45,6 +46,9 @@
   @if(selectedOption()=== 'AboutUs'){
     <app-aboutus-edit [dataPageAbout]="dataPageAbout()" (modalRequest)="onModalRequestFromChild($event)"></app-aboutus-edit>
   }
+  @if(selectedOption()=== 'Location'){
+    <app-location-edit [dataLocationPage]="dataLocationPage()" (modalRequest)="onModalRequestFromChild($event)"></app-location-edit>
+  }
   @if(selectedOption() === 'ContactUs') {
     <div>
       @if(dataPageContact() !== null) {
@@ -56,3 +60,4 @@
     </div>
   } 
 }
+
