@@ -3,10 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, map, of } from 'rxjs';
 import { Page } from '../../models/page.interface';
 import { Page as PageaAboutUs} from '../../auth/models/page-model';
-import { ImagePageAbotUs} from '../../auth/models/image-model'
+import { Page as PageContactUs} from '../../auth/models/page-model';
+import { ImagePageAbotUs, ImagePageContactUs} from '../../auth/models/image-model'
 import { catchError, tap } from 'rxjs/operators';
 import { getBaseUrl } from '../../core/constants/api.constants';
-import {ContentAboutUS} from '../models/image-model';
+import {ContentAboutUS, ContentContactUs} from '../models/image-model';
 
 @Injectable({
   providedIn: 'root'
@@ -211,6 +212,165 @@ export class PageService {
       
       console.log('Sending data:', JSON.stringify(requestBody));
       
+      xhr.send(JSON.stringify(requestBody));
+    });
+  }
+
+  loadContactUs(): Observable<ContentContactUs[]> {
+    return this.http.get<PageContactUs[]>(`${this.baseUrl}/Page/getPageForTittle?facilities=Contáctenos`).pipe(
+      map(response => {
+        return response.map(page => this.parseContactContent(page.pageContent, page.pageID));
+      }),
+      tap(parsed => console.log('Contact Us loaded and parsed successfully:', parsed)),
+      catchError(err => {
+        console.error('Error loading Contact Us:', err);
+        return of([]);
+      })
+    );
+  }
+
+  private parseContactContent(content: string, pageID: number): ContentContactUs {
+  const contact: any = { pageID };
+  const parts = content.split(";").map(p => p.trim());
+
+  parts.forEach(part => {
+    if (part.startsWith("Teléfonos:")) {
+      const phones = part.replace("Teléfonos:", "").split("/").map(p => p.trim());
+      contact.phone1 = phones[0] || '';
+      contact.phone2 = phones[1] || '';
+    } else if (part.startsWith("Apartado Postal:")) {
+      contact.poBox = part.replace("Apartado Postal:", "").trim();
+    } else if (part.startsWith("Correo electrónico:")) {
+      contact.email = part.replace("Correo electrónico:", "").trim();
+    } else if (part.startsWith("Facebook:")) {
+      contact.facebook = part.replace("Facebook:", "").trim();
+    } else if (part.startsWith("Instagram:")) {
+      contact.instagram = part.replace("Instagram:", "").trim();
+    }
+  });
+
+  return contact as ContentContactUs;
+}
+
+  updateContactUs(ContentContactUs: ContentContactUs): Observable<any> {
+    const url = `${this.baseUrl}/Page/UpdateContactUs`;
+
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Accept', '*/*');
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Update successful', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Update failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+
+      const formattedContact = `Teléfonos: ${ContentContactUs.phone1} / ${ContentContactUs.phone2}; ` +
+                              `Apartado Postal: ${ContentContactUs.poBox}; ` +
+                              `Correo electrónico: ${ContentContactUs.email}; ` +
+                              `Facebook: ${ContentContactUs.facebook}; ` +
+                              `Instagram: ${ContentContactUs.instagram}`;
+
+      const requestBody = {
+        pageID: ContentContactUs.pageID,
+        pageContent: formattedContact
+      };
+
+      console.log('Sending data:', JSON.stringify(requestBody));
+      xhr.send(JSON.stringify(requestBody));
+    });
+  }
+
+  deleteImageContactUs(imageID: number): Observable<any> {
+    const url = `${this.baseUrl}/Page/DeleteImagePageContactUs?imageID=${imageID}`;
+
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('DELETE', url, true);
+      xhr.setRequestHeader('Accept', '*/*');
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Image deleted successfully', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Delete failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+
+      console.log('Sending delete request for image ID:', imageID);
+      xhr.send();
+    });
+  }
+
+  insertImageContactUs(ImagePageContactUs: ImagePageContactUs): Observable<any> {
+    const url = `${this.baseUrl}/Page/InsertImagePageContactUs?ImagePath=${ImagePageContactUs.ImagePath}&PageID=${ImagePageContactUs.PageID}`;
+
+    return new Observable(observer => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.setRequestHeader('Accept', '*/*');
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          console.log('Image inserted successfully', xhr.responseText);
+          observer.next(xhr.responseText || 'Success');
+          observer.complete();
+        } else {
+          console.error('Insert failed', xhr.status, xhr.statusText, xhr.responseText);
+          observer.error({
+            status: xhr.status,
+            statusText: xhr.statusText,
+            error: xhr.responseText
+          });
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Network error occurred');
+        observer.error({
+          error: 'Network error occurred'
+        });
+      };
+
+      const requestBody = {
+        PageID: ImagePageContactUs.PageID,
+        ImagePath: ImagePageContactUs.ImagePath
+      };
+
+      console.log('Sending data:', JSON.stringify(requestBody));
       xhr.send(JSON.stringify(requestBody));
     });
   }

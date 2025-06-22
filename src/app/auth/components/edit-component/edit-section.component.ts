@@ -1,29 +1,30 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, input } from '@angular/core';
 import { FacilitiesEditComponent } from './facilities-edit/facilities-edit.component';
 import { PageService } from '../../services/page.service';
 import { Page } from '../../../models/page.interface';
-import {Page as PageAboutUs} from '../../models/page-model'
+import { Page as PageAboutUs } from '../../models/page-model';
+import { ContentContactUs } from '../../models/image-model';
+import { ContactusEditComponent } from './contactus-edit/contactus-edit.component';
 import { confirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
-
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import HomeEditorComponent from './home-editor/home-editor.component';
 import { AboutusEditComponent } from './aboutus-edit/aboutus-edit.component';
 import { LocationEditComponent } from './location-edit/location-edit.component';
-
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-component',
-  imports: [FacilitiesEditComponent, confirmationModalComponent, AboutusEditComponent, HomeEditorComponent, LocationEditComponent],
-
+  imports: [FacilitiesEditComponent, confirmationModalComponent, AboutusEditComponent, HomeEditorComponent, LocationEditComponent, ContactusEditComponent, JsonPipe],
   templateUrl: './edit-section.component.html',
 })
 export class EditSectionComponent implements OnInit {
   pageService = inject(PageService);
   dataPage = signal<Page[]>([]);
-  
+  contactData = input.required<ContentContactUs>();
   dataHomePage = signal<Page>({} as Page);
   dataPageAbout = signal<PageAboutUs[]>([]);
   dataLocationPage = signal<Page>({} as Page);
+  dataPageContact = signal<ContentContactUs | null>(null);
   typeMessage: string = '';
   message: string = '';
   selectedOption = signal('');
@@ -31,18 +32,16 @@ export class EditSectionComponent implements OnInit {
   readonly titleContactUs = "Contáctanos";
   readonly titleLocation = "Ubicacion";
   loadHome(){
-    
     this.pageService.getPageByTitle(this.titleHomePage).subscribe({
-    next: (respPage) => {
-    console.log('Pages loaded successfully:', respPage);
-      this.dataHomePage.set(respPage);
-      console.log('DataPage updated at index 0:', this.dataPage()[0]);
-    },
-    error: (err) => {
-      console.error('Error loading pages:', err.error.message);
-    },
-  });
-
+      next: (respPage) => {
+      console.log('Pages loaded successfully:', respPage);
+        this.dataHomePage.set(respPage);
+        console.log('DataPage updated at index 0:', this.dataPage()[0]);
+      },
+      error: (err) => {
+        console.error('Error loading pages:', err.error.message);
+      },
+    });
   }
 
   loadFacilities() {
@@ -56,6 +55,7 @@ export class EditSectionComponent implements OnInit {
       },
     });
   }
+
   loadAboutUs() {
     this.pageService.loadAboutUs().subscribe({
       next: (respPageAbout) => {
@@ -67,6 +67,7 @@ export class EditSectionComponent implements OnInit {
       },
     });
   }
+   
   loadLocation() {
     this.pageService.loadLocation(this.titleLocation).subscribe({
       next: (respPage) => {
@@ -76,6 +77,34 @@ export class EditSectionComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading location:', err.error.message);
+      },
+    });
+  }
+  
+  loadContactUs() {
+    console.log('Loading ContactUs...');
+    this.pageService.loadContactUs().subscribe({  
+      next: (respPage) => {
+        console.log('Contact Us loaded successfully:', respPage);
+        console.log('Type of respPage:', typeof respPage);
+        console.log('Is array:', Array.isArray(respPage));
+
+        if (respPage && Array.isArray(respPage) && respPage.length > 0) {
+          console.log('Setting dataPageContact to:', respPage[0]);
+          this.dataPageContact.set(respPage[0]); 
+          console.log('dataPageContact after set:', this.dataPageContact());
+        } else if (respPage && !Array.isArray(respPage)) {
+          // Si no es array, tal vez es un objeto directo
+          console.log('Setting dataPageContact to single object:', respPage);
+          this.dataPageContact.set(respPage);
+        } else {
+          console.log('No contact data received or empty array');
+          this.dataPageContact.set(null);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading Contact Us:', err);
+        this.dataPageContact.set(null);
       },
     });
   }
@@ -97,7 +126,9 @@ export class EditSectionComponent implements OnInit {
     if (this.selectedOption() === 'Location') {
       this.loadLocation();
     }
-
+    if (this.selectedOption() === 'ContactUs') {
+      this.loadContactUs();
+    }
   }
 
   ngOnInit() {
@@ -126,6 +157,10 @@ export class EditSectionComponent implements OnInit {
     
     if(this.selectedOption() === 'AboutUs') {
       this.loadAboutUs();
+    }
+
+    if(this.selectedOption() === 'ContactUs') {
+      this.loadContactUs();
     }
     
   }

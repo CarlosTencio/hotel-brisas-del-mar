@@ -3,9 +3,10 @@
 <select name="" id="" (change)="onSelectChange($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
   <option value="default">---Elige una opción---</option>
   <option value="Home">Home</option>
-  <option value="Facilities">Facilities</option>
-  <option value="AboutUs">sobre nosotros</option>
+  <option value="Facilities">Facilidades</option>
+  <option value="AboutUs">Sobre Nosotros</option>
   <option value="Location">Ubicación</option>
+  <option value="ContactUs">Contáctenos</option>  
 </select>
 
 @if (typeMessage === 'success') {
@@ -48,4 +49,15 @@
   @if(selectedOption()=== 'Location'){
     <app-location-edit [dataLocationPage]="dataLocationPage()" (modalRequest)="onModalRequestFromChild($event)"></app-location-edit>
   }
+  @if(selectedOption() === 'ContactUs') {
+    <div>
+      @if(dataPageContact() !== null) {
+        <app-contactus-edit
+          [contactData]="dataPageContact()!"
+          (modalRequest)="onModalRequestFromChild($event)">
+        </app-contactus-edit>
+      } 
+    </div>
+  } 
 }
+
