@@ -16,11 +16,9 @@ export default class ContactUsPageComponent implements OnInit {
   ngOnInit() {
     this.contactUsMessage.loadContent().subscribe({
       next: (respPages) => {
-        // Set the retrieved pages to the signal
         this.dataPage.set(respPages);
       },
       error: (err) => {
-        // Optional: handle error
         console.error('Error loading pages', err);
       }
     });
