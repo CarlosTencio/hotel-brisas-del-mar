@@ -36,9 +36,9 @@ export class RoomManageComponent implements OnInit {
     roomTypeId: 0,
     roomTypeName: '',
     price: 0,
-    characteristics: '',
-    description: '',
-    image: ''
+    characteristics: null,
+    description: null,
+    image: null
   };
 
   // FormGroup con todos los campos incluyendo el selector
@@ -53,14 +53,11 @@ export class RoomManageComponent implements OnInit {
     private roomTypeService: RoomTypeService,
     private route: ActivatedRoute,
     private router: Router
-    
-
   ) {}
 
   loadRoomData(roomType?: string): void {
     const selectedType = roomType || this.updateForm.get('selectedRoomType')?.value;
     
-
     if (this.roomTypeId() === 1) {
       this.roomTypeName = 'Normal';
     } else if (this.roomTypeId() === 2) {
@@ -76,7 +73,6 @@ export class RoomManageComponent implements OnInit {
           this.room.characteristics = this.room.characteristics ? 
             this.room.characteristics.split('~').join('\n') : '';
 
-          
           this.updateForm.patchValue({
             price: this.room.price.toString(),
             description: this.room.description,
@@ -110,78 +106,77 @@ export class RoomManageComponent implements OnInit {
     }
   }
 
-onSubmit(): void {
-  if (this.updateForm.valid) {
-    const formValues = this.updateForm.value;
+  onSubmit(): void {
+    if (this.updateForm.valid) {
+      const formValues = this.updateForm.value;
 
-    const proceedWithUpdate = (imageUrl: string) => {
-      const updatedRoom: RoomTypedto = {
-        roomTypeId: this.roomTypeId(),
-        roomTypeName: this.roomTypeName,
-        price: formValues.price ? parseInt(formValues.price) : 0,
-        description: formValues.description || '',
-        characteristics: formValues.characteristics || '',
-        image: imageUrl
+      const proceedWithUpdate = (imageUrl: string) => {
+        const updatedRoom: RoomTypedto = {
+          roomTypeId: this.roomTypeId(),
+          roomTypeName: this.roomTypeName,
+          price: formValues.price ? parseInt(formValues.price) : 0,
+          description: formValues.description || '',
+          characteristics: formValues.characteristics || '',
+          image: imageUrl
+        };
+
+        updatedRoom.characteristics = this.characteristicsFormatted(updatedRoom.characteristics);
+
+        console.log('Actualizando habitación con datos:', updatedRoom);
+
+        this.roomTypeService.updateRoomTypeData(updatedRoom).subscribe({
+          next: (response: string) => {
+            this.message = response;
+            this.openModal();
+          },
+          error: (err) => {
+            console.error('Error al actualizar habitación en backend:', err);
+            this.message = 'Error al actualizar la habitación. Por favor, verifique los datos ingresados.';
+            this.openModal();
+          }
+        });
       };
 
-      updatedRoom.characteristics = this.characteristicsFormatted(updatedRoom.characteristics);
-
-      console.log('Actualizando habitación con datos:', updatedRoom);
-
-      this.roomTypeService.updateRoomTypeData(updatedRoom).subscribe({
-        next: (response: string) => {
-          this.message = response;
-          this.openModal();
-        },
-        error: (err) => {
-          console.error('Error al actualizar habitación en backend:', err);
-          this.message = 'Error al actualizar la habitación. Por favor, verifique los datos ingresados.';
-          this.openModal();
-        }
-      });
-    };
-
-    if (formValues.img) {
-      this.cloudinary.processImage(this.selectedFile).subscribe({
-        next: (uploadResponse) => {
-          const imageUrl = uploadResponse;
-          console.log('Imagen subida a Cloudinary:', imageUrl);
-          proceedWithUpdate(imageUrl);
+      if (formValues.img) {
+        this.cloudinary.processImage(this.selectedFile).subscribe({
+          next: (uploadResponse) => {
+            const imageUrl = uploadResponse;
+            console.log('Imagen subida a Cloudinary:', imageUrl);
+            proceedWithUpdate(imageUrl);
           },
-        error: (uploadErr) => {
-          console.error('Error al subir imagen:', uploadErr);
-          this.message = 'Error al subir la imagen.';
-          this.openModal();
-        }
-      });
+          error: (uploadErr) => {
+            console.error('Error al subir imagen:', uploadErr);
+            this.message = 'Error al subir la imagen.';
+            this.openModal();
+          }
+        });
+      } else {
+        proceedWithUpdate(this.room.image || ''); // usa la imagen existente o cadena vacía si es null
+      }
     } else {
-      proceedWithUpdate(this.room.image); // usa la imagen existente
+      this.markFormGroupTouched();
     }
-  } else {
-    this.markFormGroupTouched();
   }
-}
-
 
   characteristicsFormatted(characteristics: string): string {
     return characteristics ? characteristics.split('\n').join('~') : '';
   }
 
- updateRoomType(roomType: RoomTypedto): void {
-  roomType.characteristics = this.characteristicsFormatted(roomType.characteristics);
-  
-  this.roomTypeService.updateRoomTypeData(roomType).subscribe({
-    next: (response: string) => {
-      this.message = response;
-      this.openModal();
-    },
-    error: (err) => {
-      console.error('Error:', err);
-      this.message = 'Error al actualizar la habitación. Por favor, verifique los datos ingresados.';
-      this.openModal();
-    }
-  });
-}
+  updateRoomType(roomType: RoomTypedto): void {
+    roomType.characteristics = this.characteristicsFormatted(roomType.characteristics);
+    
+    this.roomTypeService.updateRoomTypeData(roomType).subscribe({
+      next: (response: string) => {
+        this.message = response;
+        this.openModal();
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.message = 'Error al actualizar la habitación. Por favor, verifique los datos ingresados.';
+        this.openModal();
+      }
+    });
+  }
 
   onDelete(): void {
     this.router.navigate(['/habitaciones']);
@@ -200,10 +195,10 @@ onSubmit(): void {
 
   openModal(): void {
     this.isModalOpen.set(true);
-    console.log('Modal abierto');
   }
 
   closeModal(): void {
     this.isModalOpen.set(false);
+    this.router.navigate(['/habitaciones']);
   }
 }

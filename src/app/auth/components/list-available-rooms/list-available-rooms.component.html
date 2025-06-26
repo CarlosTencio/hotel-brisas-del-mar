@@ -23,6 +23,7 @@
           [min]="minDateDeparture"
           class="border rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-colors" 
         />
+        <span class="mt-1 text-xs text-gray-500">Estancia máxima: {{ MAX_STAY_DAYS }} días</span>
       </div>
 
       <div class="flex flex-col">
@@ -48,7 +49,8 @@
     <!-- Search Button -->
     <div class="mt-6">
       <button 
-        type="submit" 
+        (click)="onSearch()"
+        type="button" 
         class="px-4 py-2.5 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors shadow-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
         [disabled]="loading"
       >
@@ -109,9 +111,17 @@
   }
 
   <!-- No Results Message -->
-  @if (rooms.length === 0 && !loading && !error) {
-    <div class="bg-white rounded-lg shadow-md p-6 text-center">
-      <p class="text-gray-500">No se encontraron habitaciones disponibles para las fechas seleccionadas</p>
+  @if (hasSearched && rooms.length === 0 && !loading && !error) {
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="text-center space-y-2">
+        <p class="text-gray-600">No se encontraron habitaciones disponibles para las fechas seleccionadas.</p>
+        <p class="text-sm text-gray-500">Sugerencias:</p>
+        <ul class="text-sm text-gray-500 list-disc list-inside">
+          <li>Intenta con diferentes fechas</li>
+          <li>Reduce la duración de la estancia</li>
+          <li>Prueba con un tipo de habitación diferente</li>
+        </ul>
+      </div>
     </div>
   }
 </div>

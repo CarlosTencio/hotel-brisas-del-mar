@@ -105,16 +105,25 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
       cardNumber: this.profileForm.get('cardNumber')?.value || '',
     };
 
+    // Ensure dates are in the correct format for SQL Server (YYYY-MM-DDTHH:mm:ss)
+    const formatDate = (dateString: string) => {
+      const date = new Date(dateString);
+      return date.toISOString();
+    };
+
     const booking: Booking = {
       Customer: customer,
       RoomId: this.room.roomId,
-      CheckIn: this.room.checkIn,
-      CheckOut: this.room.checkOut,
+      CheckIn: formatDate(this.room.checkIn),
+      CheckOut: formatDate(this.room.checkOut),
       Transaction: this.room.price,
     };
 
+    console.log('Sending booking:', booking); // Debug log
+
     this.bookingService.createBooking(booking).subscribe({
       next: async (response: BookingResponse) => {
+        console.log('Booking response:', response); // Debug log
         try {
           if (response.status === "Success") {
             await this.sendConfirmationEmailJS(customer);
@@ -130,15 +139,19 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
           } else {
             this.errorMessage.set('Ocurrió un error inesperado');
           }
+          this.isLoading.set(false);
         }
       },
       error: (error) => {
-        console.error('Error en la petición:', error);
+        console.error('Error completo:', error); // Debug log
         if (error.status === 404) {
           this.errorMessage.set('No hay habitaciones disponibles para las fechas seleccionadas');
+        } else if (error.error && error.error.ErrorMessage) {
+          this.errorMessage.set(`Error: ${error.error.ErrorMessage}`);
         } else {
-          this.errorMessage.set('Ocurrió un error al procesar la reserva');
+          this.errorMessage.set('Ocurrió un error al procesar la reserva. Por favor, intente nuevamente.');
         }
+        this.isLoading.set(false);
       },
       complete: () => {
         this.isLoading.set(false);

@@ -4,8 +4,8 @@ export const API_PORTS = {
 };
 
 // Change these values based on your environment
-export const IS_MAC_ENVIRONMENT = false;
-export const USE_HTTPS = true; // Set to false if your backend uses HTTP
+export const IS_MAC_ENVIRONMENT = true;
+export const USE_HTTPS = false; // Set to false if your backend uses HTTP
 
 // Function to get the current port based on environment
 export const getCurrentPort = () => IS_MAC_ENVIRONMENT ? API_PORTS.MAC_PORT : API_PORTS.WINDOWS_PORT;
