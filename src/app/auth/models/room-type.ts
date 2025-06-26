@@ -2,7 +2,7 @@ export interface RoomType {
   roomTypeId: number;
   roomTypeName: string;
   price: number;
-  characteristics: string; 
-  description: string;
-  image: string;
+  characteristics: string | null;
+  description: string | null;
+  image: string | null;
 }

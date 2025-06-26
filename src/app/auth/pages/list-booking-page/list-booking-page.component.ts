@@ -4,54 +4,32 @@ import { BokingService } from '../../services/boking.service';
 import { Router } from '@angular/router';
 import { ModalListBookingComponent } from "./modal-list-booking/modal-list-booking.component";
 import { ModalBookingDetailsComponent } from "./modal-booking-details/modal-booking-details.component";
-
+import { CommonModule } from '@angular/common';
+import { Booking } from '../../models/booking';
 
 interface TokenResponse {
   tokenDTOString: string;
 }
-interface Customer {
-  name: string;
-  lastName: string;
-  email: string;
-  cardNumber: string;
-}
 
-interface RoomType {
-  roomTypeID: number;
-  roomTypeName: string;
-  price: number;
-  characteristics: string | null;
-  description: string | null;
-  image: string | null;
-}
-interface Booking {
-  bookingid: number;
-  roomID: number;
-  creationDate: string;
-  checkIn: string;
-  checkOut: string;
-  customerID: number;
-  transaction: number;
-  bookingReferenceNumber: string;
-  customer: Customer;
-  roomType: RoomType;
-}
 @Component({
   selector: 'app-list-booking-page',
-  imports: [ModalListBookingComponent, ModalBookingDetailsComponent],
+  standalone: true,
+  imports: [CommonModule, ModalListBookingComponent, ModalBookingDetailsComponent],
   templateUrl: './list-booking-page.component.html',
   styleUrl: './list-booking-page.component.css'
 })
-export default class ListBookingPageComponent {
+export default class ListBookingPageComponent implements OnInit {
   isLoading = signal(true);
+  hasMorePages = signal(true);
+  totalBookings = signal(0);
+  pageSize = 6; // Debe coincidir con el SP
   
-  constructor(private router: Router) {
-    
-  }
-  login= inject(LoginService);
-  bookings: Booking[] = [];
-  currentPage: number = 1;
+  login = inject(LoginService);
   bookingService = inject(BokingService);
+  router = inject(Router);
+  
+  bookings: Booking[] = [];
+  currentPage = 1;
   
   // Modal states
   showModal = false;
@@ -62,48 +40,72 @@ export default class ListBookingPageComponent {
   selectedBooking: Booking | null = null;
   
   ngOnInit(): void {
-    this.loadBookings(this.currentPage);
+    this.checkAuthAndLoadBookings();
+  }
+
+  private checkAuthAndLoadBookings(): void {
     const token = localStorage.getItem('token');
-    // console.log('Token:', token);
     
-    if (token) {
-      this.login.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
-         
-          this.isLoading.set(false);
-          if(!tokenResponse) {
-           
-           
-            this.router.navigate(['/login']);
-          
-          }
-      
-        },
-        error: (err) => {
-          console.error('Error loading pages', err);
-        }
-      });
-    } else {
+    if (!token) {
       console.error('No token found');
-      // Redirect to login page
       this.router.navigate(['/login']);
+      return;
     }
+
+    this.login.verifyToken(token).subscribe({
+      next: (tokenResponse) => {
+        if (!tokenResponse) {
+          this.router.navigate(['/login']);
+          return;
+        }
+        this.loadBookings(this.currentPage);
+      },
+      error: (err) => {
+        console.error('Error verificando token:', err);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   loadBookings(page: number): void {
+    if (page < 1) {
+      page = 1;
+    }
+    
+    this.isLoading.set(true);
     this.bookingService.getAllBookings(page).subscribe({
-      next: (data) => {
-        this.bookings = data;
+      next: (response) => {
+        this.bookings = response.bookings;
         this.currentPage = page;
+        this.totalBookings.set(response.totalBookings);
+        
+        // Calculamos si hay más páginas basándonos en el total y el tamaño de página
+        const totalPages = Math.ceil(response.totalBookings / this.pageSize);
+        this.hasMorePages.set(page < totalPages);
+
+        // Si no hay datos y estamos en una página mayor a 1, volvemos a la página anterior
+        if (response.bookings.length === 0 && page > 1) {
+          this.loadBookings(page - 1);
+        }
       },
       error: (err) => {
-        console.error('Error cargando las reservas', err);
+        console.error('Error cargando las reservas:', err);
+        this.bookings = [];
+        this.totalBookings.set(0);
+        this.hasMorePages.set(false);
+        this.isLoading.set(false);
+      },
+      complete: () => {
+        this.isLoading.set(false);
       }
     });
   }
 
   nextPage(): void {
-    this.loadBookings(this.currentPage + 1);
+    const totalPages = Math.ceil(this.totalBookings() / this.pageSize);
+    if (this.currentPage < totalPages) {
+      this.loadBookings(this.currentPage + 1);
+    }
   }
 
   prevPage(): void {
@@ -112,31 +114,26 @@ export default class ListBookingPageComponent {
     }
   }
 
-  delteBooking(bookingId: number): void {
-    this.bookingService.deleteBooking(bookingId).subscribe({
-      next: () => {
-        console.log('Booking deleted successfully');
-        // Reload bookings after deletion
-        this.loadBookings(this.currentPage);
-      },
-      error: (err) => {
-        console.error('Error deleting booking', err);
-      }
-    });
+  // Método helper para mostrar información de paginación
+  getPaginationInfo(): string {
+    if (this.totalBookings() === 0) {
+      return 'No hay reservaciones';
+    }
+    const start = ((this.currentPage - 1) * this.pageSize) + 1;
+    const end = Math.min(this.currentPage * this.pageSize, this.totalBookings());
+    return `Mostrando ${start}-${end} de ${this.totalBookings()} reservas`;
   }
 
-  // Updated viewBooking method
   viewBooking(bookingId: number): void {
     const booking = this.bookings.find(b => b.bookingid === bookingId);
     if (booking) {
       this.selectedBooking = booking;
       this.showDetailsModal = true;
     } else {
-      console.error('Booking not found');
+      console.error('Reserva no encontrada');
     }
   }
 
-  // Delete modal methods
   openDeleteModal(bookingId: number): void {
     this.bookingToDelete = bookingId;
     this.showModal = true;
@@ -148,20 +145,21 @@ export default class ListBookingPageComponent {
   }
 
   confirmDelete(bookingId: number): void {
+    this.isLoading.set(true);
     this.bookingService.deleteBooking(bookingId).subscribe({
       next: () => {
-        console.log('Booking deleted successfully');
+        console.log('Reserva eliminada exitosamente');
         this.loadBookings(this.currentPage);
         this.showModal = false;
         this.bookingToDelete = null;
       },
       error: (err) => {
-        console.error('Error deleting booking', err);
+        console.error('Error eliminando la reserva:', err);
+        this.isLoading.set(false);
       }
     });
   }
 
-  // Details modal methods
   closeDetailsModal(): void {
     this.showDetailsModal = false;
     this.selectedBooking = null;
@@ -170,7 +168,14 @@ export default class ListBookingPageComponent {
   deleteBookingFromDetails(bookingId: number): void {
     this.showDetailsModal = false;
     this.selectedBooking = null;
-    // Show confirmation modal
     this.openDeleteModal(bookingId);
+  }
+
+  // Método para enmascarar el número de tarjeta
+  maskCardNumber(cardNumber: string): string {
+    if (!cardNumber) return '****';
+    // Asegurarse de que solo se muestren los últimos 4 dígitos
+    const lastFourDigits = cardNumber.slice(-4);
+    return `•••• •••• •••• ${lastFourDigits}`;
   }
 }

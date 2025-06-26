@@ -3,35 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BokingService } from '../../../services/boking.service';
 import { RoomTypeService } from '../../../services/roomType.service';
 import { jsPDF } from 'jspdf';
-
-interface Customer {
-  name: string;
-  lastName: string;
-  email: string;
-  cardNumber: string;
-}
-
-interface RoomType {
-  roomTypeID: number;
-  roomTypeName: string;
-  price: number;
-  characteristics: string | null;
-  description: string | null;
-  image: string | null;
-}
-
-interface Booking {
-  bookingid: number;
-  roomID: number;
-  creationDate: string;
-  checkIn: string;
-  checkOut: string;
-  customerID: number;
-  transaction: number;
-  bookingReferenceNumber: string;
-  customer: Customer;
-  roomType: RoomType;
-}
+import { Booking } from '../../../models/booking';
 
 @Component({
   selector: 'app-modal-booking-details',
@@ -51,9 +23,13 @@ export class ModalBookingDetailsComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.booking) {
-      console.log('Booking data received:', this.booking);
-      console.log('Room type price:', this.booking.roomType?.price);
-      console.log('Transaction (total price):', this.booking.transaction);
+      console.log('=== Booking Data Debug ===');
+      console.log('Full booking object:', this.booking);
+      console.log('Check-in (raw):', this.booking.checkIn);
+      console.log('Check-out (raw):', this.booking.checkOut);
+      console.log('Room type:', this.booking.roomType);
+      console.log('Transaction:', this.booking.transaction);
+      console.log('========================');
       
       // Try to fetch additional room details if needed
       if (!this.booking.roomType?.price || this.booking.roomType.price === 0) {
@@ -64,7 +40,7 @@ export class ModalBookingDetailsComponent implements OnChanges {
 
   private fetchRoomTypeDetails(): void {
     // Try both possible field names due to inconsistency in the API
-    const roomTypeId = this.booking?.roomType?.roomTypeID || this.booking?.roomType?.roomTypeID;
+    const roomTypeId = this.booking?.roomType?.roomTypeId;
     
     if (roomTypeId) {
       console.log('Fetching room type details for ID:', roomTypeId);
@@ -103,7 +79,7 @@ export class ModalBookingDetailsComponent implements OnChanges {
 
   printReservation(): void {
     if (!this.booking) return;
-
+    
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     
@@ -134,9 +110,9 @@ export class ModalBookingDetailsComponent implements OnChanges {
     
     doc.text(`ID Reserva: ${this.booking.bookingReferenceNumber}`, leftColumn, yPosition);
     yPosition += 8;
-    doc.text(`Check-in: ${new Date(this.booking.checkIn).toLocaleDateString('es-ES')}`, leftColumn, yPosition);
+    doc.text(`Check-in: ${this.formatDate(this.booking.checkIn)}`, leftColumn, yPosition);
     yPosition += 8;
-    doc.text(`Check-out: ${new Date(this.booking.checkOut).toLocaleDateString('es-ES')}`, leftColumn, yPosition);
+    doc.text(`Check-out: ${this.formatDate(this.booking.checkOut)}`, leftColumn, yPosition);
     yPosition += 8;
     doc.text(`Noches: ${this.calculateNights()}`, leftColumn, yPosition);
     
@@ -153,7 +129,7 @@ export class ModalBookingDetailsComponent implements OnChanges {
     yPosition += 8;
     doc.text(`Email: ${this.booking.customer.email}`, rightColumn, yPosition);
     yPosition += 8;
-    doc.text(`Tarjeta: ****${this.booking.customer.cardNumber.slice(-4)}`, rightColumn, yPosition);
+    doc.text(`Tarjeta: ${this.maskCardNumber(this.booking.customer.cardNumber)}`, rightColumn, yPosition);
     
     // Room information
     yPosition += 20;
@@ -164,9 +140,9 @@ export class ModalBookingDetailsComponent implements OnChanges {
     
     doc.text(`Tipo de Habitación: ${this.booking.roomType.roomTypeName}`, leftColumn, yPosition);
     yPosition += 8;
-    doc.text(`Precio por noche: $${this.getRoomPrice().toLocaleString()}`, leftColumn, yPosition);
+    doc.text(`Precio por noche: ${this.getFormattedPrice(this.getRoomPrice())}`, leftColumn, yPosition);
     yPosition += 8;
-    doc.text(`Total: $${this.getTotalPrice().toLocaleString()}`, leftColumn, yPosition);
+    doc.text(`Total: ${this.getFormattedPrice(this.getTotalPrice())}`, leftColumn, yPosition);
     yPosition += 8;
     if (this.booking.roomType.characteristics) {
       doc.text(`Características: ${this.booking.roomType.characteristics}`, leftColumn, yPosition);
@@ -190,64 +166,149 @@ export class ModalBookingDetailsComponent implements OnChanges {
   }
 
   formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    try {
+      if (!dateString) return 'Fecha no disponible';
+      
+      // Si la fecha ya está en formato DD/MM/YYYY, la mostramos formateada
+      if (dateString.includes('/')) {
+        const [day, month, year] = dateString.split('/').map(Number);
+        const date = new Date(year, month - 1, day);
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          });
+        }
+      }
+      
+      // Para otros formatos, intentamos parsear
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        return date.toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+      
+      return dateString; // Si no podemos parsear, mostramos la fecha original
+    } catch (error) {
+      console.error('Error formatting date:', error, 'for date:', dateString);
+      return dateString; // En caso de error, mostramos la fecha original
+    }
   }
 
   formatDateTime(dateString: string): string {
-    return new Date(dateString).toLocaleString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
-
-  maskCardNumber(cardNumber: string): string {
-    return `****-****-****-${cardNumber.slice(-4)}`;
-  }
-
-  calculateNights(): number {
-    if (!this.booking) return 0;
-    const checkIn = new Date(this.booking.checkIn);
-    const checkOut = new Date(this.booking.checkOut);
-    const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
-    const nights = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    console.log('Calculated nights:', nights, 'from', checkIn, 'to', checkOut);
-    return nights;
-  }
-
-  calculateTotal(): number {
-    // Return the transaction value directly as it contains the total
-    const total = this.getTotalPrice();
-    console.log('Total price from transaction:', total);
-    return total;
-  }
-
-  getRoomPrice(): number {
-    // Use transaction field as total price and calculate price per night
-    if (this.booking?.transaction && this.calculateNights() > 0) {
-      const totalPrice = this.booking.transaction;
-      const nights = this.calculateNights();
-      const pricePerNight = totalPrice / nights;
-      console.log('Price calculation: total:', totalPrice, '/ nights:', nights, '= per night:', pricePerNight);
-      return Math.round(pricePerNight); // Round to avoid decimals
+    try {
+      if (!dateString) return 'Fecha no disponible';
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Fecha inválida';
+      return date.toLocaleString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('Error formatting datetime:', error);
+      return 'Error en fecha';
     }
-    
-    // Fallback to original price field if available
-    return this.booking?.roomType?.price || 0;
-  }
-
-  getTotalPrice(): number {
-    // Transaction field contains the total price
-    return this.booking?.transaction || 0;
   }
 
   getFormattedPrice(price: number): string {
-    return price > 0 ? `$${price.toLocaleString()}` : 'No disponible';
+    try {
+      if (typeof price !== 'number' || isNaN(price)) return '$0';
+      return `$${price.toLocaleString('es-ES')}`;
+    } catch (error) {
+      console.error('Error formatting price:', error);
+      return '$0';
+    }
+  }
+
+  maskCardNumber(cardNumber: string): string {
+    try {
+      if (!cardNumber) return '•••• •••• •••• ****';
+      const lastFourDigits = cardNumber.slice(-4);
+      return `•••• •••• •••• ${lastFourDigits}`;
+    } catch (error) {
+      console.error('Error masking card number:', error);
+      return '•••• •••• •••• ****';
+    }
+  }
+
+  calculateNights(): number {
+    try {
+      if (!this.booking?.checkIn || !this.booking?.checkOut) return 0;
+      
+      // Convertir fechas en formato DD/MM/YYYY a Date
+      const [checkInDay, checkInMonth, checkInYear] = this.booking.checkIn.split('/').map(Number);
+      const [checkOutDay, checkOutMonth, checkOutYear] = this.booking.checkOut.split('/').map(Number);
+      
+      const checkIn = new Date(checkInYear, checkInMonth - 1, checkInDay);
+      const checkOut = new Date(checkOutYear, checkOutMonth - 1, checkOutDay);
+      
+      if (isNaN(checkIn.getTime()) || isNaN(checkOut.getTime())) {
+        console.error('Invalid dates:', { checkIn: this.booking.checkIn, checkOut: this.booking.checkOut });
+        return 0;
+      }
+
+      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    } catch (error) {
+      console.error('Error calculating nights:', error);
+      return 0;
+    }
+  }
+
+  getRoomPrice(): number {
+    try {
+      console.log('Getting room price...');
+      
+      // Si tenemos una transacción válida y noches, calculamos el precio por noche
+      if (this.booking?.transaction && !isNaN(this.booking.transaction) && this.booking.transaction > 0) {
+        const nights = this.calculateNights();
+        if (nights > 0) {
+          const pricePerNight = this.booking.transaction / nights;
+          console.log('Calculated price per night from transaction:', pricePerNight);
+          return pricePerNight;
+        }
+      }
+      
+      // Si tenemos un precio válido en el tipo de habitación, lo usamos
+      if (this.booking?.roomType?.price && !isNaN(this.booking.roomType.price) && this.booking.roomType.price > 0) {
+        console.log('Using room type price:', this.booking.roomType.price);
+        return this.booking.roomType.price;
+      }
+      
+      console.warn('No valid price found');
+      return 0;
+    } catch (error) {
+      console.error('Error getting room price:', error);
+      return 0;
+    }
+  }
+
+  getTotalPrice(): number {
+    try {
+      // Siempre usar la transacción si está disponible
+      if (this.booking?.transaction && !isNaN(this.booking.transaction) && this.booking.transaction > 0) {
+        return this.booking.transaction;
+      }
+      
+      // Si no hay transacción, calcular desde el precio por noche
+      const roomPrice = this.getRoomPrice();
+      const nights = this.calculateNights();
+      
+      if (roomPrice > 0 && nights > 0) {
+        return roomPrice * nights;
+      }
+      
+      return 0;
+    } catch (error) {
+      console.error('Error calculating total price:', error);
+      return 0;
+    }
   }
 } 

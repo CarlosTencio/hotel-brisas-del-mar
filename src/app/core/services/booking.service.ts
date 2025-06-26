@@ -52,7 +52,8 @@ export class BookingService {
       roomId: booking.RoomId,
       checkIn: booking.CheckIn,
       checkOut: booking.CheckOut,
-      transaction: booking.Transaction
+      transaction: booking.Transaction,
+      creationDate: new Date().toISOString()
     };
     return this.http.post<BookingResponse>(this.bookingURLPost, bookingRequest);
   }
