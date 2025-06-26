@@ -1,36 +1,71 @@
-<div class="flex flex-col lg:flex-row items-start">
-
-    <div class="flex lg:justify-start w-full px-0">
-
-        <img [src]="image()" alt="Imagen de la habitación"
-            class="w-40 h-40 rounded-xl object-cover shadow-lg animate-fade-in" />
-
-        <div class="text-left ml-5">
-
-            <p class="text-2xl font-bold mb-2 text-left">
-                {{ roomTypeName() }}
-            </p>
-
-            <div class="mb-4">
-                <p [innerText]="description()" class="text-gray-700"></p>
-            </div>
-
-            <div class="mb-4">
-                <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
-                    @for (item of characteristics().split(tokenSplit); track $index) {
-                    <li>
-                        {{ item.trim() }}
-                    </li>
-                    }
-                </ul>
-            </div>
-
-            <div class="mb-4">
-                <h2 class="text-xl font-semibold text-emerald-700">Precio</h2>
-                <p class="text-gray-700">${{ price() }}</p>
-            </div>
-
-        </div>
+<div class="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-sm hover:shadow-md transition-all">
+  <div class="flex flex-col lg:flex-row gap-4">
+    <!-- Image Section -->
+    <div class="lg:w-[300px] min-w-[300px]">
+      <img 
+        [src]="image()" 
+        alt="Imagen de la habitación"
+        class="w-full h-[200px] rounded-lg object-cover shadow-sm hover:scale-[1.02] transition-transform duration-300" 
+      />
     </div>
 
+    <!-- Content Section -->
+    <div class="flex-1 flex flex-col">
+      <div class="flex justify-between items-start mb-2">
+        <!-- Room Title -->
+        <h2 class="text-2xl font-semibold text-gray-900">
+          {{ roomTypeName() }}
+        </h2>
+        <!-- Price -->
+        <div class="text-right">
+          <p class="text-sm text-gray-500">Precio por noche</p>
+          <p class="text-2xl font-bold text-hotel-600">${{ price() }}</p>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <p class="text-gray-600 text-sm mb-3" [innerText]="description()"></p>
+
+      <!-- Characteristics -->
+      <div class="mt-auto">
+        <h3 class="text-sm font-medium text-gray-700 mb-2">Características de la habitación</h3>
+        <ul class="grid grid-cols-2 gap-x-4 gap-y-1">
+          @for (item of characteristics().split(tokenSplit); track $index) {
+            <li class="flex items-center text-sm text-gray-600">
+              <svg class="w-4 h-4 text-hotel-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {{ item.trim() }}
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Button -->
+      <button class="bg-hotel-500 text-white px-4 py-2 rounded-lg hover:bg-hotel-600 transition-colors mt-4 self-end">
+        Reservar ahora
+      </button>
+    </div>
+  </div>
 </div>
+
+<style>
+  @keyframes expandLine {
+    0% { 
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-expandLine {
+    transform-origin: center;
+    animation: expandLine 1s ease-out 0.5s both;
+  }
+</style>

@@ -1,0 +1,19 @@
+.promotion-title {
+  margin-top: 10px;
+  margin-bottom: 4px;
+  color: #4d7755;
+  font-weight: 500;
+}
+
+.promotion-subtitle {
+  color: rgba(77, 119, 85, 0.8);
+  font-size: 0.75rem;
+}
+
+.promotion-container {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: linear-gradient(to right, rgba(77, 119, 85, 0.1), transparent);
+  border-radius: 8px;
+}

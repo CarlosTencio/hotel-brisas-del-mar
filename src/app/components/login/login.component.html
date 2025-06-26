@@ -1,4 +1,7 @@
 <div class="">
-    <app-login-item (loginEvent)="handleLogin($event)"></app-login-item>
+    <app-login-item 
+      [isLoading]="isLoading"
+      (loginEvent)="handleLogin($event)"
+    ></app-login-item>
   </div>
   

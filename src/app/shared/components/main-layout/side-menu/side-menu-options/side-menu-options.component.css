@@ -1,0 +1,58 @@
+/* Modern Side Menu Styling */
+.menu-section {
+  padding: 1.5rem 0;
+  position: relative;
+}
+
+.menu-link {
+  position: relative;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border-left: 3px solid transparent;
+}
+
+.menu-link:hover {
+  background: linear-gradient(90deg, rgba(77, 119, 85, 0.08) 0%, transparent 100%);
+  border-left-color: #4d7755;
+}
+
+.menu-text {
+  transition: transform 0.2s ease;
+}
+
+.menu-link:hover .menu-text {
+  transform: translateX(4px);
+  color: #4d7755;
+}
+
+/* Active state with better contrast */
+.active-menu-item {
+  background: linear-gradient(90deg, #4d7755 0%, #2c5530 100%);
+  border-left-color: #a7d4b1;
+  color: white !important;
+}
+
+.active-menu-item .menu-text {
+  font-weight: 500;
+}
+
+.active-menu-item:hover {
+  background: linear-gradient(90deg, #3d6145 0%, #1a3d20 100%);
+  border-left-color: #a7d4b1;
+}
+
+.active-menu-item:hover .menu-text {
+  color: white;
+  transform: translateX(4px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .menu-link {
+    padding: 0.875rem 1.25rem;
+  }
+  
+  .menu-text {
+    font-size: 0.95rem;
+  }
+}

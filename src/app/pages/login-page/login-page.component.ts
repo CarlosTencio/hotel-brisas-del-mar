@@ -8,24 +8,28 @@ import modalLoginComponent from './modal-login/modal-login.component';
 interface TokenResponse {
   tokenDTOString: string;
 }
+
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [CommonModule, LoginComponent,modalLoginComponent],
+  imports: [CommonModule, LoginComponent, modalLoginComponent],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })
 
 export default class LoginPageComponent {
   constructor(private router: Router) {}
-  login= inject(LoginService);
+  login = inject(LoginService);
   dataPage = signal<TokenResponse[]>([]);
   showErrorModal = signal<boolean>(false);
   errorMessage = signal<string>('');
+  isLoading = signal<boolean>(false);
 
   handleLogin(credentials: { username: string; password: string }) {
+    this.isLoading.set(true);
     this.login.login(credentials.username, credentials.password).subscribe({
       next: (tokenResponse: TokenResponse) => {
+        this.isLoading.set(false);
         if(tokenResponse.tokenDTOString === null) {
           this.errorMessage.set('Credenciales incorrectas. Por favor intente nuevamente.');
           this.showErrorModal.set(true);
@@ -37,6 +41,7 @@ export default class LoginPageComponent {
         this.router.navigate(['/home-auth']);
       },
       error: (err) => {
+        this.isLoading.set(false);
         this.errorMessage.set('Credenciales incorrectas. Por favor intente nuevamente.');
         this.showErrorModal.set(true);
       }

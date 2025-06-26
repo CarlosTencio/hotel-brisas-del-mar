@@ -1,0 +1,199 @@
+/* Beach Hotel Main Layout Styling */
+.layout-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fffe 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 16rem;
+  z-index: 30;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
+
+.main-content {
+  margin-left: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 50%, #ffffff 100%);
+  position: relative;
+}
+
+.main-content::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(77,119,85,0.02)"/></svg>') repeat;
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+  .sidebar-container {
+    position: static;
+    transform: none !important;
+    width: 16rem;
+  }
+  
+  .main-content {
+    margin-left: 16rem;
+  }
+  
+  .sidebar-overlay {
+    display: none;
+  }
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .sidebar-container {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar-container.open {
+    transform: translateX(0);
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Smooth scrolling */
+.content-wrapper {
+  scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.layout-container:focus-within .sidebar-container {
+  outline: 2px solid #4d7755;
+  outline-offset: 2px;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Main container styles */
+.flex-1 {
+  padding-top: 64px; /* Height of the header */
+  height: 100vh;
+  overflow-y: auto;
+  background-color: white;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.flex-1::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.flex-1 {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  aside {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  aside.open {
+    transform: translateX(0);
+  }
+
+  .flex-1 {
+    margin-left: 0;
+    padding-top: 56px; /* Smaller header on mobile */
+  }
+}
+
+.layout-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.side-menu-container {
+  width: 256px;
+  height: 100vh;
+  flex-shrink: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+}
+
+.main-content {
+  margin-left: 256px;
+  width: calc(100vw - 256px);
+  height: calc(100vh - 64px); /* Subtract header height */
+  margin-top: 64px; /* Add header height margin */
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  background-color: #ffffff;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.main-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.main-content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+@media (max-width: 768px) {
+  .side-menu-container {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .side-menu-container.open {
+    transform: translateX(0);
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100vw;
+    height: calc(100vh - 56px); /* Smaller header on mobile */
+    margin-top: 56px;
+  }
+} 

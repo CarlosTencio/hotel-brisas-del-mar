@@ -4,7 +4,7 @@
 >
   <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
     <svg
-      class="w-10 h-10 text-blue-600 animate-spin mb-4"
+      class="w-10 h-10 text-emerald-600 animate-spin mb-4"
       viewBox="0 0 24 24"
       fill="none"
     >
@@ -26,77 +26,82 @@
   </div>
 </div>
 }@else{
-<div class="container mx-auto px-4 py-8 items-center flex flex-col justify-center">
-  <h1 class="text-xl font-bold mb-4 text-center">Listado de Reservaciones</h1>
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">Listado de Reservaciones</h1>
 
-  <div class="w-full overflow-x-auto">
-    <table class="min-w-full bg-white text-sm">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="py-3 px-4 text-left">Fecha</th>
-          <th class="py-3 px-4 text-left">ID Reserva</th>
-          <th class="py-3 px-4 text-left">Nombre</th>
-          <th class="py-3 px-4 text-left hidden md:table-cell">Apellidos</th>
-          <th class="py-3 px-4 text-left hidden md:table-cell">Email</th>
-          <th class="py-3 px-4 text-left hidden md:table-cell">Tarjeta</th>
-          <th class="py-3 px-4 text-left hidden md:table-cell">Transacción</th>
-          <th class="py-3 px-4 text-left">Llegada</th>
-          <th class="py-3 px-4 text-left hidden md:table-cell">Salida</th>
-          <th class="py-3 px-4 text-left">Tipo</th>
-          <th class="py-3 px-4 text-left">Ver</th>
-          <th class="py-3 px-4 text-left">Eliminar</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (booking of bookings; track $index) {
-        <tr class="border-b hover:bg-gray-50">
-          <td class="py-3 px-4">{{ booking.creationDate }}</td>
-          <td class="py-3 px-4">{{ booking.bookingReferenceNumber }}</td>
-          <td class="py-3 px-4">{{ booking.customer.name }}</td>
-          <td class="py-3 px-4 hidden md:table-cell">{{ booking.customer.lastName }}</td>
-          <td class="py-3 px-4 hidden md:table-cell">{{ booking.customer.email }}</td>
-          <td class="py-3 px-4 hidden md:table-cell">{{ booking.customer.cardNumber }}</td>
-          <td class="py-3 px-4 hidden md:table-cell">{{ booking.transaction }}</td>
-          <td class="py-3 px-4">{{ booking.checkIn }}</td>
-          <td class="py-3 px-4 hidden md:table-cell">{{ booking.checkOut }}</td>
-          <td class="py-3 px-4">{{ booking.roomType.roomTypeName }}</td>
-          <td class="py-3 px-4">
-            <button
-              (click)="viewBooking(booking.bookingid)"
-              class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-            >
-              Ver
-            </button>
-          </td>
-          <td class="py-3 px-4">
-            <button
-              (click)="openDeleteModal(booking.bookingid)"
-              class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
-            >
-              Eliminar
-            </button>
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Reserva</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Apellidos</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Email</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Tarjeta</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Transacción</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Llegada</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Salida</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+              <th class="py-3.5 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            @for (booking of bookings; track $index) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="py-4 px-4 text-sm text-gray-900">{{ booking.creationDate }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900">{{ booking.bookingReferenceNumber }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900">{{ booking.customer.name }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900 hidden md:table-cell">{{ booking.customer.lastName }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900 hidden md:table-cell">{{ booking.customer.email }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900 hidden md:table-cell">{{ booking.customer.cardNumber }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900 hidden md:table-cell">{{ booking.transaction }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900">{{ booking.checkIn }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900 hidden md:table-cell">{{ booking.checkOut }}</td>
+              <td class="py-4 px-4 text-sm text-gray-900">{{ booking.roomType.roomTypeName }}</td>
+              <td class="py-4 px-4 text-sm space-x-2">
+                <button
+                  (click)="viewBooking(booking.bookingid)"
+                  class="px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-md hover:bg-emerald-700 transition-colors shadow-sm"
+                >
+                  Ver
+                </button>
+                <button
+                  (click)="openDeleteModal(booking.bookingid)"
+                  class="px-3 py-1.5 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700 transition-colors shadow-sm"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-  <div class="pagination-controls mt-6 flex items-center gap-4">
-    <button 
-      (click)="prevPage()" 
-      [disabled]="currentPage === 1"
-      class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
-      ← Anterior
-    </button>
+    <div class="mt-6 flex items-center justify-between px-4">
+      <button 
+        (click)="prevPage()" 
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        ← Anterior
+      </button>
 
-    <span class="text-gray-700 font-medium">Página {{ currentPage }}</span>
+      <span class="text-sm text-gray-700 font-medium">
+        Página {{ currentPage }}
+      </span>
 
-    <button 
-      (click)="nextPage()" 
-      class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-      Siguiente →
-    </button>
+      <button 
+        (click)="nextPage()" 
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+      >
+        Siguiente →
+      </button>
+    </div>
   </div>
 
   <!-- Modal for Delete Confirmation -->
@@ -115,5 +120,4 @@
     (deleteBooking)="deleteBookingFromDetails($event)">
   </app-modal-booking-details>
 </div>
-
 }

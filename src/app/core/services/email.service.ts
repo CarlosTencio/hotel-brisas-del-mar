@@ -1,18 +1,57 @@
 // emailjs.service.ts
 import { Injectable } from '@angular/core';
-import emailjs from '@emailjs/browser'; // ✅ Versión actual
+import emailjs from '@emailjs/browser';
+
+interface EmailData {
+  customerEmail: string;
+  customerName: string;
+  roomNumber: number;
+  roomType: string;
+  description: string;
+  checkIn: string;
+  checkOut: string;
+  price: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmailJSService {
-  private serviceId = 'service_vkeavbi'; // Obtén de EmailJS
-  private templateId = 'template_y3xj6cc'; // Obtén de EmailJS
-  private userId = 'Z0d-K15x7r1gD4xVS'; // Obtén de EmailJS
+  private serviceId = 'service_omh3789';
+  private templateId = 'template_ltqax3g';
+  private userId = 'QEZ-q9v4WBnXLv46W';
+  private initialized = false;
 
-  async sendBookingConfirmation(emailData: any): Promise<any> {
+  constructor() {
+    console.log('EmailJS Service instantiated');
+    this.initEmailJS();
+  }
+
+  private async initEmailJS() {
+    try {
+      console.log('Attempting to initialize EmailJS...');
+      await emailjs.init(this.userId);
+      this.initialized = true;
+      console.log('EmailJS initialized successfully');
+    } catch (error) {
+      console.error('Error initializing EmailJS:', error);
+      console.log('Current configuration:', {
+        serviceId: this.serviceId,
+        templateId: this.templateId,
+        userId: this.userId
+      });
+      throw new Error('Failed to initialize email service');
+    }
+  }
+
+  async sendBookingConfirmation(emailData: EmailData): Promise<any> {
+    if (!this.initialized) {
+      console.log('EmailJS not initialized, attempting to initialize...');
+      await this.initEmailJS();
+    }
+
     const templateParams = {
-      to_email: emailData.customerEmail,
+      email: emailData.customerEmail,
       customer_name: emailData.customerName,
       room_number: emailData.roomNumber,
       room_type: emailData.roomType,
@@ -23,16 +62,34 @@ export class EmailJSService {
       booking_date: new Date().toLocaleDateString('es-ES')
     };
 
+    console.log('Attempting to send email with params:', templateParams);
+
     try {
+      console.log('Sending email...');
       const response = await emailjs.send(
         this.serviceId,
         this.templateId,
         templateParams,
         this.userId
       );
+
+      console.log('Email service response:', response);
+
+      if (response.status !== 200) {
+        console.error('Email service returned non-200 status:', response.status);
+        throw new Error(`Email service responded with status: ${response.status}`);
+      }
+
+      console.log('Email sent successfully');
       return response;
     } catch (error) {
-      throw error;
+      console.error('Detailed error sending email:', {
+        error,
+        serviceId: this.serviceId,
+        templateId: this.templateId,
+        userId: this.userId.substring(0, 5) + '...'
+      });
+      throw new Error('Failed to send confirmation email');
     }
   }
 }

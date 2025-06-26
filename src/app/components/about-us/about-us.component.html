@@ -1,4 +1,4 @@
-<div class="m-3">
+<div>
   @for (item of dataPage(); track $index) {
     @if (item.pageTitle === 'Sobre nosotros') {
       <app-about [dataPage]="item" error />

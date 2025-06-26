@@ -1,4 +1,4 @@
-/* Beach Hotel Contact Us Page Styling */
+/* Beach Hotel Room Rate Page Styling */
 .page-container {
   min-height: calc(100vh - 80px);
   padding: 2rem 1rem;
@@ -18,4 +18,4 @@
   .page-container {
     padding: 1rem 0.5rem;
   }
-}
+} 

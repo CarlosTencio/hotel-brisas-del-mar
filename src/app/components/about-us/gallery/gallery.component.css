@@ -3,3 +3,220 @@ img {
     max-height: 400px;
   }
   
+/* Beach Hotel Gallery Component - Enhanced with Personality */
+.gallery-section {
+  margin-top: 4rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 32px;
+  box-shadow: 
+    0 25px 50px -12px rgba(77, 119, 85, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #4d7755 25%, 
+    #a7d4b1 50%, 
+    #4d7755 75%, 
+    transparent 100%);
+}
+
+.gallery-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #4d7755;
+  margin-bottom: 3rem;
+  text-align: center;
+  letter-spacing: -1px;
+  position: relative;
+}
+
+.gallery-title::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+}
+
+.gallery-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.gallery-main-image {
+  position: relative;
+  flex: 1;
+  min-height: 500px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    0 32px 64px -12px rgba(77, 119, 85, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-main-image:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 40px 80px -12px rgba(77, 119, 85, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.gallery-featured-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-main-image:hover .gallery-featured-image {
+  transform: scale(1.05);
+}
+
+.gallery-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.gallery-thumbnail {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 3px solid transparent;
+  box-shadow: 0 8px 24px rgba(77, 119, 85, 0.15);
+}
+
+.gallery-thumbnail:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(77, 119, 85, 0.25);
+}
+
+.gallery-thumbnail.active {
+  border-color: #4d7755;
+  transform: scale(1.1);
+  box-shadow: 
+    0 16px 40px rgba(77, 119, 85, 0.3),
+    0 0 0 2px rgba(77, 119, 85, 0.2);
+}
+
+.gallery-thumbnail.active::after {
+  content: '✓';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: #4d7755;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.gallery-thumbnail-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-thumbnail:hover .gallery-thumbnail-image {
+  transform: scale(1.1);
+}
+
+.gallery-thumbnail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(77, 119, 85, 0.1) 0%, 
+    transparent 50%, 
+    rgba(167, 212, 177, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.gallery-thumbnail:hover::before {
+  opacity: 1;
+}
+
+/* Desktop layout */
+@media (min-width: 1024px) {
+  .gallery-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .gallery-main-image {
+    flex: 2;
+    min-height: 600px;
+  }
+  
+  .gallery-thumbnails {
+    flex: 1;
+    max-width: none;
+    margin: 0;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 1023px) {
+  .gallery-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .gallery-thumbnails {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .gallery-section {
+    padding: 2rem 1rem;
+    margin-top: 2rem;
+    border-radius: 24px;
+  }
+  
+  .gallery-main-image {
+    min-height: 300px;
+  }
+  
+  .gallery-thumbnails {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .gallery-title {
+    font-size: 2rem;
+  }
+}
+  

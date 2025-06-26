@@ -1,0 +1,55 @@
+/* Beach Hotel About Component */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Main container */
+div:first-child {
+  position: relative;
+  text-align: center;
+  padding: 2rem;
+  background: #ffffff;
+  margin: 1rem auto;
+  max-width: 1200px;
+  margin-top: -1.5em;
+}
+
+/* Title styling */
+h1 {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+/* Content text styling */
+p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #475569;
+  font-weight: 400;
+  text-align: justify;
+  position: relative;
+  z-index: 2;
+  padding: 0 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  div:first-child {
+    padding: 1.5rem;
+    margin: 0.5rem auto;
+  }
+  
+  p {
+    padding: 0 0.5rem;
+    text-align: left;
+  }
+}
+
+@media (max-width: 640px) {
+  div:first-child {
+    padding: 1rem;
+  }
+}

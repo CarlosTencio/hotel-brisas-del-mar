@@ -48,3 +48,4 @@ src/app/core/services/promotion.service.ts
 src/app/core/services/content.service.ts
 src/app/core/services/booking.service.ts
 src/app/core/services/ad.service.ts
+src/app/core/constants/api.constants.ts

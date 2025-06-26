@@ -1,53 +1,36 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
-import { LoginService } from '../../services/login.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RoomManageComponent } from '../../components/change-status-room/room-manage/room-manage.component';
-
-interface TokenResponse {
-  tokenDTOString: string;
-}
+import { ChangeStatusRoomComponent } from '../../components/change-status-room/change-status-room.component';
+import { RoomService } from '../../services/room.service';
+import { ManageRoomActive } from '../../models/manage-room-active';
 
 @Component({
   selector: 'app-manage-room-page',
-  imports: [CommonModule, RoomManageComponent],
+  standalone: true,
+  imports: [CommonModule, ChangeStatusRoomComponent],
   templateUrl: './manage-room-page.component.html',
-  styleUrl: './manage-room-page.component.css'
+  styleUrls: ['./manage-room-page.component.css']
 })
-export default class ManageRoomPageComponent implements OnInit {
-
+export class ManageRoomPageComponent implements OnInit {
   isLoading = signal(true);
-  constructor(private router: Router) {
-    
-  }
-  login= inject(LoginService);
+  roomsData: ManageRoomActive[] = [];
 
-    ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    // console.log('Token:', token);
-    
-    if (token) {
-      this.login.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
-         
-          this.isLoading.set(false);
-          if(!tokenResponse) {
-           
-           
-            this.router.navigate(['/login']);
-          
-          }
-      
-        },
-        error: (err) => {
-          console.error('Error loading pages', err);
-        }
-      });
-    } else {
-      console.error('No token found');
-      // Redirect to login page
-      this.router.navigate(['/login']);
-    }
+  constructor(private roomService: RoomService) {}
+
+  ngOnInit() {
+    this.loadRooms();
   }
 
+  loadRooms() {
+    this.roomService.getRoomActive().subscribe({
+      next: (data) => {
+        this.roomsData = data;
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading rooms:', error);
+        this.isLoading.set(false);
+      }
+    });
+  }
 }

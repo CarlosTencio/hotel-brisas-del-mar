@@ -69,26 +69,25 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
   }
 
   private async sendConfirmationEmailJS(customer: Customer): Promise<void> {
-  const emailData = {
-    customerEmail: customer.email,
-    customerName: `${customer.name} ${customer.lastName}`,
-    roomNumber: this.room.roomNumber,
-    roomType: this.room.roomTypeName,
-    description: this.room.description,
-    checkIn: this.room.checkIn,
-    checkOut: this.room.checkOut,
-    price: this.room.price
-  };
+    const emailData = {
+      customerEmail: customer.email,
+      customerName: `${customer.name} ${customer.lastName}`,
+      roomNumber: this.room.roomNumber,
+      roomType: this.room.roomTypeName,
+      description: this.room.description,
+      checkIn: new Date(this.room.checkIn).toLocaleDateString('es-ES'),
+      checkOut: new Date(this.room.checkOut).toLocaleDateString('es-ES'),
+      price: this.room.price // Mantenemos el número para la interfaz EmailData
+    };
 
-  try {
-    await this.emailJSService.sendBookingConfirmation(emailData);
-    console.log('Correo enviado exitosamente');
-  } catch (error) {
-    console.error('Error al enviar correo:', error);
+    try {
+      await this.emailJSService.sendBookingConfirmation(emailData);
+      console.log('Correo enviado exitosamente');
+    } catch (error) {
+      console.error('Error al enviar correo:', error);
+      throw error;
+    }
   }
-}
-
-// Llama este método en el success de createBooking:
 
   onSubmit() {
     if (this.profileForm.invalid) {
@@ -114,29 +113,36 @@ export class PersonalDataBookingComponent implements OnInit, OnDestroy {
       Transaction: this.room.price,
     };
 
-
     this.bookingService.createBooking(booking).subscribe({
-      next: (response: BookingResponse) => {
-
-        this.isLoading.set(false);
-        if (response.status === "Success") {
-          this.sendConfirmationEmailJS(customer);
-          this.openModal();
-
-          this.bookingService.cleanData(); // Limpiar los datos de reserva después de la creación
-        } else {
-          console.log('Error al registrar la reserva', response);
-          this.errorMessage.set(response.status || 'Error al registrar la reserva');
+      next: async (response: BookingResponse) => {
+        try {
+          if (response.status === "Success") {
+            await this.sendConfirmationEmailJS(customer);
+            this.bookingService.cleanData();
+            this.openModal();
+          } else {
+            throw new Error(response.status || 'Error al registrar la reserva');
+          }
+        } catch (error) {
+          console.error('Error en el proceso:', error);
+          if (error instanceof Error) {
+            this.errorMessage.set(error.message);
+          } else {
+            this.errorMessage.set('Ocurrió un error inesperado');
+          }
         }
       },
       error: (error) => {
-        this.isLoading.set(false);
+        console.error('Error en la petición:', error);
         if (error.status === 404) {
           this.errorMessage.set('No hay habitaciones disponibles para las fechas seleccionadas');
         } else {
           this.errorMessage.set('Ocurrió un error al procesar la reserva');
         }
       },
+      complete: () => {
+        this.isLoading.set(false);
+      }
     });
   }
 

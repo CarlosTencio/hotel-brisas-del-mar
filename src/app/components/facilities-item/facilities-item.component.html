@@ -1,9 +1,22 @@
-<div class="">
+<div class="grid grid-cols-1 gap-4">
   @for (item of dataPage(); track $index) {
-  @if (item.pageTitle === 'Facilidades') {
-  <app-facilities [dataPage]="item" />
-  <hr class="mb-2.5">
+    @if (item.pageTitle === 'Facilidades') {
+      <div class="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 ease-in-out hover:translate-y-[-2px]">
+        <div class="flex flex-col md:flex-row md:items-center gap-6">
+          <div class="md:w-[320px] min-w-[320px] h-[220px] overflow-hidden rounded-xl">
+            <img 
+              [src]="item.images[0]" 
+              [alt]="item.pageTitle" 
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease-out"
+            />
+          </div>
+          <div class="flex-1">
+            <p class="text-gray-700 leading-relaxed text-lg">
+              {{ item.pageContent }}
+            </p>
+          </div>
+        </div>
+      </div>
+    }
   }
-  }
-
 </div>

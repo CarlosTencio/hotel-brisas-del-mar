@@ -5,41 +5,34 @@ import { RoomService } from '../../services/room.service';
 import { RoomStatus } from '../../models/room-status';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
-interface TokenResponse {
-  tokenDTOString: string;
-}
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-status-hotel-page',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, DatePipe],
   templateUrl: './status-hotel-page.component.html',
   styleUrl: './status-hotel-page.component.css'
 })
 export default class StatusHotelPageComponent implements OnInit {
   habitaciones = signal<RoomStatus[]>([]);
   isLoading = signal(true);
-  fechaActual = signal('');
+  currentDate = new Date();
   
   // Paginación
   pageSize = signal(10);
   currentPage = signal(1);
-  totalPages = computed(() => Math.ceil(this.habitaciones().length / this.pageSize()));
+  totalRooms = signal(0);
+  
+  // Valores computados para la paginación
+  startIndex = computed(() => (this.currentPage() - 1) * this.pageSize());
+  endIndex = computed(() => Math.min(this.startIndex() + this.pageSize(), this.totalRooms()));
   
   // Habitaciones paginadas
   paginatedHabitaciones = computed(() => {
-    const start = (this.currentPage() - 1) * this.pageSize();
-    const end = start + this.pageSize();
+    const start = this.startIndex();
+    const end = this.endIndex();
     return this.habitaciones().slice(start, end);
-  });
-  
-  // Exponer Math para usar en la plantilla
-  mathMin = Math.min;
-  
-  // Lista de páginas para la paginación
-  pageNumbers = computed(() => {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
   });
 
   private roomService = inject(RoomService);
@@ -47,41 +40,21 @@ export default class StatusHotelPageComponent implements OnInit {
   private login = inject(LoginService);
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-    // console.log('Token:', token);
-    
-    if (token) {
-      this.login.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
-          this.isLoading.set(false);
-          if(!tokenResponse) {
-            this.router.navigate(['/login']);
-            return;
-          }
-          
-          const hoy = new Date();
-          const fechaFormateada = hoy.toLocaleDateString('es-ES');
-          this.fechaActual.set(fechaFormateada);
-
-          this.loadRoomStatuses();
-        },
-        error: (err) => {
-          console.error('Error loading pages', err);
-          this.router.navigate(['/login']);
-        }
-      });
-    } else {
-      console.error('No token found');
-      // Redirect to login page
+    if (!this.login.isLoggedIn()) {
       this.router.navigate(['/login']);
+      return;
     }
+    
+    this.loadRoomStatuses();
   }
 
   private loadRoomStatuses(): void {
+    this.isLoading.set(true);
     this.roomService.roomStatus().subscribe({
       next: (data) => {
         this.habitaciones.set(data);
-        this.isLoading.set(false); // Oculta el loader cuando ya cargó
+        this.totalRooms.set(data.length);
+        this.isLoading.set(false);
       },
       error: (err) => {
         console.error('Error al cargar estados de habitación', err);
@@ -92,7 +65,7 @@ export default class StatusHotelPageComponent implements OnInit {
   
   // Métodos para la paginación
   nextPage(): void {
-    if (this.currentPage() < this.totalPages()) {
+    if (this.currentPage() < Math.ceil(this.totalRooms() / this.pageSize())) {
       this.currentPage.update(val => val + 1);
     }
   }
@@ -103,16 +76,9 @@ export default class StatusHotelPageComponent implements OnInit {
     }
   }
   
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage.set(page);
-    }
-  }
-  
   // Método para generar PDF
   generatePDF(): void {
     const doc = new jsPDF();
-    const fecha = this.fechaActual();
     
     // Título
     doc.setFontSize(18);
@@ -120,20 +86,15 @@ export default class StatusHotelPageComponent implements OnInit {
     
     // Fecha
     doc.setFontSize(12);
-    doc.text(`Fecha: ${fecha}`, 14, 30);
+    doc.text(`Fecha: ${this.currentDate.toLocaleDateString()}`, 14, 30);
     
     // Tabla
     const tableColumn = ['Número de Habitación', 'Tipo', 'Estado'];
-    const tableRows: any[] = [];
-    
-    this.habitaciones().forEach(habitacion => {
-      const roomData = [
-        habitacion.roomNumber.toString(),
-        habitacion.roomTypeName,
-        habitacion.status
-      ];
-      tableRows.push(roomData);
-    });
+    const tableRows = this.habitaciones().map(habitacion => [
+      habitacion.roomNumber.toString(),
+      habitacion.roomTypeName,
+      habitacion.status
+    ]);
     
     autoTable(doc, {
       head: [tableColumn],
@@ -152,6 +113,6 @@ export default class StatusHotelPageComponent implements OnInit {
     });
     
     // Guardar el PDF
-    doc.save(`estado-hotel-${fecha.replace(/\//g, '-')}.pdf`);
+    doc.save(`estado-hotel-${this.currentDate.toISOString().split('T')[0]}.pdf`);
   }
 }

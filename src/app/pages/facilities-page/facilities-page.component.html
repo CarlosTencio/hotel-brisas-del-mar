@@ -1,4 +1,41 @@
-<div class=" p-8  ">
-    <h1 class="text-4xl font-bold mb-6 text-left text-gray-800">Facilidades</h1>
-<app-facilities-item [dataPage]="dataPage()"/>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Title Section -->
+  <h1 class="text-4xl font-bold text-center z-2 relative mb-8"
+      style="
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -1px;
+        background: linear-gradient(135deg, #4d7755 0%, #2c5530 50%, #1a3d20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      ">
+    Facilidades
+    <div class="absolute bottom-[-12px] left-1/2 transform -translate-x-1/2 w-[100px] h-[4px] bg-gradient-to-r from-[#4d7755] to-[#a7d4b1] rounded-[2px] animate-expandLine"></div>
+  </h1>
+
+  <app-facilities-item [dataPage]="dataPage()"/>
 </div>
+
+<style>
+  @keyframes expandLine {
+    0% { 
+      width: 0; 
+      opacity: 0; 
+      background: linear-gradient(90deg, transparent 0%, #4d7755 25%, #a7d4b1 50%, #4d7755 75%, transparent 100%);
+    }
+    50% { 
+      opacity: 1; 
+    }
+    100% { 
+      width: 100px; 
+      opacity: 1;
+      background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+    }
+  }
+
+  .animate-expandLine {
+    animation: expandLine 1s ease-out 0.5s both;
+  }
+</style>

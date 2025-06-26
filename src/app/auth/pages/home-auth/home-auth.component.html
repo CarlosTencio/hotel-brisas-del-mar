@@ -1,7 +1,7 @@
 @if(isLoading()){
-<div  class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
   <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
-    <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
+    <svg class="w-10 h-10 text-emerald-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path class="opacity-75" fill="currentColor"
         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
@@ -11,8 +11,14 @@
   </div>
 </div>
 }@else{
-  <div class="container mx-auto px-4 py-8 items-center flex flex-col justify-center">
-    <h1 class="text-xl font-bold">Home Auth</h1>
-    <p>Modulo Administrador</p>
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-emerald-700 to-emerald-500 bg-clip-text text-transparent">
+        Bienvenido
+      </h1>
+      <p class="text-xl text-gray-600">
+        al módulo administrador del Hotel Brisas del Mar
+      </p>
+    </div>
   </div>
 }

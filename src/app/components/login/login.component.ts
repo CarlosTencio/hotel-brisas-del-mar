@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoginItemComponent } from "./login-item/login-item.component";
@@ -11,14 +11,13 @@ import { LoginItemComponent } from "./login-item/login-item.component";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
+  @Input() isLoading = false;
   @Output() loginEvent = new EventEmitter<{ username: string; password: string }>();
 
   handleLogin(credentials: { username: string; password: string }) {
     console.log('Usuario:', credentials.username);
     console.log('Contraseña:', credentials.password);
     
-   
     this.loginEvent.emit(credentials);
   }
 }

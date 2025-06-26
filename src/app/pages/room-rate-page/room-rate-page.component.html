@@ -1,4 +1,26 @@
-<div class=" p-8  ">
-<h1 class="text-4xl font-bold mb-6 text-left text-gray-800">Tarifas</h1>
-<app-room-rate />
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Title Section -->
+  <h1 class="text-4xl font-bold text-center z-2 relative"
+      style="
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, #4d7755 0%, #2c5530 50%, #1a3d20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      ">
+    Tarifas
+    <div class="absolute bottom-[-16px] left-1/2 transform -translate-x-1/2 w-[120px] h-[6px] bg-gradient-to-r from-[#4d7755] to-[#a7d4b1] rounded-[3px] animate-expandLine"></div>
+  </h1>
+
+  <app-room-rate />
 </div>
+
+<style>
+  @keyframes expandLine {
+    from { width: 0; opacity: 0; }
+    to { width: 120px; opacity: 1; }
+  }
+</style>

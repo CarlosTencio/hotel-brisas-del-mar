@@ -21,4 +21,18 @@ export class RoomRateItemComponent {
   price = computed(() => this.dataRoomRate().price);
   image = computed(() => this.dataRoomRate().image);
   
+  title = computed(() => this.roomTypeName());
+  content = computed(() => {
+    const items = [];
+    if (this.characteristics()) {
+      items.push(`Características: ${this.characteristics()}`);
+    }
+    if (this.description()) {
+      items.push(`Descripción: ${this.description()}`);
+    }
+    if (this.price()) {
+      items.push(`Precio: $${this.price()}`);
+    }
+    return items;
+  });
 }
