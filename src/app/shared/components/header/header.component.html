@@ -1,20 +1,39 @@
-<header class="flex flex-wrap justify-between items-center p-4 bg-white shadow-md">
-  <div class="flex items-center">
-    <button
-      (click)="toggleMenu()"
-      class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none mr-2"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-    <img src="assets/logo.png" alt="Logo" class="h-10 w-auto" />
-    <div class="flex flex-col ml-2">
-      <h1 class="font-bold text-sm md:text-lg text-gray-800">Hotel Brisas del Mar</h1>
+<header class="header-container sticky top-0 z-50 bg-white/80 backdrop-blur-md w-full">
+  <div class="w-full px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Left side: Menu button and Logo -->
+      <div class="flex items-center">
+        <button
+          (click)="toggleMenu()"
+          class="menu-toggle md:hidden p-2 rounded-lg text-white hover:bg-[#3d6145] focus:outline-none focus:ring-2 focus:ring-[#4d7755] focus:ring-offset-2 mr-4"
+          aria-label="Menu"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
+        <div class="flex flex-col pl-0">
+          <h1 class="hotel-title text-lg md:text-xl font-semibold">Hotel Brisas del Mar</h1>
+          <span class="hotel-subtitle text-[#4d7755] text-xs font-medium tracking-wide">Tu paraíso frente al mar</span>
+        </div>
+      </div>
+
+      <!-- Right side: Promotion and Reservation Button -->
+      <div class="flex items-center">
+        <app-promotion-main class="mr-6"/>
+        <!-- Reservation Button -->
+        <a routerLink="/reservation" 
+           class="bg-emerald-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 group hidden sm:flex items-center space-x-2 relative">
+          <div class="absolute inset-0 rounded-full bg-emerald-500 animate-[ping_2.5s_ease-in-out_infinite] opacity-20"></div>
+          <div class="relative flex items-center space-x-2">
+            <span class="font-medium text-white">Reservar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
-
-
-  <app-promotion-main/>
-
 </header>

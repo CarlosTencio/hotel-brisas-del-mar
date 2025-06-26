@@ -1,7 +1,15 @@
-<div *ngIf="promotionDisplay" class=" ml-5 w-[150px] max-h-[90px] rounded-lg">
-  <img
-    [src]="promotionDisplay.img"
-    [alt]="promotionDisplay.promotionName || 'Promotion'"
-    class="w-full max-h-[250px] object-cover rounded-lg shadow-md"
-  />
-</div>
+@if (promotionDisplay) {
+  <div class="promotion-container">
+    <!-- Promotion Image -->
+    <img
+      [src]="promotionDisplay.img"
+      [alt]="promotionDisplay.promotionName || 'Promotion'"
+      class="w-12 h-12 object-cover rounded-md shadow-sm"
+    />
+    <!-- Promotion Name -->
+    <div class="ml-3 hidden md:block">
+      <p class="promotion-title">{{promotionDisplay.promotionName}}</p>
+      <p class="promotion-subtitle">Oferta especial</p>
+    </div>
+  </div>
+}

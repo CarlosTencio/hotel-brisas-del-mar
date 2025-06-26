@@ -1,22 +1,40 @@
 @if(showModal) {
-<div class="fixed inset-0 backdrop-blur-sm bg-white/30 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-6 shadow-2xl max-w-md w-full">
+<div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 shadow-xl max-w-md w-full mx-4">
     <div class="flex justify-between items-center mb-4">
-      <h3 class="text-lg font-semibold text-red-600">¿Eliminar reservación?</h3>
-      <button (click)="onCancel()" class="text-gray-500 hover:text-gray-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <h3 class="text-lg font-semibold text-gray-900">Confirmar eliminación</h3>
+      <button 
+        (click)="onCancel()" 
+        class="text-gray-400 hover:text-gray-500 transition-colors"
+        aria-label="Cerrar"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
-    <div class="mb-4">
-      <p class="text-gray-700">¿Estás seguro de que deseas eliminar esta reservación? Esta acción no se puede deshacer.</p>
+    
+    <div class="mb-6">
+      <div class="flex items-center mb-4 text-red-600">
+        <svg class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <span class="font-medium">¿Eliminar reservación?</span>
+      </div>
+      <p class="text-gray-600">Esta acción eliminará permanentemente la reservación y no se puede deshacer. ¿Estás seguro de que deseas continuar?</p>
     </div>
+
     <div class="flex justify-end gap-3">
-      <button (click)="onCancel()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+      <button 
+        (click)="onCancel()" 
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+      >
         Cancelar
       </button>
-      <button (click)="onConfirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+      <button 
+        (click)="onConfirmDelete()" 
+        class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+      >
         Eliminar
       </button>
     </div>

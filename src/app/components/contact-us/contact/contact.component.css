@@ -13,3 +13,162 @@
     animation: fadeIn 1.2s ease-out forwards;
   }
   
+/* Beach Hotel Contact Component Styling */
+.contact-container {
+  padding: 3rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-title {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 3rem;
+  text-align: center;
+  background: linear-gradient(135deg, #4d7755 0%, #2c5530 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.contact-title::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+}
+
+.contact-content {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.contact-info {
+  flex: 1;
+  max-width: 500px;
+  padding-left: 2rem;
+}
+
+.contact-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 16px rgba(77, 119, 85, 0.08);
+  border: 1px solid #e0f2e7;
+  transition: all 0.3s ease;
+}
+
+.contact-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(77, 119, 85, 0.12);
+}
+
+.contact-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #4d7755;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.contact-section-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+  margin-right: 0.75rem;
+}
+
+.contact-section-content {
+  color: #4b5563;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.contact-image-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.contact-image {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(77, 119, 85, 0.15);
+  transition: all 0.4s ease;
+}
+
+.contact-image:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 25px 50px rgba(77, 119, 85, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .contact-content {
+    gap: 2rem;
+  }
+  
+  .contact-info {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 2rem 1rem;
+  }
+  
+  .contact-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .contact-info {
+    padding-left: 0;
+    max-width: none;
+  }
+  
+  .contact-image {
+    height: 300px;
+  }
+  
+  .contact-title::after {
+    width: 80px;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-section {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .contact-image {
+    height: 250px;
+    border-radius: 16px;
+  }
+  
+  .contact-section-title {
+    font-size: 1.125rem;
+  }
+}
+  

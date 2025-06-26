@@ -46,7 +46,7 @@ export  class SideMenuOptionsAuthComponent {
       route: '/home-auth/availability-room'
     },
     {
-      label: 'Publicidad',
+      label: 'Administrar publicidad',
       route: '/home-auth/ad'
     },
     {

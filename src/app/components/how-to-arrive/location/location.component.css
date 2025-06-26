@@ -1,0 +1,278 @@
+/* Beach Hotel Location Component Styling */
+.location-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(77, 119, 85, 0.1);
+  border: 1px solid #e0f2e7;
+  position: relative;
+  overflow: hidden;
+}
+
+.location-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+}
+
+.location-title {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #4d7755 0%, #2c5530 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.location-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+}
+
+.location-content {
+  max-width: none;
+  margin: 0;
+}
+
+.location-text {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #4b5563;
+  font-weight: 400;
+  text-align: justify;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.location-text::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .location-section {
+    padding: 2rem;
+  }
+  
+  .location-text {
+    padding-left: 1rem;
+    text-align: left;
+  }
+  
+  .location-title::after {
+    width: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .location-section {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  
+  .location-text {
+    font-size: 1rem;
+  }
+}
+
+/* Beach Hotel Location Component - Enhanced with Personality */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Main container */
+div[class*="container mx-auto"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%) !important;
+  border-radius: 32px !important;
+  padding: 4rem 3rem !important;
+  margin-bottom: 3rem !important;
+  box-shadow: 
+    0 25px 50px -12px rgba(77, 119, 85, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+div[class*="container mx-auto"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #4d7755 25%, 
+    #a7d4b1 50%, 
+    #4d7755 75%, 
+    transparent 100%);
+}
+
+div[class*="container mx-auto"]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -100px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(77, 119, 85, 0.05) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+/* Title styling */
+h1[class*="text-4xl font-bold"] {
+  font-size: clamp(2.5rem, 6vw, 4rem) !important;
+  font-weight: 900 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -2px !important;
+  margin-bottom: 2rem !important;
+  position: relative;
+  text-align: center !important;
+  z-index: 2;
+  background: linear-gradient(135deg, #4d7755 0%, #2c5530 50%, #1a3d20 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+h1[class*="text-4xl font-bold"]::after {
+  content: '';
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 6px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 3px;
+  animation: expandLine 1s ease-out 0.5s both;
+}
+
+/* Prose container */
+div[class*="prose max-w-none"] {
+  position: relative;
+  z-index: 2;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
+
+/* Content text styling */
+p[class*="text-lg text-gray-700"] {
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+  color: #475569 !important;
+  font-weight: 400 !important;
+  text-align: justify !important;
+  position: relative;
+  padding: 2.5rem !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(77, 119, 85, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 
+    0 16px 32px rgba(77, 119, 85, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  margin-top: 2rem !important;
+}
+
+p[class*="text-lg text-gray-700"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 3px;
+}
+
+/* Add location features */
+p[class*="text-lg text-gray-700"]::after {
+  content: '📍 Ubicación Privilegiada';
+  position: absolute;
+  top: -12px;
+  right: 2rem;
+  background: linear-gradient(135deg, #4d7755 0%, #5a8a62 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(77, 119, 85, 0.3);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes expandLine {
+  from { width: 0; opacity: 0; }
+  to { width: 120px; opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  div[class*="container mx-auto"] {
+    padding: 3rem 2rem !important;
+  }
+  
+  p[class*="text-lg text-gray-700"] {
+    padding: 2rem !important;
+    text-align: left !important;
+  }
+  
+  h1[class*="text-4xl font-bold"]::after {
+    width: 80px;
+  }
+  
+  p[class*="text-lg text-gray-700"]::after {
+    position: static;
+    display: block;
+    text-align: center;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  div[class*="container mx-auto"] {
+    padding: 2rem 1rem !important;
+    border-radius: 24px !important;
+  }
+  
+  p[class*="text-lg text-gray-700"] {
+    padding: 1.5rem !important;
+  }
+  
+  h1[class*="text-4xl font-bold"]::after {
+    width: 60px;
+  }
+}

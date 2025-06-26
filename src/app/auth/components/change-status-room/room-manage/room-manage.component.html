@@ -1,110 +1,121 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6">Modificar Habitación</h1>
+<div class="bg-gray-50">
+  <div class="p-8">
+    <h1 class="text-3xl font-bold mb-6">Modificar Habitación</h1>
 
-  <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
-    
-    <div>
-      <label>Tipo: </label> 
-      <span>{{ room.roomTypeName }}</span>
-      <label class="ml-8">Tarifa Diaria: </label>
-      <input 
-        formControlName="price" 
-        type="number" 
-        class="input-text"
-        [class.border-red-500]="updateForm.get('price')?.invalid && updateForm.get('price')?.touched"
-      />
-      <!-- Mostrar error de validación con @if -->
-      @if (updateForm.get('price')?.invalid && updateForm.get('price')?.touched) {
-        <div class="text-red-500 text-sm mt-1">
-          El precio es requerido
+    <div class="max-w-3xl">
+      <form [formGroup]="updateForm" (ngSubmit)="onSubmit()" class="bg-white rounded-lg shadow-lg p-6">
+        <div class="space-y-6">
+          <!-- Tipo y Tarifa -->
+          <div class="flex items-center gap-8">
+            <div class="flex items-center">
+              <label class="font-medium text-gray-700">Tipo: </label> 
+              <span class="text-gray-900 ml-2">{{ room.roomTypeName }}</span>
+            </div>
+            <div class="flex items-center">
+              <label class="font-medium text-gray-700">Tarifa Diaria: </label>
+              <input 
+                formControlName="price" 
+                type="number" 
+                class="input-text ml-2"
+                [class.border-red-500]="updateForm.get('price')?.invalid && updateForm.get('price')?.touched"
+              />
+            </div>
+          </div>
+          @if (updateForm.get('price')?.invalid && updateForm.get('price')?.touched) {
+            <div class="text-red-500 text-sm">
+              El precio es requerido
+            </div>
+          }
+
+          <!-- Características -->
+          <div>
+            <label class="block font-semibold text-gray-700 mb-2">Características:</label>
+            <textarea
+              formControlName="characteristics"
+              rows="3"
+              class="w-full p-2 border rounded-lg shadow-sm"
+              [class.border-red-500]="updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched"
+            ></textarea>
+            @if (updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched) {
+              <div class="text-red-500 text-sm mt-1">
+                Las características son requeridas
+              </div>
+            }
+          </div>
+
+          <!-- Descripción -->
+          <div>
+            <label class="block font-semibold text-gray-700 mb-2">Descripción:</label>
+            <textarea
+              formControlName="description"
+              rows="3"
+              class="w-full p-2 border rounded-lg shadow-sm"
+              [class.border-red-500]="updateForm.get('description')?.invalid && updateForm.get('description')?.touched"
+            ></textarea>
+            @if (updateForm.get('description')?.invalid && updateForm.get('description')?.touched) {
+              <div class="text-red-500 text-sm mt-1">
+                La descripción es requerida
+              </div>
+            }
+          </div>
+
+          <!-- Imagen Actual -->
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Imagen actual</label>
+            @if (room.image) {
+              <img
+                [src]="room.image"
+                alt="Imagen actual"
+                class="max-h-48 object-cover rounded-lg shadow-sm"
+              />
+            } @else {
+              <div class="text-gray-500 italic">No hay imagen disponible</div>
+            }
+          </div>
+
+          <!-- Nueva Imagen -->
+          <div>
+            <label class="block text-gray-700 font-semibold mb-2">Subir nueva imagen:</label>
+            <input
+              formControlName="img"
+              type="file"
+              (change)="onFileSelected($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+            />
+          </div>
+
+          <!-- Botones -->
+          <div class="flex gap-4">
+            <button 
+              type="submit" 
+              class="px-6 py-2.5 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              [disabled]="updateForm.invalid"
+            >
+              Aceptar
+            </button>
+            <button 
+              type="button" 
+              (click)="onDelete()" 
+              class="px-6 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors shadow-sm"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
-      }
+      </form>
     </div>
-
-    <div class="mt-4">
-      <label class="block font-semibold text-gray-700 mb-1">Características:</label>
-      <textarea
-        formControlName="characteristics"
-        rows="3"
-        class="w-full p-2 border rounded-lg shadow-sm resize-none"
-        [class.border-red-500]="updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched"
-      ></textarea>
-      <!-- Mostrar error de validación con @if -->
-      @if (updateForm.get('characteristics')?.invalid && updateForm.get('characteristics')?.touched) {
-        <div class="text-red-500 text-sm mt-1">
-          Las características son requeridas
-        </div>
-      }
-    </div>
-
-    <div class="mt-4">
-      <label class="block font-semibold text-gray-700 mb-1">Descripción:</label>
-      <textarea
-        formControlName="description"
-        rows="3"
-        class="w-full p-2 border rounded-lg shadow-sm resize-none"
-        [class.border-red-500]="updateForm.get('description')?.invalid && updateForm.get('description')?.touched"
-      ></textarea>
-      <!-- Mostrar error de validación con @if -->
-      @if (updateForm.get('description')?.invalid && updateForm.get('description')?.touched) {
-        <div class="text-red-500 text-sm mt-1">
-          La descripción es requerida
-        </div>
-      }
-    </div>
-
-    <div class="mt-4">
-      <label class="block text-gray-700 font-semibold mb-1">Imagen actual</label>
-      @if (room.image) {
-        <img
-          [src]="room.image"
-          alt="Imagen actual"
-          class="image-preview"
-        />
-      } @else {
-        <div class="text-gray-500 italic">No hay imagen disponible</div>
-      }
-    </div>
-
-    <div class="mt-4">
-      <label class="block text-gray-700 font-semibold mb-1">Subir nueva imagen:</label>
-      <input
-        formControlName="img"
-        type="file"
-        (change)="onFileSelected($event)"
-        class="file-input"
-      />
-    </div>
-
-    <div class="mt-6 flex gap-4">
-      <button 
-        type="submit" 
-        class="btn-accept"
-        [disabled]="updateForm.invalid"
-        [class.opacity-50]="updateForm.invalid"
-      >
-        Aceptar
-      </button>
-      <button 
-        type="button" 
-        (click)="onDelete()" 
-        class="btn-cancel"
-      >
-        Cancelar
-      </button>
-    </div>
-  </form>
- 
+  </div>
 </div>
- <modal-update-room-type 
-    [isOpen]="isModalOpen()" 
-    title="Aviso" 
-    [showConfirmButton]="true" 
-    [showCancelButton]="false"
-    confirmButtonText="Aceptar" 
-    (closeModal)="closeModal()"
-  >
-    <p class="text-gray-700 dark:text-gray-300">
-      {{ message }}
-    </p>
-  </modal-update-room-type>
+
+<modal-update-room-type 
+  [isOpen]="isModalOpen()" 
+  title="Aviso" 
+  [showConfirmButton]="true" 
+  [showCancelButton]="false"
+  confirmButtonText="Aceptar" 
+  (closeModal)="closeModal()"
+>
+  <p class="text-gray-700 dark:text-gray-300">
+    {{ message }}
+  </p>
+</modal-update-room-type>

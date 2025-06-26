@@ -1,9 +1,11 @@
-<div *ngIf="adDisplay" class="w-full mt-3">
-  <a [href]="adDisplay.imgUrl" target="_blank" class="block">
-    <img
-      [src]="adDisplay.img"
-      [alt]="adDisplay.name || 'Publicidad'"
-      class="w-full max-h-[200px] object-cover rounded-lg shadow-md"
-    />
-  </a>
-</div>
+@if (adDisplay) {
+  <div class="w-full mt-3">
+    <a [href]="adDisplay.imgUrl" target="_blank" class="block">
+      <img
+        [src]="adDisplay.img"
+        [alt]="adDisplay.name || 'Publicidad'"
+        class="w-full max-h-[200px] object-cover rounded-lg shadow-md"
+      />
+    </a>
+  </div>
+}

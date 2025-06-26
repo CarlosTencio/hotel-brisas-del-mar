@@ -1,21 +1,35 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-item',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './login-item.component.html',
-  styleUrl: './login-item.component.css'
+  styleUrls: ['./login-item.component.css'],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class LoginItemComponent {
-  username: string = '';
-  password: string = '';
+  @Input() isLoading = false;
+  @Output() loginEvent = new EventEmitter<{username: string, password: string}>();
+  
+  loginForm: FormGroup;
+  showPassword = false;
 
-  @Output() loginEvent = new EventEmitter<{ username: string; password: string }>();
+  constructor(private fb: FormBuilder) {
+    this.loginForm = this.fb.group({
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
+    });
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   onSubmit() {
-    this.loginEvent.emit({ username: this.username, password: this.password });
+    if (this.loginForm.valid) {
+      this.loginEvent.emit(this.loginForm.value);
+    }
   }
 }

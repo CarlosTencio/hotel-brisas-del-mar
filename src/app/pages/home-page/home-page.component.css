@@ -1,10 +1,37 @@
 /* Styles will be handled by Tailwind CSS */
 
+/* Beach Hotel Home Page - Enhanced Container */
+
 :host {
   display: block;
   width: 100%;
-  min-height: calc(100vh - 64px); /* Adjust based on your header height */
-  background-color: #ffffff;
+  height: 100vh;
+  overflow: hidden;
+  background-color: white;
+}
+
+:host::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(77, 119, 85, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(167, 212, 177, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(77, 119, 85, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Container styling */
+div[class*="container mx-auto"] {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 1rem !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
 }
 
 .prose {
@@ -14,4 +41,11 @@
 img {
   min-height: 400px;
   max-height: 600px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  div[class*="container mx-auto"] {
+    padding: 1rem 0.5rem !important;
+  }
 }

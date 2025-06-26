@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { PromotionService } from '../../services/promotion.service';
+import { CloudinaryService } from '../../services/cloudinary.service';
 import { CommonModule } from '@angular/common';
 import { PromotionMainDTO } from '../../../models/promotion.model';
 
@@ -26,6 +27,7 @@ export default class PromotionFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private loginService = inject(LoginService);
   private promotionService = inject(PromotionService);
+  private cloudinaryService = inject(CloudinaryService);
   
   ngOnInit(): void {
     this.checkAuthentication();
@@ -43,19 +45,7 @@ export default class PromotionFormComponent implements OnInit {
   }
   
   private checkAuthentication(): void {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.loginService.verifyToken(token).subscribe({
-        next: (tokenResponse) => {
-          if (!tokenResponse) {
-            this.router.navigate(['/login']);
-          }
-        },
-        error: () => {
-          this.router.navigate(['/login']);
-        }
-      });
-    } else {
+    if (!this.loginService.isLoggedIn()) {
       this.router.navigate(['/login']);
     }
   }
@@ -100,7 +90,7 @@ export default class PromotionFormComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
       
-      // Read and convert file to data URL (base64) for preview and form submission
+      // Read and convert file to data URL (base64) for preview
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === 'string') {
@@ -120,16 +110,29 @@ export default class PromotionFormComponent implements OnInit {
     }
     
     this.isLoading.set(true);
-    const promotionData: PromotionMainDTO = {
-      ...this.promotionForm.value
-    };
+
+    // Primero procesamos la imagen con Cloudinary si hay una nueva imagen
+    const imageToProcess = this.selectedFile || this.promotionForm.get('img')?.value;
     
-    if (this.isEditMode() && this.promotionId() !== undefined) {
-      promotionData.promotionID = this.promotionId();
-      this.updatePromotion(promotionData);
-    } else {
-      this.createPromotion(promotionData);
-    }
+    this.cloudinaryService.processImage(imageToProcess).subscribe({
+      next: (cloudinaryUrl) => {
+        const promotionData: PromotionMainDTO = {
+          ...this.promotionForm.value,
+          img: cloudinaryUrl // Usamos la URL de Cloudinary
+        };
+        
+        if (this.isEditMode() && this.promotionId() !== undefined) {
+          promotionData.promotionID = this.promotionId();
+          this.updatePromotion(promotionData);
+        } else {
+          this.createPromotion(promotionData);
+        }
+      },
+      error: (error) => {
+        this.errorMessage.set('Error uploading image: ' + error.message);
+        this.isLoading.set(false);
+      }
+    });
   }
   
   private createPromotion(promotion: PromotionMainDTO): void {
@@ -155,19 +158,17 @@ export default class PromotionFormComponent implements OnInit {
       }
     });
   }
-  
-  cancel(): void {
-    this.router.navigate(['/home-auth/promotion']);
-  }
-  
-  // Helper to mark all controls as touched to trigger validation
-  private markFormGroupTouched(formGroup: FormGroup): void {
+
+  private markFormGroupTouched(formGroup: FormGroup) {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
-      
-      if ((control as any).controls) {
-        this.markFormGroupTouched(control as FormGroup);
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
       }
     });
+  }
+
+  cancel(): void {
+    this.router.navigate(['/home-auth/promotion']);
   }
 } 

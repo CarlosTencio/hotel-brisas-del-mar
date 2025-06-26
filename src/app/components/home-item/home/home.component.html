@@ -1,11 +1,55 @@
-<div class="flex flex-col md:flex-row gap-8 items-start">
-  <div class="md:w-1/2">
-    <img [src]="image()" [alt]="title()" class="w-full h-[600px] object-cover rounded-lg shadow-lg" />
+<!-- Hero Section -->
+<div class="relative h-screen w-full overflow-hidden">
+  <!-- Hero Image with Overlay -->
+  <div class="absolute inset-0">
+    <img [src]="image()" [alt]="title()" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
   </div>
-  <div class="md:w-1/2 space-y-4">
-    <h1 class="text-3xl font-bold text-gray-800">{{title()}}</h1>
-    <p class="text-lg font-medium text-gray-700 leading-relaxed">
-      {{content()}}
-    </p>
+
+  <!-- Content Container -->
+  <div class="relative h-full flex items-start pt-12">
+    <div class="container mx-auto px-6 lg:px-8">
+      <div class="max-w-2xl">
+        <!-- Description with Glass Effect -->
+        <div class="backdrop-blur-sm bg-white/10 rounded-2xl p-6 shadow-xl">
+          <p class="text-base text-white/90 leading-relaxed" style="line-height: 1.5;">
+            {{content()}}
+          </p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="mt-6 flex flex-wrap gap-4">
+          <a [routerLink]="['/reservation']" 
+             class="bg-white text-gray-900 px-6 py-2.5 rounded-full font-medium hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg">
+            Reservar Ahora
+          </a>
+          <a [routerLink]="['/room-rate']" 
+             class="border-2 border-white text-white px-6 py-2.5 rounded-full font-medium hover:bg-white/10 transform hover:scale-105 transition-all duration-300">
+            Ver Tarifas
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-</div> 
+</div>
+
+<style>
+  @keyframes expandLine {
+    0% { 
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-expandLine {
+    transform-origin: center;
+    animation: expandLine 1s ease-out 0.5s both;
+  }
+</style> 

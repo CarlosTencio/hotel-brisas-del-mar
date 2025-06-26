@@ -1,0 +1,259 @@
+/* Beach Hotel Facilities Component - Enhanced with Personality */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Main container */
+div:first-child {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 24px;
+  padding: 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 
+    0 20px 40px rgba(77, 119, 85, 0.12),
+    0 0 0 1px rgba(77, 119, 85, 0.05);
+  border: 1px solid rgba(77, 119, 85, 0.1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+div:first-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #4d7755 0%, #a7d4b1 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+div:first-child:hover::before {
+  transform: scaleX(1);
+}
+
+div:first-child:hover {
+  transform: translateY(-12px);
+  box-shadow: 
+    0 32px 64px rgba(77, 119, 85, 0.2),
+    0 0 0 1px rgba(77, 119, 85, 0.1);
+}
+
+/* Content container */
+div[class*="flex items-start"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2.5rem !important;
+  position: relative;
+  margin: 0 !important;
+}
+
+/* Image styling */
+img[class*="w-40 h-40"] {
+  width: 240px !important;
+  height: 240px !important;
+  object-fit: cover !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 32px rgba(77, 119, 85, 0.15) !important;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+div:first-child:hover img[class*="w-40 h-40"] {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 24px 48px rgba(77, 119, 85, 0.25) !important;
+}
+
+/* Text content styling */
+p[class*="text-lg font-medium"] {
+  flex: 1 !important;
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+  color: #475569 !important;
+  font-weight: 400 !important;
+  text-align: justify !important;
+  position: relative;
+  padding: 1.5rem !important;
+  background: rgba(248, 250, 252, 0.8) !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(77, 119, 85, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.4s ease !important;
+  display: flex;
+  align-items: center;
+  min-height: 240px;
+  margin: 0 !important;
+}
+
+div:first-child:hover p[class*="text-lg font-medium"] {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(77, 119, 85, 0.1) !important;
+  transform: translateX(8px);
+}
+
+p[class*="text-lg font-medium"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #4d7755 0%, #a7d4b1 100%);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+div:first-child:hover p[class*="text-lg font-medium"]::before {
+  opacity: 1;
+}
+
+/* Add facility icon */
+div:first-child::after {
+  content: '🏨';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #4d7755 0%, #5a8a62 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2;
+}
+
+div:first-child:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  div[class*="flex items-start"] {
+    gap: 2rem !important;
+  }
+  
+  img[class*="w-40 h-40"] {
+    width: 200px !important;
+    height: 200px !important;
+  }
+  
+  p[class*="text-lg font-medium"] {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  div:first-child {
+    padding: 2rem;
+  }
+  
+  div[class*="flex items-start"] {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 1.5rem !important;
+  }
+  
+  img[class*="w-40 h-40"] {
+    width: 100% !important;
+    height: 250px !important;
+  }
+  
+  p[class*="text-lg font-medium"] {
+    min-height: auto !important;
+    text-align: left !important;
+  }
+  
+  div:first-child:hover p[class*="text-lg font-medium"] {
+    transform: translateY(4px);
+  }
+}
+
+@media (max-width: 640px) {
+  div:first-child {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+  
+  img[class*="w-40 h-40"] {
+    height: 200px !important;
+    border-radius: 12px !important;
+  }
+  
+  p[class*="text-lg font-medium"] {
+    padding: 1rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* Beach Hotel Facilities Component */
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Main container */
+div:first-child {
+  background: #ffffff;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+div:first-child:hover {
+  transform: translateY(-4px);
+}
+
+/* Content container */
+.flex {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Image styling */
+img {
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+div:first-child:hover img {
+  transform: scale(1.02);
+}
+
+/* Text content styling */
+p {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: #475569;
+  font-weight: 400;
+  text-align: justify;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  div:first-child:hover {
+    transform: none;
+  }
+  
+  div:first-child:hover img {
+    transform: none;
+  }
+  
+  p {
+    text-align: left;
+  }
+}

@@ -1,47 +1,107 @@
-<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-  <section class="flex flex-col md:flex-row justify-center items-center gap-6 p-6">
-    <div class="flex flex-col">
-      <label class="text-gray-700 font-semibold">Fecha de llegada</label>
-      <input 
-        type="date" 
-        formControlName="arrivalDate"  
-        [min]="minDate" 
-        (change)="onArrivalDateChange($event)"
-        required
-        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <!-- Title Section -->
+  <h1 class="text-4xl font-bold text-center z-2 relative mb-8"
+      style="
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, #4d7755 0%, #2c5530 50%, #1a3d20 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      ">
+    Reservar en línea
+    <span class="absolute bottom-[-16px] left-1/2 transform -translate-x-1/2 w-[120px] h-[6px] overflow-hidden">
+      <span class="absolute inset-0 bg-gradient-to-r from-[#4d7755] to-[#a7d4b1] rounded-[3px] animate-expandLine"></span>
+    </span>
+  </h1>
 
-    <div class="flex flex-col">
-      <label class="text-gray-700 font-semibold">Fecha de salida</label>
-      <input 
-        type="date" 
-        formControlName="departureDate" 
-        [min]="minDateDeparture" 
-        required
-        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    </div>
-  </section>
-  <div class="flex flex-col items-center w-full">
-    <label for="roomType" class="text-center mb-2">Seleccione tipo de habitación</label>
-    <div class="flex flex-col md:flex-row justify-center items-center gap-4 p-6">
-      <select id="roomType" formControlName="roomType"
-        class="border border-gray-300 p-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <option value="">--Habitaciones--</option>
-        @for (item of dataSelectRoomType(); track item.roomTypeID) {
-        <option [value]="item.roomTypeID">{{ item.roomTypeName }}</option>
-        }
-      </select>
+  <!-- Booking Form -->
+  <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-100">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <!-- Date Selection -->
+      <section class="flex flex-col md:flex-row justify-center items-center gap-4 p-4">
+        <div class="flex flex-col w-full md:w-auto">
+          <label class="text-gray-700 font-medium mb-2">Fecha de llegada</label>
+          <input 
+            type="date" 
+            formControlName="arrivalDate"  
+            [min]="minDate" 
+            (change)="onArrivalDateChange($event)"
+            required
+            class="w-full md:w-64 border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-hotel-500 focus:border-hotel-500 transition-all duration-300">
+        </div>
 
-      <button type="submit" (click)="onSubmit()"
-        class="bg-gray-900 text-white px-6 py-2 rounded-2xl shadow-md hover:bg-gray-700 transition-all duration-300">
-        Aceptar
-      </button>
-    </div>
+        <div class="flex flex-col w-full md:w-auto">
+          <label class="text-gray-700 font-medium mb-2">Fecha de salida</label>
+          <input 
+            type="date" 
+            formControlName="departureDate" 
+            [min]="minDateDeparture" 
+            required
+            class="w-full md:w-64 border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-hotel-500 focus:border-hotel-500 transition-all duration-300">
+        </div>
+      </section>
+
+      <!-- Room Selection -->
+      <div class="flex flex-col items-center w-full mt-4">
+        <label for="roomType" class="text-gray-700 font-medium mb-3">Seleccione tipo de habitación</label>
+        <div class="flex flex-col md:flex-row justify-center items-center gap-4 w-full max-w-xl">
+          <select 
+            id="roomType" 
+            formControlName="roomType"
+            class="w-full md:w-2/3 border border-gray-300 p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-hotel-500 focus:border-hotel-500 transition-all duration-300 bg-white">
+            <option value="">--Habitaciones--</option>
+            @for (item of dataSelectRoomType(); track item.roomTypeID) {
+              <option [value]="item.roomTypeID">{{ item.roomTypeName }}</option>
+            }
+          </select>
+
+          <button 
+            type="submit" 
+            (click)="onSubmit()"
+            class="w-full md:w-auto bg-[#2c5530] text-white px-8 py-3 rounded-lg shadow-md hover:bg-[#1a3d20] active:transform active:scale-95 transition-all duration-300 font-medium flex items-center justify-center gap-2">
+            <span>Continuar</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
-</form>
-<app-recommendation-modal [isOpen]="isModalOpen()" title="Recomendación" [showConfirmButton]="true"
-  [showCancelButton]="false" confirmButtonText="Aceptar" (closeModal)="closeModal()">
+</div>
+
+<app-recommendation-modal 
+  [isOpen]="isModalOpen()" 
+  title="Recomendación" 
+  [showConfirmButton]="true"
+  [showCancelButton]="false" 
+  confirmButtonText="Aceptar" 
+  (closeModal)="closeModal()">
   <p class="text-gray-700 dark:text-gray-300">
     {{ message }}
   </p>
 </app-recommendation-modal>
+
+<style>
+  @keyframes expandLine {
+    0% { 
+      transform: scaleX(0);
+      opacity: 0;
+    }
+    50% { 
+      opacity: 1;
+    }
+    100% { 
+      transform: scaleX(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-expandLine {
+    transform-origin: center;
+    animation: expandLine 1s ease-out 0.5s both;
+  }
+</style>

@@ -1,0 +1,21 @@
+/* Beach Hotel About Us Page Styling */
+.bg-white {
+  min-height: calc(100vh - 80px);
+  padding: 1rem;
+  background: #ffffff;
+  position: relative;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bg-white {
+    padding: 0.5rem;
+  }
+}
