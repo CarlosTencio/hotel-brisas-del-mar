@@ -34,9 +34,7 @@ export class EditSectionComponent implements OnInit {
   loadHome(){
     this.pageService.getPageByTitle(this.titleHomePage).subscribe({
       next: (respPage) => {
-      console.log('Pages loaded successfully:', respPage);
         this.dataHomePage.set(respPage);
-        console.log('DataPage updated at index 0:', this.dataPage()[0]);
       },
       error: (err) => {
         console.error('Error loading pages:', err.error.message);
@@ -71,8 +69,7 @@ export class EditSectionComponent implements OnInit {
   loadLocation() {
     this.pageService.loadLocation(this.titleLocation).subscribe({
       next: (respPage) => {
-        console.log('Location loaded successfully:', respPage);
-        console.log('Location data:', respPage);
+      
         this.dataLocationPage.set(respPage);
       },
       error: (err) => {
@@ -82,28 +79,18 @@ export class EditSectionComponent implements OnInit {
   }
   
   loadContactUs() {
-    console.log('Loading ContactUs...');
     this.pageService.loadContactUs().subscribe({  
       next: (respPage) => {
-        console.log('Contact Us loaded successfully:', respPage);
-        console.log('Type of respPage:', typeof respPage);
-        console.log('Is array:', Array.isArray(respPage));
-
         if (respPage && Array.isArray(respPage) && respPage.length > 0) {
-          console.log('Setting dataPageContact to:', respPage[0]);
           this.dataPageContact.set(respPage[0]); 
-          console.log('dataPageContact after set:', this.dataPageContact());
         } else if (respPage && !Array.isArray(respPage)) {
           // Si no es array, tal vez es un objeto directo
-          console.log('Setting dataPageContact to single object:', respPage);
           this.dataPageContact.set(respPage);
         } else {
-          console.log('No contact data received or empty array');
-          this.dataPageContact.set(null);
+                    this.dataPageContact.set(null);
         }
       },
       error: (err) => {
-        console.error('Error loading Contact Us:', err);
         this.dataPageContact.set(null);
       },
     });
@@ -113,7 +100,7 @@ export class EditSectionComponent implements OnInit {
     const target = event.target as HTMLSelectElement;
     this.selectedOption.set(target.value);
     this.dataPage.set([]); // Clear the dataPage when changing selection
-    console.log('Selected option:', this.selectedOption());
+  
    if (this.selectedOption() === 'Facilities') {
       this.loadFacilities();
     }

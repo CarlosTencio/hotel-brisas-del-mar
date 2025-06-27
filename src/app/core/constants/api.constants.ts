@@ -11,4 +11,5 @@ export const USE_HTTPS = false; // Set to false if your backend uses HTTP
 export const getCurrentPort = () => IS_MAC_ENVIRONMENT ? API_PORTS.MAC_PORT : API_PORTS.WINDOWS_PORT;
 
 // Base URL construction with protocol handling
-export const getBaseUrl = () => `http${USE_HTTPS ? 's' : ''}://localhost:${getCurrentPort()}/api`; 
+//export const getBaseUrl = () => `http${USE_HTTPS ? 's' : ''}://localhost:${getCurrentPort()}/api`; 
+export const getBaseUrl = () => `https://partepublica-abgkaygaf6awgbd5.canadacentral-01.azurewebsites.net/api`;
