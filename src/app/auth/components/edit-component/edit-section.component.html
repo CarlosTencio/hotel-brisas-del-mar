@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <!-- Modales de confirmación -->
+  <!-- Modales de confirmación y componentes -->
   @if (typeMessage === 'success') {
     <modal-confimation  
       [isOpen]="isModalOpen()" 
@@ -33,7 +33,7 @@
       (closeModal)="closeModal()"
       (confirmModal)="closeModal()"
     >
-      <p class="text-gray-700">
+      <p class="text-white">
         {{ message }}
       </p>
     </modal-confimation>
@@ -47,48 +47,47 @@
       (closeModal)="closeModal()"
       (confirm)="onModalConfirm()"
     >
-      <p class="text-gray-700">
+      <p class="text-white">
         {{ message }}
       </p>
     </modal-confimation>
+  } @else {
+    <!-- Componentes de edición -->
+    <div class="mt-8">
+      @if(selectedOption() === 'Facilities') {
+        <facilities-edit 
+          [dataPage]="dataPage()" 
+          (modalRequest)="onModalRequestFromChild($event)"
+        ></facilities-edit>
+      } 
+      @if(selectedOption() === "Home") {
+        <app-home-editor 
+          [dataPage]="dataHomePage()" 
+          (modalRequest)="onModalRequestFromChild($event)"
+        ></app-home-editor>
+      }
+      @if(selectedOption() === 'AboutUs') {
+        <app-aboutus-edit 
+          [dataPageAbout]="dataPageAbout()" 
+          (modalRequest)="onModalRequestFromChild($event)"
+        ></app-aboutus-edit>
+      }
+      @if(selectedOption() === 'Location') {
+        <app-location-edit 
+          [dataLocationPage]="dataLocationPage()" 
+          (modalRequest)="onModalRequestFromChild($event)"
+        ></app-location-edit>
+      }
+      @if(selectedOption() === 'ContactUs') {
+        <div>
+          @if(dataPageContact() !== null) {
+            <app-contactus-edit
+              [contactData]="dataPageContact()!"
+              (modalRequest)="onModalRequestFromChild($event)"
+            ></app-contactus-edit>
+          } 
+        </div>
+      } 
+    </div>
   }
-
-  <!-- Componentes de edición -->
-  <div class="mt-8">
-    @if(selectedOption() === 'Facilities') {
-      <facilities-edit 
-        [dataPage]="dataPage()" 
-        (modalRequest)="onModalRequestFromChild($event)"
-      ></facilities-edit>
-    } 
-    @if(selectedOption() === "Home") {
-      <app-home-editor 
-        [dataPage]="dataHomePage()" 
-        (modalRequest)="onModalRequestFromChild($event)"
-      ></app-home-editor>
-    }
-    @if(selectedOption()=== 'AboutUs') {
-      <app-aboutus-edit 
-        [dataPageAbout]="dataPageAbout()" 
-        (modalRequest)="onModalRequestFromChild($event)"
-      ></app-aboutus-edit>
-    }
-    @if(selectedOption()=== 'Location') {
-      <app-location-edit 
-        [dataLocationPage]="dataLocationPage()" 
-        (modalRequest)="onModalRequestFromChild($event)"
-      ></app-location-edit>
-    }
-    @if(selectedOption() === 'ContactUs') {
-      <div>
-        @if(dataPageContact() !== null) {
-          <app-contactus-edit
-            [contactData]="dataPageContact()!"
-            (modalRequest)="onModalRequestFromChild($event)"
-          ></app-contactus-edit>
-        } 
-      </div>
-    } 
-  </div>
 </div>
-

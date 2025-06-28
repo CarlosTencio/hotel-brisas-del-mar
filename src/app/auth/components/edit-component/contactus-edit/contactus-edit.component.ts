@@ -34,7 +34,6 @@ export class ContactusEditComponent implements OnInit {
   effect(() => {
       const data = this.contactData();
       if (data) {
-        console.log('Contact data received:', data); // Para debug
         this.contactForm.patchValue({
           pageID: data.pageID,
           phone1: data.phone1,
@@ -60,15 +59,11 @@ export class ContactusEditComponent implements OnInit {
 
   ngOnInit(): void {
     const data = this.contactData();
-    if (data) {
-      console.log('Initial contact data:', data);
-    }
+
   }
 
   handleUpdateContent() {
-    console.log('handleUpdateContent called');
-    console.log('Form valid:', this.contactForm.valid);
-    console.log('Form values:', this.contactForm.value);
+
     
     if (this.contactForm.valid) {
       const contentToUpdate: ContentContactUs = this.contactForm.value as ContentContactUs;
@@ -125,15 +120,10 @@ export class ContactusEditComponent implements OnInit {
   }
 
   testClick() {
-    console.log('Button clicked!');
-    alert('Button works!');
+
   }
 
   checkFormStatus() {
-    console.log('Form valid:', this.contactForm.valid);
-    console.log('Form invalid:', this.contactForm.invalid);
-    console.log('Form status:', this.contactForm.status);
-    console.log('Form errors:', this.contactForm.errors);
-    console.log('Form value:', this.contactForm.value);
+
   }
 }

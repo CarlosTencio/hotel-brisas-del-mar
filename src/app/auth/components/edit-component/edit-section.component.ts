@@ -168,7 +168,6 @@ export class EditSectionComponent implements OnInit {
 
   openModal(): void {
     this.isModalOpen.set(true);
-    console.log('Modal abierto');
   }
 
   closeModal(): void {
