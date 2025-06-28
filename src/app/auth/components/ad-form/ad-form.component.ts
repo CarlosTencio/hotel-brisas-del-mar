@@ -21,7 +21,7 @@ export default class AdFormComponent implements OnInit {
   isEditMode = signal(false);
   adId = signal<number>(0);
   selectedFile: File | null = null;
-
+  
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -90,7 +90,7 @@ export default class AdFormComponent implements OnInit {
         this.isLoading.set(false);
       },
       error: (error) => {
-        this.errorMessage.set('Error loading ad: ' + error.message);
+        this.errorMessage.set('Error cargando ad: ' + error.message);
         this.isLoading.set(false);
       }
     });
@@ -122,7 +122,7 @@ export default class AdFormComponent implements OnInit {
     if (this.selectedFile) {
       this.cloudinaryService.processImage(this.selectedFile).subscribe({
         next: (cloudinaryUrl) => {
-          this.adForm.patchValue({ img: cloudinaryUrl }); // ✅ Guardamos URL de Cloudinary en 'img'
+          this.adForm.patchValue({ img: cloudinaryUrl });
           this.proceedWithSubmit();
         },
         error: () => {

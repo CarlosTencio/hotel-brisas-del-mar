@@ -4,11 +4,12 @@ import { LoginService } from '../../services/login.service';
 import { SeasonService } from '../../services/season.service';
 import { CommonModule } from '@angular/common';
 import { SeasonDTO } from '../../../models/season.model';
+import { confirmationModalComponent } from '../edit-component/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-season-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, confirmationModalComponent],
   templateUrl: './season-view.component.html',
   styleUrl: './season-view.component.css'
 })
@@ -17,6 +18,8 @@ export default class SeasonViewComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   season = signal<SeasonDTO | null>(null);
   
+  isDeleteModalOpen = signal(false);
+
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private loginService = inject(LoginService);
@@ -34,6 +37,15 @@ export default class SeasonViewComponent implements OnInit {
     }
   }
   
+  
+    openDeleteModal(): void {
+      this.isDeleteModalOpen.set(true);
+    }
+
+    cancelDelete(): void {
+      this.isDeleteModalOpen.set(false);
+    }
+
   private checkAuthentication(): void {
     const token = localStorage.getItem('token');
     if (token) {
@@ -76,20 +88,22 @@ export default class SeasonViewComponent implements OnInit {
     }
   }
   
-  deleteSeason(): void {
+  confirmDelete(): void {
     const currentSeason = this.season();
-    if (currentSeason && currentSeason.seasonID !== undefined && 
-        confirm('Are you sure you want to delete this season?')) {
-      this.isLoading.set(true);
-      this.seasonService.deleteSeason(currentSeason.seasonID).subscribe({
-        next: () => {
-          this.router.navigate(['/home-auth/season']);
-        },
-        error: (error) => {
-          this.errorMessage.set('Error deleting season: ' + error.message);
-          this.isLoading.set(false);
-        }
-      });
-    }
+    if (!currentSeason?.seasonID) return;
+
+    this.isLoading.set(true);
+    this.seasonService.deleteSeason(currentSeason.seasonID).subscribe({
+      next: () => {
+        this.isDeleteModalOpen.set(false);
+        this.router.navigate(['/home-auth/season']);
+      },
+      error: (error) => {
+        this.errorMessage.set('Error al eliminar la temporada: ' + error.message);
+        this.isLoading.set(false);
+        this.isDeleteModalOpen.set(false);
+      }
+    });
+    
   }
 } 

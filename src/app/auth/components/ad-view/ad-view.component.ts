@@ -4,11 +4,12 @@ import { LoginService } from '../../services/login.service';
 import { AdService } from '../../services/ad.service';
 import { CommonModule } from '@angular/common';
 import { Ad } from '../../models/ad-model';
+import { confirmationModalComponent } from '../edit-component/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-ad-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, confirmationModalComponent],
   templateUrl: './ad-view.component.html',
   styleUrls: ['./ad-view.component.css']
 })
@@ -16,7 +17,8 @@ export default class AdViewComponent implements OnInit {
   isLoading = signal(true);
   errorMessage = signal<string | null>(null);
   ad = signal<Ad | null>(null);
-  
+  isDeleteModalOpen = signal(false);
+
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private loginService = inject(LoginService);
@@ -33,6 +35,18 @@ export default class AdViewComponent implements OnInit {
       this.isLoading.set(false);
     }
   }
+
+  // Abre el modal para confirmar eliminación
+    openDeleteModal() {
+      if (this.ad()) {
+        this.isDeleteModalOpen.set(true);
+      }
+    }
+
+    // Cancela la eliminación y cierra el modal
+    cancelDelete() {
+      this.isDeleteModalOpen.set(false);
+    }
 
   private checkAuthentication(): void {
     const token = localStorage.getItem('token');
@@ -76,20 +90,22 @@ export default class AdViewComponent implements OnInit {
     }
   }
 
-  deleteAd(): void {
-    const currentAd = this.ad();
-    if (currentAd && currentAd.adID !== undefined && 
-        confirm('Are you sure you want to delete this ad?')) {
-      this.isLoading.set(true);
-      this.adService.deleteAd(currentAd.adID).subscribe({
-        next: () => {
-          this.router.navigate(['/home-auth/ad']);
-        },
-        error: (error) => {
-          this.errorMessage.set('Error deleting ad: ' + error.message);
-          this.isLoading.set(false);
-        }
-      });
+confirmDelete() {
+  const currentAd = this.ad();
+  if (!currentAd || currentAd.adID === undefined) return;
+
+  this.isLoading.set(true);
+  this.adService.deleteAd(currentAd.adID).subscribe({
+    next: () => {
+      this.isDeleteModalOpen.set(false);
+      this.router.navigate(['/home-auth/ad']);
+    },
+    error: (error) => {
+      this.errorMessage.set('Error al eliminar el anuncio: ' + error.message);
+      this.isLoading.set(false);
+      this.isDeleteModalOpen.set(false);
     }
-  }
+  });
+}
+
 }

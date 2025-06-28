@@ -6,17 +6,17 @@
       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
       </path>
     </svg>
-    <p class="text-gray-700 font-medium">Loading ad details...</p>
+    <p class="text-gray-700 font-medium">Cargando detalles del anuncio...</p>
   </div>
 </div>
 } @else {
 <div class="container mx-auto px-4 py-8">
   <div class="max-w-2xl mx-auto">
     <div class="flex justify-between mb-6">
-      <h1 class="text-2xl font-bold">Ad Details</h1>
+      <h1 class="text-2xl font-bold">Detalles del Anuncio</h1>
       <button (click)="goToList()"
         class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
-        Back to List
+        Volver a la Lista
       </button>
     </div>
 
@@ -28,7 +28,7 @@
 
     @if(!ad()) {
     <div class="text-center py-8">
-      <p class="text-gray-500">Ad not found</p>
+      <p class="text-gray-500">Anuncio no encontrado</p>
     </div>
     } @else {
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -37,7 +37,7 @@
         <div class="flex space-x-3 mt-2">
           <span [class]="ad()?.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
             class="px-2 py-1 rounded text-xs font-medium">
-            {{ ad()?.isActive ? 'Active' : 'Inactive' }}
+            {{ ad()?.isActive ? 'Activo' : 'Inactivo' }}
           </span>
         </div>
       </div>
@@ -45,20 +45,20 @@
       <div class="p-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 class="text-sm font-medium text-gray-500">Start Date</h3>
+            <h3 class="text-sm font-medium text-gray-500">Fecha de Inicio</h3>
             <p class="mt-1 text-sm text-gray-900">{{ ad()?.startDate | date:'mediumDate' }}</p>
           </div>
 
           <div>
-            <h3 class="text-sm font-medium text-gray-500">End Date</h3>
+            <h3 class="text-sm font-medium text-gray-500">Fecha de Fin</h3>
             <p class="mt-1 text-sm text-gray-900">{{ ad()?.endDate | date:'mediumDate' }}</p>
           </div>
         </div>
 
         @if(ad()?.img) {
         <div class="mt-6">
-          <h3 class="text-sm font-medium text-gray-500 mb-2">Ad Image</h3>
-          <img [src]="ad()?.img" alt="Ad image" class="max-h-48 object-contain border rounded" />
+          <h3 class="text-sm font-medium text-gray-500 mb-2">Imagen del Anuncio</h3>
+          <img [src]="ad()?.img" alt="Imagen del anuncio" class="max-h-48 object-contain border rounded" />
 
           @if(ad()?.imgUrl) {
           <p class="mt-2 text-sm text-blue-600 underline break-all">
@@ -69,23 +69,31 @@
           }
 
         </div>
-
-
-
         }
 
         <div class="flex justify-end space-x-3 mt-8">
           <button (click)="editAd()"
             class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors">
-            Edit
+            Editar
           </button>
-          <button (click)="deleteAd()"
+          <button (click)="openDeleteModal()" 
             class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
-            Delete
+            Eliminar
           </button>
         </div>
       </div>
     </div>
+
+      <modal-confimation
+        [isOpen]="isDeleteModalOpen()"
+        [title]="'Confirmación de eliminación'"
+        [confirmButtonText]="'Eliminar'"
+        [cancelButtonText]="'Cancelar'"
+        (closeModal)="cancelDelete()"
+        (confirmModal)="confirmDelete()">
+        ¿Estás seguro de que deseas eliminar este anuncio?
+      </modal-confimation> 
+
     }
   </div>
 </div>
