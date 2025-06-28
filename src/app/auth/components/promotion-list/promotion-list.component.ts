@@ -4,11 +4,12 @@ import { LoginService } from '../../services/login.service';
 import { PromotionService } from '../../services/promotion.service';
 import { CommonModule } from '@angular/common';
 import { PromotionMainDTO } from '../../../models/promotion.model';
+import { confirmationModalComponent } from '../edit-component/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-promotion-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, confirmationModalComponent],
   templateUrl: './promotion-list.component.html',
   styleUrl: './promotion-list.component.css'
 })
@@ -16,7 +17,9 @@ export default class PromotionListComponent implements OnInit {
   isLoading = signal(true);
   promotions = signal<PromotionMainDTO[]>([]);
   errorMessage = signal<string | null>(null);
-  
+  isModalOpen = signal(false);
+  promotionToDelete = signal<number>(-1);
+
   private router = inject(Router);
   private loginService = inject(LoginService);
   private promotionService = inject(PromotionService);
@@ -26,6 +29,16 @@ export default class PromotionListComponent implements OnInit {
     this.loadPromotions();
   }
   
+  openDeleteModal(id: number): void {
+    this.promotionToDelete.set(id);
+    this.isModalOpen.set(true);
+  }
+
+  cancelDelete(): void {
+    this.isModalOpen.set(false);
+    this.promotionToDelete.set(-1);
+  }
+
   private checkAuthentication(): void {
     const token = localStorage.getItem('token');
     if (token) {
@@ -70,17 +83,24 @@ export default class PromotionListComponent implements OnInit {
   }
   
   deletePromotion(id: number): void {
-    if (confirm('Are you sure you want to delete this promotion?')) {
-      this.isLoading.set(true);
-      this.promotionService.deletePromotion(id).subscribe({
-        next: () => {
-          this.loadPromotions();
-        },
-        error: (error) => {
-          this.errorMessage.set('Error deleting promotion: ' + error.message);
-          this.isLoading.set(false);
-        }
-      });
-    }
+    this.openDeleteModal(id);
   }
+
+  confirmDelete(): void {
+    if (this.promotionToDelete() <= 0) return;
+
+    this.isLoading.set(true);
+    this.isModalOpen.set(false);
+
+    this.promotionService.deletePromotion(this.promotionToDelete()).subscribe({
+      next: () => {
+        this.loadPromotions();
+      },
+      error: (error) => {
+        this.errorMessage.set('Error eliminando la promoción: ' + error.message);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
 } 

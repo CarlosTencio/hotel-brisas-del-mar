@@ -64,14 +64,13 @@ export default class PromotionFormComponent implements OnInit {
   private loadPromotion(id: number): void {
     this.promotionService.getPromotionById(id).subscribe({
       next: (promotion) => {
-        // Format dates for input[type="date"]
         const startDate = new Date(promotion.startDate).toISOString().split('T')[0];
         const endDate = new Date(promotion.endDate).toISOString().split('T')[0];
         
         this.promotionForm.patchValue({
           promotionName: promotion.promotionName,
-          startDate: startDate,
-          endDate: endDate,
+          startDate,
+          endDate,
           percent: promotion.percent,
           isActive: promotion.isActive,
           img: promotion.img
@@ -89,81 +88,76 @@ export default class PromotionFormComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-      
-      // Read and convert file to data URL (base64) for preview
+
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === 'string') {
           this.promotionForm.patchValue({
-            img: reader.result
+            img: reader.result // solo para vista previa
           });
         }
       };
       reader.readAsDataURL(this.selectedFile);
     }
   }
-  
+
   onSubmit(): void {
     if (this.promotionForm.invalid) {
       this.markFormGroupTouched(this.promotionForm);
       return;
     }
-    
+
     this.isLoading.set(true);
 
-    // Primero procesamos la imagen con Cloudinary si hay una nueva imagen
-    const imageToProcess = this.selectedFile || this.promotionForm.get('img')?.value;
-    
-    this.cloudinaryService.processImage(imageToProcess).subscribe({
-      next: (cloudinaryUrl) => {
-        const promotionData: PromotionMainDTO = {
-          ...this.promotionForm.value,
-          img: cloudinaryUrl // Usamos la URL de Cloudinary
-        };
-        
-        if (this.isEditMode() && this.promotionId() !== undefined) {
-          promotionData.promotionID = this.promotionId();
-          this.updatePromotion(promotionData);
-        } else {
-          this.createPromotion(promotionData);
+    if (this.selectedFile) {
+      this.cloudinaryService.processImage(this.selectedFile).subscribe({
+        next: (cloudinaryUrl) => {
+          this.promotionForm.patchValue({ img: cloudinaryUrl });
+          this.proceedWithSubmit();
+        },
+        error: (error) => {
+          this.errorMessage.set('Error actualizando la imagen: ' + error.message);
+          this.isLoading.set(false);
         }
-      },
-      error: (error) => {
-        this.errorMessage.set('Error uploading image: ' + error.message);
-        this.isLoading.set(false);
-      }
-    });
+      });
+    } else {
+      this.proceedWithSubmit();
+    }
   }
-  
+
+  private proceedWithSubmit(): void {
+    const promotionData: PromotionMainDTO = {
+      ...this.promotionForm.value
+    };
+
+    if (this.isEditMode() && this.promotionId() !== undefined) {
+      promotionData.promotionID = this.promotionId();
+      this.updatePromotion(promotionData);
+    } else {
+      this.createPromotion(promotionData);
+    }
+  }
+
   private createPromotion(promotion: PromotionMainDTO): void {
     this.promotionService.createPromotion(promotion).subscribe({
       next: () => {
         this.router.navigate(['/home-auth/promotion']);
       },
       error: (error) => {
-        this.errorMessage.set('Error creating promotion: ' + error.message);
+        this.errorMessage.set('Error creando la promoción: ' + error.message);
         this.isLoading.set(false);
       }
     });
   }
-  
+
   private updatePromotion(promotion: PromotionMainDTO): void {
     this.promotionService.updatePromotion(promotion).subscribe({
       next: () => {
         this.router.navigate(['/home-auth/promotion']);
       },
       error: (error) => {
-        this.errorMessage.set('Error updating promotion: ' + error.message);
+        this.errorMessage.set('Error actualizando la promoción: ' + error.message);
         this.isLoading.set(false);
-      }
-    });
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup) {
-    Object.values(formGroup.controls).forEach(control => {
-      control.markAsTouched();
-      if (control instanceof FormGroup) {
-        this.markFormGroupTouched(control);
       }
     });
   }
@@ -171,4 +165,13 @@ export default class PromotionFormComponent implements OnInit {
   cancel(): void {
     this.router.navigate(['/home-auth/promotion']);
   }
-} 
+
+  private markFormGroupTouched(formGroup: FormGroup): void {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+}

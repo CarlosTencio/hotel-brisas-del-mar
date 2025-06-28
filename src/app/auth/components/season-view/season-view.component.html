@@ -1,24 +1,24 @@
 @if(isLoading()){
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
-  <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
-    <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
-      </path>
-    </svg>
-    <p class="text-gray-700 font-medium">Loading season details...</p>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-50">
+    <div class="bg-white rounded-xl p-6 shadow-lg flex flex-col items-center">
+      <svg class="w-10 h-10 text-blue-600 animate-spin mb-4" viewBox="0 0 24 24" fill="none">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+        </path>
+      </svg>
+      <p class="text-gray-700 font-medium">Cargando detalles de la temporada...</p>
+    </div>
   </div>
-</div>
 } @else {
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-2xl mx-auto">
       <div class="flex justify-between mb-6">
-        <h1 class="text-2xl font-bold">Season Details</h1>
+        <h1 class="text-2xl font-bold">Detalles de la Temporada</h1>
         <button 
           (click)="goToList()" 
           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
-          Back to List
+          Volver a la Lista
         </button>
       </div>
 
@@ -30,7 +30,7 @@
 
       @if(!season()) {
         <div class="text-center py-8">
-          <p class="text-gray-500">Season not found</p>
+          <p class="text-gray-500">Temporada no encontrada</p>
         </div>
       } @else {
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -40,12 +40,12 @@
               <span 
                 [class]="season()?.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'" 
                 class="px-2 py-1 rounded text-xs font-medium">
-                {{ season()?.isActive ? 'Active' : 'Inactive' }}
+                {{ season()?.isActive ? 'Activa' : 'Inactiva' }}
               </span>
               <span 
                 [class]="season()?.isHigh ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'" 
                 class="px-2 py-1 rounded text-xs font-medium">
-                {{ season()?.isHigh ? 'High Season' : 'Low Season' }}
+                {{ season()?.isHigh ? 'Temporada Alta' : 'Temporada Baja' }}
               </span>
             </div>
           </div>
@@ -53,17 +53,17 @@
           <div class="p-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h3 class="text-sm font-medium text-gray-500">Start Date</h3>
+                <h3 class="text-sm font-medium text-gray-500">Fecha de Inicio</h3>
                 <p class="mt-1 text-sm text-gray-900">{{ season()?.startDate | date:'mediumDate' }}</p>
               </div>
               
               <div>
-                <h3 class="text-sm font-medium text-gray-500">End Date</h3>
+                <h3 class="text-sm font-medium text-gray-500">Fecha de Fin</h3>
                 <p class="mt-1 text-sm text-gray-900">{{ season()?.endDate | date:'mediumDate' }}</p>
               </div>
               
               <div>
-                <h3 class="text-sm font-medium text-gray-500">Percentage</h3>
+                <h3 class="text-sm font-medium text-gray-500">Porcentaje</h3>
                 <p class="mt-1 text-sm text-gray-900">{{ season()?.percent }}%</p>
               </div>
               
@@ -73,17 +73,26 @@
               <button 
                 (click)="editSeason()" 
                 class="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 transition-colors">
-                Edit
+                Editar
               </button>
-              <button 
-                (click)="deleteSeason()" 
-                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
-                Delete
+              <button (click)="openDeleteModal()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                Eliminar
               </button>
             </div>
           </div>
         </div>
+
+        <modal-confimation
+          [isOpen]="isDeleteModalOpen()"
+          [title]="'Confirmación de eliminación'"
+          [confirmButtonText]="'Eliminar'"
+          [cancelButtonText]="'Cancelar'"
+          (closeModal)="cancelDelete()"
+          (confirmModal)="confirmDelete()">
+          ¿Estás seguro de que deseas eliminar esta temporada?
+        </modal-confimation>
+
       }
     </div>
   </div>
-} 
+}

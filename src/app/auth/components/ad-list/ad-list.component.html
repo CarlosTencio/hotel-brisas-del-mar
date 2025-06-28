@@ -98,6 +98,16 @@
             </table>
           </div>
         </div>
+
+        <modal-confimation
+          [isOpen]="isModalOpen()"
+          [title]="'Confirmación de eliminación'"
+          [confirmButtonText]="'Eliminar'"
+          [cancelButtonText]="'Cancelar'"
+          (closeModal)="cancelDelete()"
+          (confirmModal)="confirmDelete()">
+          ¿Estás seguro de que deseas eliminar este anuncio?
+        </modal-confimation>  
       }
     </div>
   </div>

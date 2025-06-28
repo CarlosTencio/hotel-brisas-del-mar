@@ -7,18 +7,18 @@
         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
       </path>
     </svg>
-    <p class="text-gray-700 font-medium">{{ isEditMode() ? 'Loading season...' : 'Preparing form...' }}</p>
+    <p class="text-gray-700 font-medium">{{ isEditMode() ? 'Cargando temporada...' : 'Preparando formulario...' }}</p>
   </div>
 </div>
 } @else {
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-2xl mx-auto">
       <div class="flex justify-between mb-6">
-        <h1 class="text-2xl font-bold">{{ isEditMode() ? 'Edit Season' : 'Create New Season' }}</h1>
+        <h1 class="text-2xl font-bold">{{ isEditMode() ? 'Editar Temporada' : 'Crear Nueva Temporada' }}</h1>
         <button 
           (click)="cancel()" 
           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
-          Back to List
+          Volver a la Lista
         </button>
       </div>
 
@@ -30,7 +30,7 @@
 
       <form [formGroup]="seasonForm" (ngSubmit)="onSubmit()">
         <div class="mb-4">
-          <label for="seasonName" class="block text-gray-700 font-medium mb-2">Season Name</label>
+          <label for="seasonName" class="block text-gray-700 font-medium mb-2">Nombre de la Temporada</label>
           <input 
             type="text" 
             id="seasonName" 
@@ -38,13 +38,13 @@
             class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
           @if(seasonForm.get('seasonName')?.invalid && seasonForm.get('seasonName')?.touched) {
-            <p class="text-red-600 text-sm mt-1">Season name is required</p>
+            <p class="text-red-600 text-sm mt-1">El nombre de la temporada es obligatorio</p>
           }
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
-            <label for="startDate" class="block text-gray-700 font-medium mb-2">Start Date</label>
+            <label for="startDate" class="block text-gray-700 font-medium mb-2">Fecha de Inicio</label>
             <input 
               type="date" 
               id="startDate" 
@@ -52,12 +52,12 @@
               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
             @if(seasonForm.get('startDate')?.invalid && seasonForm.get('startDate')?.touched) {
-              <p class="text-red-600 text-sm mt-1">Start date is required</p>
+              <p class="text-red-600 text-sm mt-1">La fecha de inicio es obligatoria</p>
             }
           </div>
 
           <div>
-            <label for="endDate" class="block text-gray-700 font-medium mb-2">End Date</label>
+            <label for="endDate" class="block text-gray-700 font-medium mb-2">Fecha de Fin</label>
             <input 
               type="date" 
               id="endDate" 
@@ -65,13 +65,13 @@
               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
             @if(seasonForm.get('endDate')?.invalid && seasonForm.get('endDate')?.touched) {
-              <p class="text-red-600 text-sm mt-1">End date is required</p>
+              <p class="text-red-600 text-sm mt-1">La fecha de fin es obligatoria</p>
             }
           </div>
         </div>
 
         <div class="mb-4">
-          <label for="percent" class="block text-gray-700 font-medium mb-2">Percent</label>
+          <label for="percent" class="block text-gray-700 font-medium mb-2">Porcentaje</label>
           <input 
             type="number" 
             id="percent" 
@@ -82,7 +82,7 @@
           >
           @if(seasonForm.get('percent')?.invalid && seasonForm.get('percent')?.touched) {
             <p class="text-red-600 text-sm mt-1">
-              Percent must be between 0 and 100
+              El porcentaje debe estar entre 0 y 100
             </p>
           }
         </div>
@@ -95,7 +95,7 @@
               formControlName="isActive"
               class="w-4 h-4 text-blue-600"
             >
-            <label for="isActive" class="ml-2 text-gray-700">Active</label>
+            <label for="isActive" class="ml-2 text-gray-700">Activo</label>
           </div>
 
           <div class="flex items-center">
@@ -105,7 +105,7 @@
               formControlName="isHigh"
               class="w-4 h-4 text-blue-600"
             >
-            <label for="isHigh" class="ml-2 text-gray-700">High Season</label>
+            <label for="isHigh" class="ml-2 text-gray-700">Temporada Alta</label>
           </div>
         </div>
 
@@ -114,16 +114,16 @@
             type="button"
             (click)="cancel()" 
             class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
-            Cancel
+            Cancelar
           </button>
           <button 
             type="submit"
             [disabled]="seasonForm.invalid"
             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:bg-blue-300">
-            {{ isEditMode() ? 'Update' : 'Create' }}
+            {{ isEditMode() ? 'Actualizar' : 'Crear' }}
           </button>
         </div>
       </form>
     </div>
   </div>
-} 
+}

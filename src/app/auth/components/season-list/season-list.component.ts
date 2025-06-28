@@ -4,11 +4,12 @@ import { LoginService } from '../../services/login.service';
 import { SeasonService } from '../../services/season.service';
 import { CommonModule } from '@angular/common';
 import { SeasonDTO } from '../../../models/season.model';
+import { confirmationModalComponent } from '../edit-component/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-season-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, confirmationModalComponent],
   templateUrl: './season-list.component.html',
   styleUrl: './season-list.component.css'
 })
@@ -16,6 +17,8 @@ export default class SeasonListComponent implements OnInit {
   isLoading = signal(true);
   seasons = signal<SeasonDTO[]>([]);
   errorMessage = signal<string | null>(null);
+  isModalOpen = signal(false);
+  seasonToDelete = signal<number>(-1);
   
   private router = inject(Router);
   private loginService = inject(LoginService);
@@ -26,6 +29,16 @@ export default class SeasonListComponent implements OnInit {
     this.loadSeasons();
   }
   
+  openDeleteModal(id: number): void {
+    this.seasonToDelete.set(id);
+    this.isModalOpen.set(true);
+  }
+
+  cancelDelete(): void {
+    this.isModalOpen.set(false);
+    this.seasonToDelete.set(-1);
+  }
+
   private checkAuthentication(): void {
     const token = localStorage.getItem('token');
     if (token) {
@@ -70,17 +83,30 @@ export default class SeasonListComponent implements OnInit {
   }
   
   deleteSeason(id: number): void {
-    if (confirm('Are you sure you want to delete this season?')) {
-      this.isLoading.set(true);
-      this.seasonService.deleteSeason(id).subscribe({
-        next: () => {
-          this.loadSeasons();
-        },
-        error: (error) => {
-          this.errorMessage.set('Error deleting season: ' + error.message);
-          this.isLoading.set(false);
-        }
-      });
-    }
+    this.openDeleteModal(id);
   }
+
+  confirmDelete(): void {
+    if (this.seasonToDelete() <= 0) return;
+
+    this.isLoading.set(true);
+    this.isModalOpen.set(false);
+
+    this.seasonService.deleteSeason(this.seasonToDelete()).subscribe({
+      next: () => {
+        // Enfoque tipo React: eliminamos solo del array local
+        const updated = this.seasons().filter(
+          s => s.seasonID !== this.seasonToDelete()
+        );
+        this.seasons.set(updated);
+        this.seasonToDelete.set(-1);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.errorMessage.set('Error eliminando la temporada: ' + error.message);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
 } 
