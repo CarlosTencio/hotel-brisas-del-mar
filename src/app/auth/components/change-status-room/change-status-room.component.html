@@ -11,7 +11,7 @@
 
   }@else {
 
-    <app-room-manage [roomTypeId]="roomTypeId" />
+    <app-room-manage [roomTypeId]="roomTypeId" (cancelManage)="onCancelRoomManage()" />
     
   }
 

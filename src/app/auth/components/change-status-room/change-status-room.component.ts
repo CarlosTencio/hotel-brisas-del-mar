@@ -30,5 +30,8 @@ export class ChangeStatusRoomComponent {
 
   }
 
+  onCancelRoomManage() {
+    this.openChild = false;
+  }
 
 }
