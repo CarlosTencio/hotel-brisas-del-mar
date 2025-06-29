@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal, Output, EventEmitter } from '@angular/core';
 import { RoomTypeService } from '../../../services/roomType.service';
 import { RoomType } from '../../../models/room-type';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,8 @@ import { CloudinaryService } from '../../../services/cloudinary.service';
   styleUrls: ['./room-manage.component.css']
 })
 export class RoomManageComponent implements OnInit {
+
+  @Output() cancelManage = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.loadRoomData();
@@ -122,8 +124,6 @@ export class RoomManageComponent implements OnInit {
 
         updatedRoom.characteristics = this.characteristicsFormatted(updatedRoom.characteristics);
 
-        console.log('Actualizando habitación con datos:', updatedRoom);
-
         this.roomTypeService.updateRoomTypeData(updatedRoom).subscribe({
           next: (response: string) => {
             this.message = response;
@@ -163,6 +163,7 @@ export class RoomManageComponent implements OnInit {
   }
 
   updateRoomType(roomType: RoomTypedto): void {
+    
     roomType.characteristics = this.characteristicsFormatted(roomType.characteristics);
     
     this.roomTypeService.updateRoomTypeData(roomType).subscribe({
@@ -178,8 +179,8 @@ export class RoomManageComponent implements OnInit {
     });
   }
 
-  onDelete(): void {
-    this.router.navigate(['/habitaciones']);
+  onCancel(): void {
+    this.cancelManage.emit();
   }
 
   // Método para marcar todos los campos como touched (mostrar errores)
@@ -199,6 +200,5 @@ export class RoomManageComponent implements OnInit {
 
   closeModal(): void {
     this.isModalOpen.set(false);
-    this.router.navigate(['/habitaciones']);
   }
 }

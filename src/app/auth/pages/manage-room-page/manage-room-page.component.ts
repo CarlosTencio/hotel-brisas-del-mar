@@ -22,7 +22,7 @@ export class ManageRoomPageComponent implements OnInit {
   }
 
   loadRooms() {
-    this.roomService.getRoomActive().subscribe({
+    this.roomService.getRoomManage().subscribe({
       next: (data) => {
         this.roomsData = data;
         this.isLoading.set(false);
